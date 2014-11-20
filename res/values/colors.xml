@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- /* //device/apps/common/assets/res/any/colors.xml ** ** Copyright 2006, 
+	The Android Open Source Project ** ** Licensed under the Apache License, 
+	Version 2.0 (the "License"); ** you may not use this file except in compliance 
+	with the License. ** You may obtain a copy of the License at ** ** http://www.apache.org/licenses/LICENSE-2.0 
+	** ** Unless required by applicable law or agreed to in writing, software 
+	** distributed under the License is distributed on an "AS IS" BASIS, ** WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ** See the 
+	License for the specific language governing permissions and ** limitations 
+	under the License. */ -->
+<resources>
+    
+    
+
+	  <drawable name = "auction_green" >#006600</drawable>
+	  <drawable name = "auction_red">#D01C20</drawable>
+	  <drawable name = "auction_black">#000000 </drawable>	
+	  <drawable name = "auction_lightblue">#CAFFFF </drawable>
+	  <drawable name = "auction_lightgray">#E4E4E4 </drawable>
+	  <drawable name = "auciton_blue">#1E7AA0</drawable>
+	  <drawable name = "auciton_gray">#757575</drawable>
+	  <drawable name = "auction_dark_orange">#F86B03</drawable>
+	  <drawable name = "auction_orange">#FF7B00</drawable>
+	  <drawable name = "bzj_blue">#3300cc</drawable>
+	  <drawable name = "link_blue">#5e5eff</drawable>  
+	  	   
+	  <drawable name = "blue"> #49A2E2 </drawable>
+	  <drawable name = "gray"> #F7F7F7 </drawable>
+	  <drawable name = "hot_gray"> #C9CACA</drawable>
+	  <drawable name = "dark_hot_gray"> #C4C5C5</drawable>	  	  
+	  <drawable name = "orange"> #FF8000 </drawable>
+	  <drawable name = "light_blue">#a9daf2</drawable>
+	  <drawable name = "white"> #FFFFFF </drawable> 
+	  <drawable name = "app_bg_color">#EFEFEF</drawable>
+	  <drawable name = "xuxian_color">#C9C9C9</drawable>
+	  
+		<color name="red">#ffc81724</color>
+		<color name="darkred">#ba1723</color>
+		<color name="green">#b6da53</color>
+		<color name="blue">#0076a8</color>
+		<color name="darkblue">#0080B8</color>
+		<color name="yellow">#f3a701</color>
+		<color name="darkyellow">#fea701</color> 
+		
+		
+  
+	<color name="keyboard_exist_mystock_textcolor">#ff969696</color>
+	<drawable name="screen_background_light">#ffffffff</drawable>
+	<color name="popup_menu_background_color">#00000000</color>
+	<drawable name="screen_background_dark">#ff1a1a1a</drawable>
+	<drawable name="status_bar_closed_default_background">#ff000000</drawable>
+	<drawable name="status_bar_opened_default_background">#ff000000</drawable>
+	<drawable name="search_bar_default_color">#ff000000</drawable>
+	<drawable name="safe_mode_background">#60000000</drawable>
+	<drawable name="stock_list_divider_drawable">#FF1b2f3b</drawable>
+	<color name="stock_list_divider_color">#FF5a6ba0</color>
+	<color name="safe_mode_text">#80ffffff</color>
+	<color name="buy_stock_label_color">#ff494949</color>
+	<color name="buy_sell_bg_color">#fff5f2f2</color>
+	<color name="caiwu_label_color">#ffb7b7b7</color>
+	<color name="white">#ffffffff</color>
+	<color name="background_gray">#ffececec</color>
+	<color name="hkk_white">#ffffffff</color>
+	<color name="black">#ff000000</color>
+	<color name="register_view_colro">#ff0d7a00</color>
+	<color name="gray">#ff737373</color>
+	<color name="transparent">#00000000</color>
+	<color name="background_dark">#ff1a1a1a</color>
+	<color name="bright_foreground_dark">#ffffffff</color>
+	<color name="bright_foreground_dark_disabled">#80ffffff</color>
+	<color name="bright_foreground_dark_inverse">#ff000000</color>
+	<color name="dim_foreground_dark">#bebebe</color>
+	<color name="dim_foreground_dark_disabled">#80bebebe</color>
+	<color name="dim_foreground_dark_inverse">#323232</color>
+	<color name="dim_foreground_dark_inverse_disabled">#80323232</color>
+	<color name="hint_foreground_dark">#808080</color>
+	<color name="background_light">#ffffffff</color>
+	<color name="bright_foreground_light">#ff000000</color>
+	<color name="bright_foreground_light_inverse">#ffffffff</color>
+	<color name="bright_foreground_light_disabled">#80000000</color>
+	<color name="dim_foreground_light">#323232</color>
+	<color name="dim_foreground_light_disabled">#80323232</color>
+	<color name="dim_foreground_light_inverse_disabled">#80bebebe</color>
+	<color name="hint_foreground_light">#808080</color>
+	<color name="k_bg_blue">#ff00213f</color>
+
+	<!-- For date picker widget -->
+	<drawable name="selected_day_background">#ff0092f4</drawable>
+
+	<!-- For settings framework -->
+	<color name="widget_bg_gray">#88dddddd</color>
+	<color name="lighter_gray">#ddd</color>
+	<color name="darker_gray">#aaa</color>
+
+	<!-- For security permissions -->
+	<color name="perms_dangerous_grp_color">#ffd57e</color>
+	<color name="perms_dangerous_perm_color">#ddb66a</color>
+	<color name="perms_normal_grp_color">#eeeeee</color>
+	<color name="perms_normal_perm_color">#c0c0c0</color>
+
+	<color name="widget_btn_selected_color">#88aaaaaa</color>
+	<color name="home_text_1n_color">#ffd86c22</color>
+	<color name="home_text_2n_color">#ffffffff</color>
+	<color name="home_text_3n_color">#ffd9a481</color>
+	<color name="menu_dialog_background_color">#80ffffff</color>
+
+	<!-- 整体布局 -->
+	<color name="winner_transparent">#00000000</color>
+	
+	<!-- title -->
+	<color name="title_button_color">#ffffffff</color>
+	
+	<!-- home -->
+	<color name="home_bg">#ffececec</color>
+	<color name="home_news_bgcolor">#ffececec</color>
+	<color name="home_text_color">#ff373737</color>
+	
+	<!-- stock list -->
+	<color name="stock_name_color">#ffffffff</color>
+	<color name="stock_code_color">#ffffffff</color>
+	<color name="stock_amount_color">#ffeaea00</color>
+	<color name="stock_price_color">#ffd5d5d5</color>
+	<color name="stock_updown_amount_color">#ffffffff</color>
+	<color name="stock_updown_persent_color">#ffffffff</color>
+
+	<!-- trade color red and green -->
+	<color name="trade_red">#ffc20a0b</color>
+	<color name="trade_detailleft">#ff373737</color>
+	<color name="trade_detailright">#ff373737</color>
+	<color name="tradetablecolor">#ff000000</color>
+	<color name="tradebgcolor">#ffececec</color>
+
+
+	<!-- 定义皮肤的颜色 -->
+	<!-- 皮肤1默认 -->
+	<!-- 大盘指数名字颜色 -->
+	<color name="skin1_home_zs_name_color">#ff000000</color>
+	<!-- 大盘指数金额颜色 -->
+	<color name="skin1_home_zs_money_color">#ff000000</color>
+	<!-- 资讯标题栏文字颜色 -->
+	<color name="skin1_home_new_titletext_color">#ff000000</color>
+	<!-- 资讯listview文字颜色 -->
+	<color name="skin1_home_new_listtext_color">#ff0042ff</color>
+	<!-- 资讯背景颜色 -->
+	<color name="skin1_home_new_bg_color">#ffffffff</color>
+	<!-- 功能栏按钮文字颜色 -->
+	<color name="skin1_home_function_text_color">#ff000000</color>
+	<!-- 我的自选股票名字颜色 -->
+	<color name="skin1_home_mystock_name_color">#ff000000</color>
+	<!-- 我的自选股票代码颜色 -->
+	<color name="skin1_home_mystock_code_color">#ff000000</color>
+	<!-- 我的自选股票价格颜色 -->
+	<color name="skin1_home_mystock_price_color">#ff000000</color>
+	<!-- 公告字体颜色 -->
+	<color name="skin1_home_notice_text_color">#ff000000</color>
+
+	<!-- 皮肤2默认 -->
+	<!-- 大盘指数名字颜色 -->
+	<color name="skin2_home_zs_name_color">#ff373737</color>
+	<!-- 大盘指数金额颜色 -->
+	<color name="skin2_home_zs_money_color">#ff373737</color>
+	<!-- 资讯标题栏文字颜色 -->
+	<color name="skin2_home_new_titletext_color">#ff000000</color>
+	<!-- 资讯listview文字颜色 -->
+	<color name="skin2_home_new_listtext_color">#ff0042ff</color>
+	<!-- 资讯背景颜色 -->
+	<color name="skin2_home_new_bg_color">#ffececec</color>
+	<!-- 功能栏按钮文字颜色 -->
+	<color name="skin2_home_function_text_color">#ff691107</color>
+	<!-- 我的自选股票名字颜色 -->
+	<color name="skin2_home_mystock_name_color">#ff000000</color>
+	<!-- 我的自选股票代码颜色 -->
+	<color name="skin2_home_mystock_code_color">#ff808080</color>
+	<!-- 我的自选股票价格颜色 -->
+	<color name="skin2_home_mystock_price_color">#ff000000</color>
+	<!-- 我的自选股票涨跌颜色 -->
+	<color name="skin2_home_mystock_updownpercent_color">#ffe4e4e4</color>
+	<!-- 公告字体颜色 -->
+	<color name="skin2_home_notice_text_color">#ffFFFFFF</color>
+	<!-- 公告字体颜色 -->
+	<color name="skin2_phoneregist_paddingline_color">#ffE8AD34</color>
+	<color name="keyboard_bg">#ff878A88</color>
+	<color name="popup_bg_color">#ffCED3D6</color>
+
+	<color name="black_alph">#c0000000</color>
+	<!-- splash 下方启动中的几个字体颜色 -->
+	<color name="splash_text_color">@color/white</color>
+	<!-- 注册页面字体颜色 -->
+	<color name="register_text_color">@color/white</color>
+</resources>
+

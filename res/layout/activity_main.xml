@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    >
+    
+
+<RelativeLayout 
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000">
+    <LinearLayout 
+        android:id="@+id/prepare_ll"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_marginTop="20dip"
+        android:background="#000000"
+        android:layout_weight="2"
+        android:layout_width="fill_parent"
+     	android:layout_height="wrap_content">
+    <Button 
+    	android:id="@+id/discoverButton"
+    	android:visibility="gone"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:text="设置可见性"/>
+    <Button 
+    	android:id="@+id/scanButton"
+    	android:layout_marginLeft="60dip"
+    	android:layout_marginRight="60dip"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:background="@drawable/search_btn_selector"
+    	android:text="Start Scanning"
+    	android:textColor="@color/white"/>
+   	<Button 
+    	android:id="@+id/btnDis"
+    	android:visibility="gone"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:text="本机可见性设置"/> 
+    <Button 
+    	android:id="@+id/checkButton"
+    	android:visibility="gone"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:text="设备自检"/>
+ 
+    <ToggleButton 
+    	android:id="@+id/tbtnSwitch"
+    	android:layout_marginTop="10dip"
+    	android:layout_marginBottom="10dip"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginLeft="60dip"
+    	android:layout_marginRight="60dip"
+    	android:background="@drawable/tbtnswitch_btn_selector"
+    	android:textOn="Bluetooth ON"
+    	android:textOff="Bluetooth OFF"/>
+    <LinearLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="300dip"
+	    android:orientation="vertical">
+      <TextView 
+          android:id="@+id/lvTitle"
+          android:visibility="gone"
+          android:text="Bluetooth connection available："
+          android:textSize="18sp"
+          android:textColor="@color/white"
+          android:layout_marginLeft="20dip"
+          android:layout_width="fill_parent"
+	  	  android:layout_height="wrap_content"/>
+	  <ListView android:id="@+id/lvDevices"
+	      android:background="#7e8336"
+	      android:layout_marginLeft="20dip"
+	      android:layout_marginRight="20dip"
+	      android:layout_width="fill_parent"
+	  	  android:layout_height="fill_parent" />
+	  <Button 
+    	android:id="@+id/clearButton"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:background="@drawable/clear_btn_selector"  	  	
+    	android:text="clear"
+    	android:visibility="gone"
+    	android:textColor="@color/white"/>
+	</LinearLayout>	
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:background="#000000"
+	    android:layout_marginTop="10dip">
+	<Button 
+    	android:id="@+id/howtoButton"
+    	android:layout_marginLeft="20dip"
+    	android:layout_marginRight="10dip"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+		android:background="@drawable/howto_btn_selector"
+		android:text="How to use?"
+		android:textSize="12sp"
+		android:layout_weight="1"
+		android:textColor="@color/white"
+    	/>
+	<Button 
+    	android:id="@+id/aboutButton"
+    	android:layout_marginLeft="10dip"
+    	android:layout_marginRight="20dip"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+		android:background="@drawable/about_btn_selector"
+		android:text="About ENDURO"
+		android:textSize="12sp"
+		android:layout_weight="1"
+		android:textColor="@color/white"
+    	/>
+	</LinearLayout>
+  </LinearLayout>
+  <LinearLayout 
+     android:id="@+id/oprate_ll"
+     android:visibility="gone"
+     android:orientation="vertical"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"> 
+  	<Button 
+   		android:id="@+id/exitButton"
+   		android:visibility="gone"
+   		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:layout_marginLeft="20dip"
+    	android:layout_marginRight="20dip"
+    	android:layout_marginTop="10dip"
+   		android:background="@drawable/exit_btn_selector"
+    	android:textColor="@color/white"
+   		android:text="安全退出"/>
+   <LinearLayout 
+     android:id="@+id/signal_ll"
+     android:orientation="horizontal"
+     android:paddingTop="10dip"
+     android:paddingBottom="10dip"
+     android:layout_width="fill_parent"
+     android:background="#7e8336"
+     android:layout_height="wrap_content"> 
+     <ImageView 
+         android:id="@+id/diya_img"
+         android:src="@drawable/diya"
+         android:layout_weight="1"
+         android:visibility="gone"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+     <ImageView 
+         android:id="@+id/gaoya_img"
+         android:src="@drawable/gaoya"
+         android:layout_weight="1"
+         android:visibility="invisible"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+   	 <ImageView 
+   	     android:id="@+id/xinhao_img"
+   	     android:src="@drawable/xinhao"
+   	     android:layout_weight="1"
+   	     android:visibility="visible"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+ 	 <ImageView 
+ 	     android:id="@+id/guozai_img"
+   	     android:src="@drawable/guozai"
+   	     android:layout_weight="1"
+   	     android:visibility="invisible"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+ 	<ImageView 
+ 	     android:id="@+id/zhinanzhen_img"
+   	     android:src="@drawable/zhinanzhen"
+   	     android:layout_weight="1"
+   	     android:visibility="visible"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+     </LinearLayout>
+     
+   <LinearLayout 
+     android:id="@+id/dianji_ll"
+     android:orientation="horizontal"
+     android:layout_gravity="bottom"
+     android:layout_marginTop="20dip"
+     android:layout_marginBottom="20dip"
+     android:layout_width="fill_parent"
+     android:layout_height="fill_parent">
+   	 <LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content">    
+	  	<ImageButton 
+	    	android:id="@+id/songkaiBtn"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/dianji_songkai_btn_selector"/>
+	  	</LinearLayout> 
+    	<LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content">
+	 	<ImageButton 
+	    	android:id="@+id/jiajinBtn"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/dianji_jiajin_btn_selector"/>
+ 		</LinearLayout>
+ 	</LinearLayout>
+ 	
+   
+   
+   
+   
+    <ImageView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"/>  
+        
+    
+	<LinearLayout 
+	    android:layout_gravity="center_horizontal"
+	    android:layout_width="265dp"
+	    android:layout_height="300dp"
+	    android:orientation="vertical"
+	    android:padding="@dimen/padding_medium"
+	    >
+	    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/upleftBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/zuoqian_btn_selector" 
+            android:background="@null"
+            />
+
+        <ImageButton
+            android:id="@+id/uprightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:src="@drawable/youqian_btn_selector" />
+
+        <ImageButton
+            android:id="@+id/upBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/qianjin_btn_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/padding_large"
+        android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/downrightBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:src="@drawable/youhou_btn_selector" />
+
+        <ImageButton
+            android:id="@+id/downBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@null"
+            android:src="@drawable/houtui_btn_selector" />
+
+        <ImageButton
+            android:id="@+id/downleftBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@null"
+            android:src="@drawable/zuohou_btn_selector" />
+    </RelativeLayout>
+	</LinearLayout>
+    <!-- <LinearLayout 
+        android:orientation="horizontal"
+        android:layout_marginTop="20dip"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+	    <ImageButton 
+	    	android:id="@+id/upBtn"
+	    	android:gravity="center"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/qianjin_btn_selector"/>                  
+    </LinearLayout>	
+    <LinearLayout 
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_marginBottom="20dip"
+      android:layout_height="wrap_content">
+
+	 	<LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"> 
+	 	<ImageButton 
+	    	android:id="@+id/uprightBtn"  	
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/youqian_btn_selector"/>
+	 	</LinearLayout>
+	 	<LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"> 
+	 	<ImageButton 
+	    	android:id="@+id/upleftBtn"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/zuoqian_btn_selector"/>
+	 	</LinearLayout>
+	</LinearLayout>
+	
+      <LinearLayout 
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dip">
+	    <LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"> 
+	 	 <ImageButton 
+	    	android:id="@+id/downrightBtn" 	
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/youhou_btn_selector"/> 
+	    </LinearLayout>
+		<LinearLayout 
+		 android:layout_weight="1"
+		 android:gravity="center"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"> 
+	 	 <ImageButton
+	    	android:id="@+id/downleftBtn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@drawable/zuohou_btn_selector"/> 
+	    </LinearLayout>
+	</LinearLayout>	 	
+    <LinearLayout 
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dip"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+	 	<ImageButton 
+	    	android:id="@+id/downBtn"
+	    	android:gravity="center"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	    	android:background="@drawable/houtui_btn_selector"/>           
+    </LinearLayout>	 -->
+ </LinearLayout>    
+</RelativeLayout>
+</ScrollView>

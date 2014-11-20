@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="app_name">bzbluetooth</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">ENDURO</string>
+    <string name="howto">
+        1. Turn on the APP and select “Bluetooth ON” in the interface to turn on the bluetooth.\n\n
+		2. Select “Start Scanning” and users will find existing bluetooth connections listed nearby. Choose your manoeuvring system’s control unit to connect.\n\n
+		3.If the control unit bluetooth shows unpaired, click and enter the password 1234 to get paired.\n\n
+		4. After successful paired your cellphone and control unit combined with a prompt sound, users will see “Please select the type of your caravan manoeuvring system”. Users shall select “Manual Engaging Your Manoeuvring System” or “Automatic Engaging Your Manoeuvring System” \n\n
+		5. If “Manual Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
+		6. If “Automatic Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
+		7. If users’ cellphone fail to connect with control unit, there’s no need to operate on APP. Simply by pressing sync button on the control unit and waiting for the cellphone to give out a promt sound indicating sync completed. Then sync is completed. APP can now perform normally with control unit.
+        
+        
+    </string>
+</resources>
