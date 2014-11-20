@@ -29,7 +29,10 @@ public class MultiToucher implements OnTouchListener {
 	 */
 	static final SparseArray<Integer> contrastMap = new SparseArray<Integer>();
 
-	final int[] CP_MASKS = new int[]{0x110000,0x011000,0x000110,0x000011};
+	final int[] CP_MASKS = new int[]{0x110000,0x011000,0x000110,0x000011,
+									0x101000,0x000101,
+									0x100001,0x001100
+	};
 
 	public MultiToucher() {
 		contrastMap.put(R.id.uprightBtn, 0x100000);
@@ -81,7 +84,7 @@ public class MultiToucher implements OnTouchListener {
 	 * 终止指令
 	 */
 	public void stop() {
-//		Log.i(TAG, "stop--");
+		Log.i(TAG, "stop--");
 		send(0);
 	}
 
@@ -93,7 +96,7 @@ public class MultiToucher implements OnTouchListener {
 	public void send(int order) {
 		if(order==0&&availableZone.size()>0) order = availableZone.get(0);//松开第三颗手指而剩下两个有冲突时
 		
-//		logHex(order);
+		logHex(order);
 	}
 
 
@@ -138,7 +141,7 @@ public class MultiToucher implements OnTouchListener {
 		for(int mask:CP_MASKS){
 			if(com==mask) {
 				result=mask;
-			break;
+				break;
 			}
 		}
 //		Log.i(TAG , "check:"+result);

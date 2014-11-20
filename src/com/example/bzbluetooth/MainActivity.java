@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.bzbluetooth.helper.CampassHelper;
-import com.example.bzbluetooth.helper.MultiToucher;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,6 +43,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.bzbluetooth.helper.CampassHelper;
+import com.example.bzbluetooth.helper.MultiToucher;
+
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
 	private Button discoverButton = null;
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 	private ImageView campass_img;//taotao 1117
 	
 	private SharedPreferences sharedPrefrences;
-	private Editor editor;
+//	private Editor editor;
 	
 	OutputStream mmOutputStream;
 	InputStream mmInputStream;
@@ -102,6 +102,9 @@ public class MainActivity extends Activity {
 	public static BluetoothSocket btSocket;
 	
 	private HomeKeyEventBroadCastReceiver receiver;
+	private Editor editorToken;
+	private Editor editorBox;
+	private Editor editorAuto;
 
 	
 	 /**
@@ -141,15 +144,15 @@ public class MainActivity extends Activity {
 	    registerReceiver(mBatInfoReceiver, filter); 
 	    
         sharedPrefrences = this.getSharedPreferences("TOKEN", MODE_WORLD_READABLE);	
-        editor = sharedPrefrences.edit();      
+        editorToken = sharedPrefrences.edit();      
         token = sharedPrefrences.getString("TOKEN", "");
         
         sharedPrefrences = this.getSharedPreferences("BOX_TOKEN", MODE_WORLD_READABLE);	
-        editor = sharedPrefrences.edit();      
-        box_token = sharedPrefrences.getString("BOX_TOKEN", "01234567890");     //TODO testtest  
+        editorBox = sharedPrefrences.edit();      
+        box_token = sharedPrefrences.getString("BOX_TOKEN", "");     
     
         sharedPrefrences = this.getSharedPreferences("AUTO_BLT", MODE_WORLD_READABLE);	
-        editor = sharedPrefrences.edit();      
+        editorAuto = sharedPrefrences.edit();      
         blt_addr_str = sharedPrefrences.getString("AUTO_BLT", "");  
         
         TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -485,8 +488,8 @@ public class MainActivity extends Activity {
 			mmOutputStream = btSocket.getOutputStream();
 			mmInputStream = btSocket.getInputStream();
 			Log.d("--", "----------------3-------------->");
-			editor.putString("AUTO_BLT", btDev.getAddress());
-			editor.commit();//提交
+			editorAuto.putString("AUTO_BLT", btDev.getAddress());
+			editorAuto.commit();//提交
 			Log.d("--", "----------------4-------------->");
 			afterConnectUIChange();
 		    beginListenForData();
@@ -600,21 +603,36 @@ public class MainActivity extends Activity {
 	 * @Date 2014-11-20
 	 */
 	class SubMultiToucher extends MultiToucher{
-		private final SparseArray<String> usMap;
+		private  SparseArray<String> usMap;
 		public SubMultiToucher(){
 			super();
-			usMap = new SparseArray<String>();
-			usMap.put(0, String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
-			usMap.put(0x100000, String.format("%s%s%s%sEE", "550301",box_token,"21",computeCRC8("0301"+box_token, 33)));
-			usMap.put(0x010000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));
-			usMap.put(0x001000, String.format("%s%s%s%sEE", "550301",box_token,"22",computeCRC8("0301"+box_token, 34)));
-			usMap.put(0x000100, String.format("%s%s%s%sEE", "550301",box_token,"26",computeCRC8("0301"+box_token, 38)));
-			usMap.put(0x000010, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
-			usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",computeCRC8("0301"+box_token, 39)));
-			usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 35)));
-			usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 36)));
-			usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 40)));
-			usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 41)));
+			
+			
+		}
+
+		private SparseArray<String> getmap() {
+			if(null==usMap){
+				
+				usMap = new SparseArray<String>();
+				usMap.put(0, String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
+				usMap.put(0x100000, String.format("%s%s%s%sEE", "550301",box_token,"21",computeCRC8("0301"+box_token, 33)));
+				usMap.put(0x010000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));
+				usMap.put(0x001000, String.format("%s%s%s%sEE", "550301",box_token,"22",computeCRC8("0301"+box_token, 34)));
+				usMap.put(0x000100, String.format("%s%s%s%sEE", "550301",box_token,"26",computeCRC8("0301"+box_token, 38)));
+				usMap.put(0x000010, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
+				usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",computeCRC8("0301"+box_token, 39)));
+				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 36)));
+				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 35)));
+				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 41)));
+				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 40)));
+				
+				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));//左右
+				usMap.put(0x000101, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
+				
+				usMap.put(0x100001, String.format("%s%s%s%sEE", "550301",box_token,"2A",computeCRC8("0301"+box_token, 42)));//向右原地
+				usMap.put(0x001100, String.format("%s%s%s%sEE", "550301",box_token,"2B",computeCRC8("0301"+box_token, 43)));//向左原地
+			}
+			return usMap;
 		}
 		
 		@Override
@@ -624,9 +642,9 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "请先进行对码操作", Toast.LENGTH_LONG).show();
 				return;
 			}//TODO testtest
-			Log.i("send", usMap.get(order));
 			if (btSocket == null)	return;
-			sendDataToPairedDevice(usMap.get(order));
+//			Log.i("send", getmap().get(order));
+			sendDataToPairedDevice(getmap().get(order));
 		}
 	}
 	
@@ -752,7 +770,8 @@ public class MainActivity extends Activity {
 	}
     
 	private void sendDataToPairedDevice(String message){       
-          /*try {              
+          try {              
+        	  System.out.println(message);
         	  OutputStream mmout=btSocket.getOutputStream();
               mmout.write(getHexBytes(message));
               mmout.flush();
@@ -763,7 +782,7 @@ public class MainActivity extends Activity {
 	          mMsg.what =5;
 	          mHandler.sendMessage(mMsg);
               Log.e("-------", "Exception during write", e);
-          }*///testtest TODO
+          }//testtest TODO
       }
     
 	 /**
@@ -771,16 +790,15 @@ public class MainActivity extends Activity {
 	  */
 	 void beginListenForData()
 	 {
-	     final Handler handler = new Handler(); 
-	     final byte delimiter = 10; //This is the ASCII code for a newline character
+//	     final Handler handler = new Handler(); 
+//	     final byte delimiter = 10; //This is the ASCII code for a newline character
 
 	     stopWorker = false;
 	     readBufferPosition = 0;
 	     readBuffer = new byte[1024];
 	     workerThread = new Thread(new Runnable()
 	     {
-	         @SuppressWarnings("static-access")
-			public void run()
+	         public void run()
 	         {             	        	
 	            while(!Thread.currentThread().isInterrupted() && !stopWorker){
 	                 try 
@@ -820,8 +838,8 @@ public class MainActivity extends Activity {
 	                        			 needBB = true;
 			                        	 Log.d("--", "---------111进入对码状态----->" + result);
 			                        	 token = result.substring(4, 10);  	
-			                        	 editor.putString("TOKEN", token);
-										 editor.commit();//提交
+			                        	 editorToken.putString("TOKEN", token);
+										 editorToken.commit();//提交
 			     						 String duima = "550301"+imei+"BB" + computeCRC8("0301"+imei, 187) + "EE";
 			     						 Log.d("--", "-------发送对码请求------->"+duima);		     						 
 			                        	 sendDataToPairedDevice(duima);
@@ -831,8 +849,8 @@ public class MainActivity extends Activity {
 	                        			 needBB = false;
 	                        			 Log.d("--", "---------222进入对码状态----->" + result);
 	                        			 box_token = result.substring(4, 10);  	
-			                        	 editor.putString("BOX_TOKEN", box_token);
-										 editor.commit();//提交
+			                        	 editorBox.putString("BOX_TOKEN", box_token);
+										 editorBox.commit();//提交
 										 check_str = "550301"+box_token +"CC"+ computeCRC8("0301"+box_token,204) +"EE";
 										 if(needfengming){
 											 needfengming = false;
