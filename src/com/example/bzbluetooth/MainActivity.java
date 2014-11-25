@@ -135,7 +135,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_main);
-        
         //注册home键监听
 		receiver = new HomeKeyEventBroadCastReceiver();
 		registerReceiver(receiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -295,7 +294,6 @@ public class MainActivity extends Activity {
 		}
 //		setTitle("本机蓝牙地址：" + btAdapt.getAddress());
 		btAdapt.startDiscovery();		
-		
 		
 	}
     
@@ -782,7 +780,7 @@ public class MainActivity extends Activity {
 	          mMsg.what =5;
 	          mHandler.sendMessage(mMsg);
               Log.e("-------", "Exception during write", e);
-          }//testtest TODO
+          }
       }
     
 	 /**

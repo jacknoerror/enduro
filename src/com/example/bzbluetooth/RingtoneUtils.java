@@ -17,7 +17,7 @@ public class RingtoneUtils {
     	
     	
 		 Uri path = Uri.parse("android.resource://"+context.getPackageName()+"/raw/waterdrop4");
-		 RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE,path);
+//		 RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE,path);
 		 RingtoneManager.getRingtone(context, path).play();
     }
 }
