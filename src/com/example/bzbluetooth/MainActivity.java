@@ -135,6 +135,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_main);
+        
         //注册home键监听
 		receiver = new HomeKeyEventBroadCastReceiver();
 		registerReceiver(receiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -171,7 +172,7 @@ public class MainActivity extends Activity {
 		btnDis = (Button) this.findViewById(R.id.btnDis);
 		btnDis.setOnClickListener(new ClickEvent());
 		
-		final SubMultiToucher subMultiToucher = new SubMultiToucher(); //1120
+		subMultiToucher = new SubMultiToucher();
 		
 		upBtn = (ImageButton) this.findViewById(R.id.upBtn);
 		upBtn.setOnTouchListener(subMultiToucher);	
@@ -534,7 +535,7 @@ public class MainActivity extends Activity {
 	    }
 	}
 	
-	@Deprecated
+	/*@Deprecated
 	class TouchEvent implements View.OnTouchListener{
 
 		@Override
@@ -594,7 +595,7 @@ public class MainActivity extends Activity {
 			return false;
 		}
 
-	}
+	}*/
 	/**
 	 * 
 	 * @author taotao
@@ -619,8 +620,8 @@ public class MainActivity extends Activity {
 				usMap.put(0x000100, String.format("%s%s%s%sEE", "550301",box_token,"26",computeCRC8("0301"+box_token, 38)));
 				usMap.put(0x000010, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
 				usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",computeCRC8("0301"+box_token, 39)));
-				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 36)));
-				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 35)));
+				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 35)));
+				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 36)));
 				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 41)));
 				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 40)));
 				
@@ -643,6 +644,10 @@ public class MainActivity extends Activity {
 			if (btSocket == null)	return;
 //			Log.i("send", getmap().get(order));
 			sendDataToPairedDevice(getmap().get(order));
+		}
+
+		public int getFingerCount() {//1126
+			return availableZone.size()+waitingZone.size();
 		}
 	}
 	
@@ -780,7 +785,7 @@ public class MainActivity extends Activity {
 	          mMsg.what =5;
 	          mHandler.sendMessage(mMsg);
               Log.e("-------", "Exception during write", e);
-          }
+          }//testtest TODO
       }
     
 	 /**
@@ -885,7 +890,12 @@ public class MainActivity extends Activity {
 				                        	 Log.d("--", "---小电机工作超时--->");
 				                         }else if(command.equals("99")){
 				                        	 Log.d("--", "---大电机工作超时---->");
-				                         }                		 
+				                         }
+			                        	 
+			                        	 if(command.equals("93")&&subMultiToucher.getFingerCount()>0){//大电机工作中 手指没按着
+				                        	 //TODO to be tested
+			                        		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
+				                         }
 		                        	 }	                        		 
 	                        	 }	                        	 
 	                         }else{
@@ -1126,6 +1136,7 @@ public class MainActivity extends Activity {
 			}
 		};
 		private CampassHelper cmpsHelper;
+		private SubMultiToucher subMultiToucher;
 		@Override
 		protected void onResume() {
 			if(null!=cmpsHelper) cmpsHelper.onResume();

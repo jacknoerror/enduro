@@ -22,8 +22,8 @@ public class MultiToucher implements OnTouchListener {
 	private final String TAG = getClass().getSimpleName();
 	
 	private static final int MAX_FINGERS = 2;
-	static final List<Integer> availableZone = new ArrayList<Integer>();
-	static final Queue<Integer> waitingZone = new LinkedList<Integer>();
+	protected static final List<Integer> availableZone = new ArrayList<Integer>();
+	protected static final Queue<Integer> waitingZone = new LinkedList<Integer>();
 	/**
 	 * key:btnId; value:btnValue
 	 */
