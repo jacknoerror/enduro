@@ -622,8 +622,8 @@ public class MainActivity extends Activity {
 				usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",computeCRC8("0301"+box_token, 39)));
 				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 35)));
 				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 36)));
-				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 41)));
-				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 40)));
+				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 40)));
+				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 41)));
 				
 				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));//左右
 				usMap.put(0x000101, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
@@ -892,7 +892,7 @@ public class MainActivity extends Activity {
 				                        	 Log.d("--", "---大电机工作超时---->");
 				                         }
 			                        	 
-			                        	 if(command.equals("93")&&subMultiToucher.getFingerCount()>0){//大电机工作中 手指没按着
+			                        	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//大电机工作中 手指没按着
 				                        	 //TODO to be tested
 			                        		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
 				                         }
