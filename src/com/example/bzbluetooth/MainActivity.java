@@ -46,17 +46,16 @@ import android.widget.ToggleButton;
 import com.example.bzbluetooth.helper.CampassHelper;
 import com.example.bzbluetooth.helper.MultiToucher;
 
-@SuppressLint("NewApi")
 public class MainActivity extends Activity {
-	private Button discoverButton = null;
-	private Button scanButton = null;
-	private Button checkButton = null;
-	private BluetoothAdapter adapter = null;
+//	private Button discoverButton = null;
+//	private Button scanButton = null;
+//	private Button checkButton = null;
+//	private BluetoothAdapter adapter = null;
 	private LinearLayout oprate_ll,prepare_ll,dianji_ll;
 	private String result;
 	private String command;
 	private String imei;
-	private String ctrl_id;
+//	private String ctrl_id;
 	private String check_str;  	//动态计算crc8码
 	private Thread mThread;
 	private String token;		//控制盒的码
@@ -296,6 +295,8 @@ public class MainActivity extends Activity {
 //		setTitle("本机蓝牙地址：" + btAdapt.getAddress());
 		btAdapt.startDiscovery();		
 		
+		
+//		afterConnectUIChange();//TODO
 	}
     
 	class HomeKeyEventBroadCastReceiver extends BroadcastReceiver {
@@ -917,7 +918,6 @@ public class MainActivity extends Activity {
 	Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
             super.handleMessage(msg);
             switch(msg.what){
             case 0:
