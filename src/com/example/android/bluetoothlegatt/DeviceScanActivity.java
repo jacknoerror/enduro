@@ -220,14 +220,14 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
     	final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
-        /*final Intent intent = new Intent(this, DeviceControlActivity.class);
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        final Intent intent = new Intent(this, ControlActivity.class);
+        intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, device.getName());
+        intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
         }
-        startActivity(intent);*/
+        startActivity(intent);
         //TODO testtest
 	}
 

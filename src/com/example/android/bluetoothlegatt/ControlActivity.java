@@ -20,7 +20,11 @@ import com.example.bzbluetooth.R.layout;
 public class ControlActivity extends Activity {
 	final static String TAG = "ControlActivity";
 	
-	final static String mDeviceAddress = "BOLUTEK";//FIXME
+
+	public static final String EXTRAS_DEVICE_ADDRESS = "deviceaddress";
+	public static final String EXTRAS_DEVICE_NAME = "devicename";
+	
+	private boolean mConnected = false;
 	
 	private BluetoothLeService mBluetoothLeService;
 	
@@ -43,15 +47,19 @@ public class ControlActivity extends Activity {
             mBluetoothLeService = null;
         }
     };
+
+
+	private String mDeviceName;
+	private String mDeviceAddress;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_operate);
 		
-//		final Intent intent = getIntent();
-//        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
-//        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+		final Intent intent = getIntent();
+        mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
+        mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 		
 //		mGattServicesList.setOnChildClickListener(servicesListClickListner);
 //        mConnectionState = (TextView) findViewById(R.id.connection_state);
@@ -89,14 +97,18 @@ public class ControlActivity extends Activity {
                 mConnected = true;
 //                updateConnectionState(R.string.connected);
 //                invalidateOptionsMenu();
+                Toast.makeText(ControlActivity.this, "connected", Toast.LENGTH_SHORT).show();
+                send();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
 //                updateConnectionState(R.string.disconnected);
 //                invalidateOptionsMenu();
-                clearUI();
+                Toast.makeText(ControlActivity.this, "disconnected", Toast.LENGTH_SHORT).show();
+//                clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
-                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+            	//TODO
+//                displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
@@ -111,7 +123,9 @@ public class ControlActivity extends Activity {
         return intentFilter;
     }
 	
+    byte[] WriteBytes = new byte[20];
 	void send(){
+		
 		final BluetoothGattCharacteristic characteristic =
                 mGattCharacteristics.get(groupPosition).get(childPosition);
 		
@@ -123,7 +137,7 @@ public class ControlActivity extends Activity {
 //        }else if(editTextNumEditText.getText().length() > 0){
 //            WriteBytes= hex2byte(editTextNumEditText.getText().toString().getBytes());
 //        }
-        "".getBytes();
+        WriteBytes = "1234abcd".getBytes();
         characteristic.setValue(value[0],
                 BluetoothGattCharacteristic.FORMAT_UINT8, 0);
         characteristic.setValue(WriteBytes);
@@ -133,6 +147,7 @@ public class ControlActivity extends Activity {
 	
 	private void displayData(String data) {
         if (data != null) {
+        	Log.i(TAG, "data:"+data);
             Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
         }
     }
