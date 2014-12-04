@@ -44,6 +44,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.bzbluetooth.helper.CampassHelper;
+import com.example.bzbluetooth.helper.GattUtils;
 import com.example.bzbluetooth.helper.MultiToucher;
 
 public class MainActivity extends Activity {
@@ -59,7 +60,7 @@ public class MainActivity extends Activity {
 	private String check_str;  	//动态计算crc8码
 	private Thread mThread;
 	private String token;		//控制盒的码
-	private String box_token; 	//遥控器的码
+	public String box_token; 	//遥控器的码
 	private String broken_str;	//截断的返回码
 	private String blt_addr_str;//自动连接的蓝牙地址
 	private boolean needBB = true;
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
 	 /**
 	  * 动态计算CRC8
 	  */
-	 private String computeCRC8(String str,int flag){
+	 public String computeCRC8(String str,int flag){
 		
 		 byte[] buffer = {
 				 (byte)Integer.parseInt(str.substring(0, 2),16),
@@ -500,18 +501,18 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	Handler handler = new Handler() {
+	Handler handler1 = new Handler() {
 	    public void handleMessage(Message msg) {
 	    	if (btSocket != null){
 //				Log.d("", "------------------> send <------" + check_str);
 	    		if(hasSignal){
 	    			 Message mMsg = new Message();	    			 
 			         mMsg.what = 5;
-			         mHandler.sendMessage(mMsg);
+			         handler2.sendMessage(mMsg);
 	    		}else{
 	    			 Message mMsg = new Message();	    			 
 			         mMsg.what = 6;
-			         mHandler.sendMessage(mMsg);
+			         handler2.sendMessage(mMsg);
 	    		}
 	    		sendDataToPairedDevice(check_str);
 	    		hasSignal = true;
@@ -528,7 +529,7 @@ public class MainActivity extends Activity {
 	                Thread.sleep(300);// 每隔n毫秒发送一次
 	                Message message = new Message();
 	                message.what = 1;
-	                handler.sendMessage(message);// 发送消息
+	                handler1.sendMessage(message);// 发送消息
 	            } catch (InterruptedException e) {
 	                e.printStackTrace();
 	            }
@@ -602,39 +603,8 @@ public class MainActivity extends Activity {
 	 * @author taotao
 	 * @Date 2014-11-20
 	 */
-	class SubMultiToucher extends MultiToucher{
-		private  SparseArray<String> usMap;
-		public SubMultiToucher(){
-			super();
-			
-			
-		}
+	public class SubMultiToucher extends MultiToucher{
 
-		private SparseArray<String> getmap() {
-			if(null==usMap){
-				
-				usMap = new SparseArray<String>();
-				usMap.put(0, String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
-				usMap.put(0x100000, String.format("%s%s%s%sEE", "550301",box_token,"21",computeCRC8("0301"+box_token, 33)));
-				usMap.put(0x010000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));
-				usMap.put(0x001000, String.format("%s%s%s%sEE", "550301",box_token,"22",computeCRC8("0301"+box_token, 34)));
-				usMap.put(0x000100, String.format("%s%s%s%sEE", "550301",box_token,"26",computeCRC8("0301"+box_token, 38)));
-				usMap.put(0x000010, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
-				usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",computeCRC8("0301"+box_token, 39)));
-				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"23",computeCRC8("0301"+box_token, 35)));
-				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"24",computeCRC8("0301"+box_token, 36)));
-				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"28",computeCRC8("0301"+box_token, 40)));
-				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"29",computeCRC8("0301"+box_token, 41)));
-				
-				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",computeCRC8("0301"+box_token, 32)));//左右
-				usMap.put(0x000101, String.format("%s%s%s%sEE", "550301",box_token,"25",computeCRC8("0301"+box_token, 37)));
-				
-				usMap.put(0x100001, String.format("%s%s%s%sEE", "550301",box_token,"2A",computeCRC8("0301"+box_token, 42)));//向右原地
-				usMap.put(0x001100, String.format("%s%s%s%sEE", "550301",box_token,"2B",computeCRC8("0301"+box_token, 43)));//向左原地
-			}
-			return usMap;
-		}
-		
 		@Override
 		public void send(int order) {
 			super.send(order);
@@ -646,9 +616,30 @@ public class MainActivity extends Activity {
 //			Log.i("send", getmap().get(order));
 			sendDataToPairedDevice(getmap().get(order));
 		}
-
-		public int getFingerCount() {//1126
-			return availableZone.size()+waitingZone.size();
+		SparseArray<String> usMap;
+		protected SparseArray<String> getmap() {
+			if(null==usMap){
+				
+				usMap = new SparseArray<String>();
+//				usMap.put(0, makeFormatCmd(box_token, "AA", 170));//notice this
+				usMap.put(0x100000, String.format("%s%s%s%sEE", "550301",box_token,"21",GattUtils.computeCRC8("0301"+box_token, 33)));
+				usMap.put(0x010000, String.format("%s%s%s%sEE", "550301",box_token,"20",GattUtils.computeCRC8("0301"+box_token, 32)));
+				usMap.put(0x001000, String.format("%s%s%s%sEE", "550301",box_token,"22",GattUtils.computeCRC8("0301"+box_token, 34)));
+				usMap.put(0x000100, String.format("%s%s%s%sEE", "550301",box_token,"26",GattUtils.computeCRC8("0301"+box_token, 38)));
+				usMap.put(0x000010, String.format("%s%s%s%sEE", "550301",box_token,"25",GattUtils.computeCRC8("0301"+box_token, 37)));
+				usMap.put(0x000001, String.format("%s%s%s%sEE", "550301",box_token,"27",GattUtils.computeCRC8("0301"+box_token, 39)));
+				usMap.put(0x110000, String.format("%s%s%s%sEE", "550301",box_token,"23",GattUtils.computeCRC8("0301"+box_token, 35)));
+				usMap.put(0x011000, String.format("%s%s%s%sEE", "550301",box_token,"24",GattUtils.computeCRC8("0301"+box_token, 36)));
+				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"28",GattUtils.computeCRC8("0301"+box_token, 40)));
+				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"29",GattUtils.computeCRC8("0301"+box_token, 41)));
+				
+				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",GattUtils.computeCRC8("0301"+box_token, 32)));//左右
+				usMap.put(0x000101, String.format("%s%s%s%sEE", "550301",box_token,"25",GattUtils.computeCRC8("0301"+box_token, 37)));
+				
+				usMap.put(0x100001, String.format("%s%s%s%sEE", "550301",box_token,"2A",GattUtils.computeCRC8("0301"+box_token, 42)));//向右原地
+				usMap.put(0x001100, String.format("%s%s%s%sEE", "550301",box_token,"2B",GattUtils.computeCRC8("0301"+box_token, 43)));//向左原地
+			}
+			return usMap;
 		}
 	}
 	
@@ -784,7 +775,7 @@ public class MainActivity extends Activity {
           } catch (IOException e) {
         	  Message mMsg = new Message();
 	          mMsg.what =5;
-	          mHandler.sendMessage(mMsg);
+	          handler2.sendMessage(mMsg);
               Log.e("-------", "Exception during write", e);
           }//testtest TODO
       }
@@ -860,7 +851,7 @@ public class MainActivity extends Activity {
 											 needfengming = false;
 											 Message mMsg = new Message();
 									         mMsg.what=4;
-									         mHandler.sendMessage(mMsg); 
+									         handler2.sendMessage(mMsg); 
 										 }										 
 			                        	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
 			                         }   
@@ -915,7 +906,7 @@ public class MainActivity extends Activity {
 	     workerThread.start();
 	 }
 	 
-	Handler mHandler = new Handler(){
+	Handler handler2 = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -996,25 +987,25 @@ public class MainActivity extends Activity {
 	 private void setNormalSignal(){
 		 Message mMsg = new Message();
          mMsg.what=3;
-         mHandler.sendMessage(mMsg);
+         handler2.sendMessage(mMsg);
 	 }
 	 
 	 private void gaodianya(){
 		 Message mMsg = new Message();
          mMsg.what=0;
-         mHandler.sendMessage(mMsg);		 
+         handler2.sendMessage(mMsg);		 
 	 }
 	 
 	 private void didianya(){
 		 Message mMsg = new Message();
          mMsg.what=1;
-         mHandler.sendMessage(mMsg);		
+         handler2.sendMessage(mMsg);		
 	 }
 	 
 	 private void guozai(){
 		 Message mMsg = new Message();
          mMsg.what=2;
-         mHandler.sendMessage(mMsg);
+         handler2.sendMessage(mMsg);
 	 }
 	 
 	/**
@@ -1136,7 +1127,7 @@ public class MainActivity extends Activity {
 			}
 		};
 		private CampassHelper cmpsHelper;
-		private SubMultiToucher subMultiToucher;
+		private MultiToucher subMultiToucher;
 		@Override
 		protected void onResume() {
 			if(null!=cmpsHelper) cmpsHelper.onResume();

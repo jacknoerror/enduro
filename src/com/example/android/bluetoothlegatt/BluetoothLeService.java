@@ -202,7 +202,6 @@ public class BluetoothLeService extends Service {
 
         return true;
     }
-
     /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *

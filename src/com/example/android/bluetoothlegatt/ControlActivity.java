@@ -1,25 +1,57 @@
 package com.example.android.bluetoothlegatt;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.TextView;
+import android.util.SparseArray;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.example.bzbluetooth.MainActivity;
 import com.example.bzbluetooth.R;
-import com.example.bzbluetooth.R.layout;
+import com.example.bzbluetooth.RingtoneUtils;
+import com.example.bzbluetooth.helper.CampassHelper;
+import com.example.bzbluetooth.helper.GattUtils;
+import com.example.bzbluetooth.helper.MultiToucher;
+import com.example.bzbluetooth.helper.TokenKeeper;
 
+/**
+ * 
+ * {@docRoot}信息发送成功？
+ * @author taotao
+ * @Date 2014-12-4
+ */
 public class ControlActivity extends Activity {
+	private static final String SP_AUTO_BLT = "AUTO_BLT";
+
+	private static final String SP_BOX_TOKEN = "BOX_TOKEN";
+
+	private static final String SP_TOKEN = "TOKEN";
+
 	final static String TAG = "ControlActivity";
 	
+//	private String commandStr = "";
 
 	public static final String EXTRAS_DEVICE_ADDRESS = "deviceaddress";
 	public static final String EXTRAS_DEVICE_NAME = "devicename";
@@ -27,6 +59,13 @@ public class ControlActivity extends Activity {
 	private boolean mConnected = false;
 	
 	private BluetoothLeService mBluetoothLeService;
+	
+	/*btns*/
+	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img;
+	private ImageButton songkaiBtn,jiajinBtn,upBtn, downBtn,upleftBtn,
+		uprightBtn,downleftBtn,downrightBtn;
+	private ToggleButton tbtnSwitch;
+	
 	
 	// Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -51,104 +90,470 @@ public class ControlActivity extends Activity {
 
 	private String mDeviceName;
 	private String mDeviceAddress;
+
+	private String blt_addr_str;
+
+	private CampassHelper cmpsHelper;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_operate);
-		
+//		findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);//changeto:配对成功后再显示
 		final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 		
 //		mGattServicesList.setOnChildClickListener(servicesListClickListner);
 //        mConnectionState = (TextView) findViewById(R.id.connection_state);
+        token = TokenKeeper.getValue(this, SP_TOKEN);
+        box_token = TokenKeeper.getValue(this, SP_BOX_TOKEN);
+        blt_addr_str = TokenKeeper.getValue(this, SP_AUTO_BLT);
+        TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        imei = telephonyManager.getDeviceId().substring(4, 10);    
+        check_str = String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204));
 		
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        
+        initBtns();
 	}
-	
+	private void initBtns() {
+		 // Button 设置
+		
+		subMultiToucher = new SubMultiToucher();
+		
+		upBtn = (ImageButton) this.findViewById(R.id.upBtn);
+		upBtn.setOnTouchListener(subMultiToucher);	
+		downBtn = (ImageButton) this.findViewById(R.id.downBtn);
+		downBtn.setOnTouchListener(subMultiToucher);	
+		
+		upleftBtn = (ImageButton) this.findViewById(R.id.upleftBtn);
+		upleftBtn.setOnTouchListener(subMultiToucher);	
+		uprightBtn = (ImageButton) this.findViewById(R.id.uprightBtn);
+		uprightBtn.setOnTouchListener(subMultiToucher);	
+		downleftBtn = (ImageButton) this.findViewById(R.id.downleftBtn);
+		downleftBtn.setOnTouchListener(subMultiToucher);	
+		downrightBtn = (ImageButton) this.findViewById(R.id.downrightBtn);
+		downrightBtn.setOnTouchListener(subMultiToucher);
+		
+		songkaiBtn = (ImageButton) this.findViewById(R.id.songkaiBtn);
+		ClickEvent clickEvent = new ClickEvent();
+		songkaiBtn.setOnClickListener(clickEvent);
+		jiajinBtn = (ImageButton) this.findViewById(R.id.jiajinBtn);
+		jiajinBtn.setOnClickListener(new ClickEvent());
+		
+		
+//		dianji_ll = (LinearLayout) this.findViewById(R.id.dianji_ll);//TODO 电机选择
+		
+		//警号灯
+		diya_img 	= (ImageView) this.findViewById(R.id.diya_img);
+		gaoya_img 	= (ImageView) this.findViewById(R.id.gaoya_img);
+		xinhao_img 	= (ImageView) this.findViewById(R.id.xinhao_img);
+		guozai_img 	= (ImageView) this.findViewById(R.id.guozai_img);
+		
+		cmpsHelper = new CampassHelper(this, (ImageView) this.findViewById(R.id.zhinanzhen_img));//taotao 1117
+		
+		
+	}
+	@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
+    }
 	@Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if(null!=cmpsHelper) cmpsHelper.onResume();
+        registerReceiver(mGattUpdateReceiver, GattUtils.makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
             final boolean result = mBluetoothLeService.connect(mDeviceAddress);
             Log.d(TAG, "Connect request result=" + result);
         }
+        startScheduleIfPossible();
     }
 	@Override
     protected void onPause() {
         super.onPause();
+        if(null!=cmpsHelper) cmpsHelper.onPause();
         unregisterReceiver(mGattUpdateReceiver);
+        if(null!=scheduledExecutorService&&!scheduledExecutorService.isShutdown()) scheduledExecutorService.shutdown();
     }
 	
-	// Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
-    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
-//                updateConnectionState(R.string.connected);
-//                invalidateOptionsMenu();
-                Toast.makeText(ControlActivity.this, "connected", Toast.LENGTH_SHORT).show();
-                send();
-            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
-//                updateConnectionState(R.string.disconnected);
-//                invalidateOptionsMenu();
-                Toast.makeText(ControlActivity.this, "disconnected", Toast.LENGTH_SHORT).show();
-//                clearUI();
-            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the user interface.
-            	//TODO
-//                displayGattServices(mBluetoothLeService.getSupportedGattServices());
-            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-            }
-        }
-    };
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
-        return intentFilter;
-    }
-	
+	 
+    /**
+     * Handles various events fired by the Service.
+     ACTION_GATT_CONNECTED: connected to a GATT server.
+     ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+     ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+     ACTION_DATA_AVAILABLE: received data from the device.  
+			This can be a result of read or notification operations.
+     */
+	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+				mConnected = true;
+				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
+			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+				mConnected = false;
+				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
+				// clearUI();
+			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+				// 发现服务器
+				startScheduleIfPossible();
+				// displayGattServices(mBluetoothLeService.getSupportedGattServices());
+			} else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+				displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+			}
+		}
+	};
     byte[] WriteBytes = new byte[20];
+    /** 固定使用的读写字符     */
+    BluetoothGattCharacteristic fixedCharacteristic = null;
+
+	private ScheduledExecutorService scheduledExecutorService;
+
+	private String broken_str;
+
+	private boolean needBB;
+
+	private String token;//TODO
+
+	private String imei;
+
+	private String box_token;
+
+	private String check_str = "";//TODO 优先级 判断成功
+
+	private boolean needfengming;
+
+	private boolean needSetNormalSignal;
+
+	private boolean noSignal;//
+
+	private SubMultiToucher subMultiToucher;
 	void send(){
-		
-		final BluetoothGattCharacteristic characteristic =
-                mGattCharacteristics.get(groupPosition).get(childPosition);
+		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ? XXX 其他操作？
 		
 		byte[] value = new byte[20];
         value[0] = (byte) 0x00;
-//        if(editTextName.getText().length() > 0){
-//            //write string
-//            WriteBytes= editTextName.getText().toString().getBytes();
-//        }else if(editTextNumEditText.getText().length() > 0){
-//            WriteBytes= hex2byte(editTextNumEditText.getText().toString().getBytes());
-//        }
-        WriteBytes = "1234abcd".getBytes();
-        characteristic.setValue(value[0],
-                BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-        characteristic.setValue(WriteBytes);
+        
+        Log.i(TAG, String.format("sending:%s", check_str));
+		WriteBytes = GattUtils.hex2byte(check_str.getBytes());// 固定使用16进制传输
+		// WriteBytes = "1234abcd".getBytes();
+		fixedCharacteristic.setValue(value[0],BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+		fixedCharacteristic.setValue(WriteBytes);
 
-        mBluetoothLeService.writeCharacteristic(characteristic);
+		mBluetoothLeService.writeCharacteristic(fixedCharacteristic);
 	}
 	
-	private void displayData(String data) {
-        if (data != null) {
-        	Log.i(TAG, "data:"+data);
-            Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+	public void startScheduleIfPossible() {  
+		if (mConnected&&(null == scheduledExecutorService
+				|| scheduledExecutorService.isShutdown())) {
+
+			scheduledExecutorService = Executors
+					.newSingleThreadScheduledExecutor();
+			// 当Activity显示出来后，每两秒钟切换一次图片显示
+			scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+				@Override
+				public void run() {
+					mHandler.sendEmptyMessage(noSignal?5:6);
+					send();
+					noSignal = true;
+//					Log.i(TAG, "哎哟~你别恶心我~");
+				}
+			}, 100, 3000, TimeUnit.MILLISECONDS);
+		}
+    }  
+	
+
+	/**
+	 * 遍历蓝牙gatt服务获得ffe1读写字符特征码
+	 * @return 
+	 * taotao 1204
+	 */
+	public BluetoothGattCharacteristic getFixedChar() {
+		if (null == fixedCharacteristic) {
+			for (BluetoothGattService bgService : mBluetoothLeService
+					.getSupportedGattServices()) {
+				for (BluetoothGattCharacteristic bgCharacteristic : bgService
+						.getCharacteristics()) {
+					String string = bgCharacteristic.getUuid().toString();
+//					Log.i(TAG, "uuid::" + string);
+					if (string.contains("ffe1"))
+						fixedCharacteristic = bgCharacteristic;
+				}
+			}
+		}
+		return fixedCharacteristic;
+	}
+
+	
+	private void displayData(String rcvStr) {
+        if (rcvStr != null) {
+//            Toast.makeText(this, rcvStr, Toast.LENGTH_SHORT).show();
+            Log.i(TAG, String.format("receiving:%s", rcvStr));
+            
+            broken_str = broken_str + rcvStr;//?
+            if(rcvStr.length() == 16 || broken_str.length() == 18){
+
+           	 noSignal = false;
+           	 
+           	 if(rcvStr.length() == 16){
+           		 
+           	 }else{
+           		 rcvStr = broken_str.substring(2, 18);
+           	 }
+           	 
+           	 Log.d("--", "----#--->"+rcvStr);
+           	 
+           	 //返回值的crc8校验             	
+           	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
+           			 .equals(rcvStr.substring(12, 14))){
+           		 
+           		 String command = rcvStr.substring(10, 12);
+           		 Log.d("--","-------- :) ---------------------->command = " +command);
+           		 //是不是对码操作,返回的命令位是91 
+           		 if(command.equals("91")){
+           			 needfengming = true;
+           			 needBB = true;
+                   	 Log.d("--", "---------111进入对码状态----->" + rcvStr);
+                   	TokenKeeper.putValue(this, SP_TOKEN, token = rcvStr.substring(4, 10));
+						 String duima = "550301"+imei+"BB" + GattUtils.computeCRC8("0301"+imei, 187) + "EE";
+						 Log.d("--", "-------发送对码请求------->"+duima);		     						 
+//                   	 sendDataToPairedDevice(duima);
+						 setCommandStr(duima);
+                    }
+
+           		 if(command.equals("BB") && needBB){
+           			 needBB = false;
+           			 Log.d("--", "---------222进入对码状态----->" + rcvStr);
+						 TokenKeeper.putValue(this, SP_BOX_TOKEN, box_token = rcvStr.substring(4, 10));
+						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
+						 if(needfengming){
+							 needfengming = false;
+							 mHandler.sendEmptyMessage(4);//
+						 }										 
+                   	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
+                    }   
+           		 
+               	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
+               			 .equals(rcvStr.substring(12, 14))){
+               		 command = rcvStr.substring(10, 12);
+                   	 if(command.equals("90")){
+                   		 if(needSetNormalSignal){
+                   			mHandler.sendEmptyMessage(3);//setNormalSignal();
+                   		 }
+                       	 Log.d("--", "--正常-->");
+                        }else if(command.equals("96")){
+                       	 Log.d("--","---------高压-------高压--------------->");
+                       	 needSetNormalSignal = true;
+                       	mHandler.sendEmptyMessage(0);//gaodianya();
+                        }else if(command.equals("95")){
+                       	 Log.d("--","---------低压-------低压-------------->");
+                       	 needSetNormalSignal = true;
+                       	mHandler.sendEmptyMessage(1);//didianya(); 
+                        }else if(command.equals("97")){
+                       	 Log.d("--","---------过载-------过载------------->");
+                       	 needSetNormalSignal = true;
+                       	mHandler.sendEmptyMessage(2);//guozai();
+                        }else if(command.equals("98")){
+                       	 Log.d("--", "---小电机工作超时--->");
+                        }else if(command.equals("99")){
+                       	 Log.d("--", "---大电机工作超时---->");
+                        }
+                   	 
+                   	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//大电机工作中 手指没按着
+//                   		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",GattUtils.computeCRC8("0301"+box_token, 170)));
+                   		 setCommandStr(String.format("%s%s%s%sEE", "550301",box_token,"AA",GattUtils.computeCRC8("0301"+box_token, 170)));
+                        }
+               	 }	                        		 
+           	 }	                        	 
+            }else{
+           	 broken_str = rcvStr;	                        	 
+            }
+        
+            
         }
     }
+	/**
+	 * @param commandStr
+	 */
+	public void setCommandStr(String commandStr) {//如果改好几遍？XXX
+		check_str = commandStr;
+	}
+	
+	Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what){
+            case 0:
+            	gaoya_img.setVisibility(View.VISIBLE);
+            	diya_img.setVisibility(View.GONE);
+            	xinhao_img.setVisibility(View.VISIBLE);
+            	playBeep();
+            	break;
+            case 1:
+            	diya_img.setVisibility(View.VISIBLE);
+            	gaoya_img.setVisibility(View.GONE);
+            	xinhao_img.setVisibility(View.VISIBLE);
+            	playBeep();            	
+            	break;
+            case 2:
+            	guozai_img.setVisibility(View.VISIBLE);
+            	xinhao_img.setVisibility(View.VISIBLE);
+            	playBeep();        	
+            	break;
+            case 3:
+            	needfengming = true;
+            	needSetNormalSignal = false;
+	       		xinhao_img.setVisibility(View.VISIBLE);	       		
+	       		guozai_img.setVisibility(View.INVISIBLE);	       		
+	       		gaoya_img.setVisibility(View.INVISIBLE);
+	       		diya_img.setVisibility(View.GONE);
+	       		setOpBtnEnablity(true);
+            	break; 
+            case 4:
+            	RingtoneUtils.playRingtone(ControlActivity.this);
+            	findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);
+            	break;
+            case 5:
+            	xinhao_img.setVisibility(View.INVISIBLE);
+            	break;
+            case 6:
+            	xinhao_img.setVisibility(View.VISIBLE);
+            	break;           	
+            }
+        }
+
+		/**
+		 * 
+		 */
+		public void playBeep() {
+			if(needfengming){
+				RingtoneUtils.playRingtone(ControlActivity.this);
+				needfengming = false;
+				setOpBtnEnablity(false);
+			}
+		}
+		
+		
+		private void setOpBtnEnablity(boolean enable) {
+			upBtn.setEnabled(enable);
+	    	downBtn.setEnabled(enable);
+	    	upleftBtn.setEnabled(enable);
+	    	uprightBtn.setEnabled(enable);
+	    	downleftBtn.setEnabled(enable);
+	    	downrightBtn.setEnabled(enable);
+	    	songkaiBtn.setEnabled(enable);
+	    	jiajinBtn.setEnabled(enable);
+			
+		}
+    };
+    
+	class ClickEvent implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			AlertDialog.Builder ad = new Builder(ControlActivity.this,
+					AlertDialog.THEME_HOLO_DARK);
+			ad.setCancelable(false);
+			ad.setNegativeButton("No", null);
+			switch (v.getId()) {
+			case R.id.songkaiBtn:
+				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
+					Toast.makeText(ControlActivity.this, "请先进行对码操作",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				ad.setTitle("Disengage the rollers?");
+				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {    						//电机松开
+//						if (btSocket != null){
+						if(mConnected){
+//							String upString = "550301"+box_token+"2D"+GattUtils.computeCRC8("0301"+box_token, 45)+"EE";								
+							String upString =String.format("550301%s%s%sEE", box_token,"2D",GattUtils.computeCRC8("0301"+box_token, 45));
+							Log.d("", "------------电机松开------>" + upString); 
+//							sendDataToPairedDevice(upString);
+							setCommandStr(upString);
+						}
+					}
+				});
+				ad.create().show();
+				break;
+			case R.id.jiajinBtn:
+				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
+					Toast.makeText(ControlActivity.this, "请先进行对码操作",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				ad.setTitle("Engage the rollers?");
+				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {    						//电机夹紧	
+						if(mConnected){
+							String upString =String.format("550301%s%s%sEE", box_token,"2C",GattUtils.computeCRC8("0301"+box_token, 44));
+							setCommandStr(upString);
+							Log.d("", "------------电机松开------>" + upString); 
+						}
+					}
+				});
+				ad.create().show();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	String makeFormatCmd(String tk,String hx,int dx){
+		return String.format("550301%s%s%sEE", tk,hx,GattUtils.computeCRC8("0301"+box_token, dx));
+	}
+	/**
+	 * 
+	 * @author taotao
+	 * @Date 2014-12-4
+	 */
+	public class SubMultiToucher extends MultiToucher{
+		SparseArray<String> usMap;
+		protected SparseArray<String> getmap() {
+			if(null==usMap){
+				
+				usMap = new SparseArray<String>();
+				usMap.put(0, makeFormatCmd(box_token, "AA", 170));
+				//makeFormatCmd(box_token, "2B", 43)
+				usMap.put(0x100000, makeFormatCmd(box_token, "21", 33));
+				usMap.put(0x010000, makeFormatCmd(box_token, "20", 32));
+				usMap.put(0x001000, makeFormatCmd(box_token, "22", 34));
+				usMap.put(0x000100, makeFormatCmd(box_token, "26", 38));
+				usMap.put(0x000010, makeFormatCmd(box_token, "25", 37));
+				usMap.put(0x000001, makeFormatCmd(box_token, "27", 39));
+				usMap.put(0x110000, makeFormatCmd(box_token, "23", 35));
+				usMap.put(0x011000, makeFormatCmd(box_token, "24", 36));
+				usMap.put(0x000110, makeFormatCmd(box_token, "28", 40));
+				usMap.put(0x000011, makeFormatCmd(box_token, "29", 41));
+				
+				usMap.put(0x101000, makeFormatCmd(box_token, "20", 32));//左右
+				usMap.put(0x000101, makeFormatCmd(box_token, "25", 37));
+				
+				usMap.put(0x100001, makeFormatCmd(box_token, "2A", 42));//向右原地
+				usMap.put(0x001100, makeFormatCmd(box_token, "2B", 43));//向左原地
+			}
+			return usMap;
+		}
+		@Override
+		public void send(int order) {
+			super.send(order);
+			if (box_token.equals("")) { // 未对码的情况下禁止用户操作
+				Toast.makeText(ControlActivity.this, "请先进行对码操作", Toast.LENGTH_LONG).show();
+				return;
+			} 
+//			if (btSocket == null)	return;
+//			sendDataToPairedDevice(getmap().get(order));
+			setCommandStr(getmap().get(order));
+		}
+	}
 }

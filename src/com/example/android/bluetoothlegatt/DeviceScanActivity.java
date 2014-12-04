@@ -60,6 +60,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	private ListView mScanListView;
     private Button btnHow,btnAbout,btnScan;
     private ToggleButton btnSwitch;
+	private BluetoothAdapter btAdapt;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -84,7 +85,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         btnAbout.setOnClickListener(this);
         btnScan.setOnClickListener(this);
         btnSwitch.setOnClickListener(this);
-
+        btAdapt = BluetoothAdapter.getDefaultAdapter();// 初始化本机蓝牙功能
+        btnSwitch.setChecked(!btAdapt.isEnabled());
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -124,10 +126,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 
     
     @Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
+	public void onClick(View v) {
     	AlertDialog.Builder ad;
-		switch (arg0.getId()) {
+		switch (v.getId()) {
 		case R.id.howtoButton:
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
@@ -156,10 +157,10 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             //TODO to be tested
 			break;
 		case R.id.tbtnSwitch:
-			/*if (!btnSwitch.isChecked())
+			if (!btnSwitch.isChecked())
 				btAdapt.enable();
 			else 
-				btAdapt.disable();*/
+				btAdapt.disable();
 			break;
 		default:
 			break;
@@ -228,7 +229,6 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             mScanning = false;
         }
         startActivity(intent);
-        //TODO testtest
 	}
 
 

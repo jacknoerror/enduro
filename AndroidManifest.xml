@@ -32,7 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DeviceControlActivity" />
+        <activity android:name="com.example.android.bluetoothlegatt.ControlActivity" />
+        
+        <service android:name="com.example.android.bluetoothlegatt.BluetoothLeService" android:enabled="true"/>
     </application>
 
 </manifest>

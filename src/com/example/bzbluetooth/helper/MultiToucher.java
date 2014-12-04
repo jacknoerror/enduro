@@ -34,6 +34,8 @@ public class MultiToucher implements OnTouchListener {
 									0x100001,0x001100
 	};
 
+	
+
 	public MultiToucher() {
 		contrastMap.put(R.id.uprightBtn, 0x100000);
 		contrastMap.put(R.id.upBtn, 0x010000);
@@ -176,6 +178,13 @@ public class MultiToucher implements OnTouchListener {
 		}
 //		Log.i(TAG , "remove:"+intToRemove);
 		return true;
+	}
+
+	
+
+
+	public int getFingerCount() {//1126
+		return availableZone.size()+waitingZone.size();
 	}
 
 }
