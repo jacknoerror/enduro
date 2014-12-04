@@ -23,12 +23,12 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.bzbluetooth.MainActivity;
 import com.example.bzbluetooth.R;
 import com.example.bzbluetooth.RingtoneUtils;
 import com.example.bzbluetooth.helper.CampassHelper;
@@ -38,7 +38,7 @@ import com.example.bzbluetooth.helper.TokenKeeper;
 
 /**
  * 
- * {@docRoot}信息发送成功？
+ * @@ icon touchmove titlebig weburl
  * @author taotao
  * @Date 2014-12-4
  */
@@ -97,6 +97,7 @@ public class ControlActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.layout_operate);
 //		findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);//changeto:配对成功后再显示
 		final Intent intent = getIntent();
@@ -116,7 +117,8 @@ public class ControlActivity extends Activity {
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
         
         initBtns();
-	}
+	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
+
 	private void initBtns() {
 		 // Button 设置
 		
@@ -215,7 +217,7 @@ public class ControlActivity extends Activity {
 
 	private ScheduledExecutorService scheduledExecutorService;
 
-	private String broken_str;
+//	private String broken_str;
 
 	private boolean needBB;
 
@@ -227,7 +229,7 @@ public class ControlActivity extends Activity {
 
 	private String check_str = "";//TODO 优先级 判断成功
 
-	private boolean needfengming;
+	private boolean needfengming=true;
 
 	private boolean needSetNormalSignal;
 
@@ -236,7 +238,9 @@ public class ControlActivity extends Activity {
 	private SubMultiToucher subMultiToucher;
 	void send(){
 		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ? XXX 其他操作？
-		
+//		mNotifyCharacteristic = fixedCharacteristic;
+        mBluetoothLeService.setCharacteristicNotification(
+        		fixedCharacteristic, true);
 		byte[] value = new byte[20];
         value[0] = (byte) 0x00;
         
@@ -265,7 +269,7 @@ public class ControlActivity extends Activity {
 					noSignal = true;
 //					Log.i(TAG, "哎哟~你别恶心我~");
 				}
-			}, 100, 3000, TimeUnit.MILLISECONDS);
+			}, 100, 300, TimeUnit.MILLISECONDS);
 		}
     }  
 	
@@ -290,23 +294,25 @@ public class ControlActivity extends Activity {
 		}
 		return fixedCharacteristic;
 	}
-
 	
 	private void displayData(String rcvStr) {
         if (rcvStr != null) {
+        	if(rcvStr.contains("\n")) rcvStr = rcvStr.substring(rcvStr.indexOf("\n")).trim();
+        	if(rcvStr.contains(" ")) rcvStr = rcvStr.replace(" ", "");
+        	
 //            Toast.makeText(this, rcvStr, Toast.LENGTH_SHORT).show();
             Log.i(TAG, String.format("receiving:%s", rcvStr));
             
-            broken_str = broken_str + rcvStr;//?
-            if(rcvStr.length() == 16 || broken_str.length() == 18){
+//            broken_str =  broken_str + rcvStr;//?
+            if(rcvStr.length() == 18){//rcvStr.length() == 16 || broken_str.length() == 18){
 
            	 noSignal = false;
            	 
-           	 if(rcvStr.length() == 16){
-           		 
-           	 }else{
-           		 rcvStr = broken_str.substring(2, 18);
-           	 }
+//           	 if(rcvStr.length() == 16){
+//           		 
+//           	 }else{
+//            }
+           		 rcvStr = rcvStr.substring(2, 18);
            	 
            	 Log.d("--", "----#--->"+rcvStr);
            	 
@@ -334,37 +340,44 @@ public class ControlActivity extends Activity {
 						 TokenKeeper.putValue(this, SP_BOX_TOKEN, box_token = rcvStr.substring(4, 10));
 						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
 						 if(needfengming){
-							 needfengming = false;
 							 mHandler.sendEmptyMessage(4);//
 						 }										 
                    	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
                     }   
            		 
                	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
-               			 .equals(rcvStr.substring(12, 14))){
+               			 .equals(rcvStr.substring(12, 14))
+               			 &&token.equals(rcvStr.substring(4, 10))){
                		 command = rcvStr.substring(10, 12);
-                   	 if(command.equals("90")){
-                   		 if(needSetNormalSignal){
-                   			mHandler.sendEmptyMessage(3);//setNormalSignal();
-                   		 }
-                       	 Log.d("--", "--正常-->");
-                        }else if(command.equals("96")){
-                       	 Log.d("--","---------高压-------高压--------------->");
-                       	 needSetNormalSignal = true;
-                       	mHandler.sendEmptyMessage(0);//gaodianya();
-                        }else if(command.equals("95")){
-                       	 Log.d("--","---------低压-------低压-------------->");
-                       	 needSetNormalSignal = true;
-                       	mHandler.sendEmptyMessage(1);//didianya(); 
-                        }else if(command.equals("97")){
-                       	 Log.d("--","---------过载-------过载------------->");
-                       	 needSetNormalSignal = true;
-                       	mHandler.sendEmptyMessage(2);//guozai();
-                        }else if(command.equals("98")){
-                       	 Log.d("--", "---小电机工作超时--->");
-                        }else if(command.equals("99")){
-                       	 Log.d("--", "---大电机工作超时---->");
-                        }
+						if (command.equals("90")) {
+							if (needSetNormalSignal) {
+								mHandler.sendEmptyMessage(3);// setNormalSignal();
+							}
+							if(needfengming){
+								mHandler.sendEmptyMessage(4);//taotao 1204
+							}
+							Log.d("--", "--正常-->");
+						} else if (command.equals("96")) {
+							Log.d("--", "---------高压-------高压--------------->");
+							needSetNormalSignal = true;
+							mHandler.sendEmptyMessage(0);// gaodianya();
+						} else if (command.equals("95")) {
+							Log.d("--", "---------低压-------低压-------------->");
+							needSetNormalSignal = true;
+							mHandler.sendEmptyMessage(1);// didianya();
+						} else if (command.equals("97")) {
+							Log.d("--", "---------过载-------过载------------->");
+							needSetNormalSignal = true;
+							mHandler.sendEmptyMessage(2);// guozai();
+						} else if (command.equals("98")) {
+							Log.d("--", "---小电机工作超时--->");
+						} else if (command.equals("99")) {
+							Log.d("--", "---大电机工作超时---->");
+						}else if(command.equals("2D")||command.equals("2C")){//1204 上部按钮
+							resetCommandStr();
+						}else if(command.equals("9A")){
+							Log.d("--", "---失去连接报错---->");
+						}
                    	 
                    	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//大电机工作中 手指没按着
 //                   		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",GattUtils.computeCRC8("0301"+box_token, 170)));
@@ -373,7 +386,7 @@ public class ControlActivity extends Activity {
                	 }	                        		 
            	 }	                        	 
             }else{
-           	 broken_str = rcvStr;	                        	 
+//           	 	broken_str = rcvStr;	                        	 
             }
         
             
@@ -384,6 +397,9 @@ public class ControlActivity extends Activity {
 	 */
 	public void setCommandStr(String commandStr) {//如果改好几遍？XXX
 		check_str = commandStr;
+	}
+	void resetCommandStr(){
+		setCommandStr(String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204)));
 	}
 	
 	Handler mHandler = new Handler(){
@@ -418,8 +434,9 @@ public class ControlActivity extends Activity {
 	       		setOpBtnEnablity(true);
             	break; 
             case 4:
-            	RingtoneUtils.playRingtone(ControlActivity.this);
+            	playBeep();
             	findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);
+            	setOpBtnEnablity(true);
             	break;
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
