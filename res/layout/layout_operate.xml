@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/black"
-    android:visibility="gone" >
+     >
 
     <Button
         android:id="@+id/exitButton"
@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:background="#7e8336"
         android:orientation="horizontal"
-        android:paddingBottom="10dip"
-        android:paddingTop="10dip" >
+        android:paddingBottom="15dip"
+        android:paddingTop="15dip" >
 
         <ImageView
             android:id="@+id/diya_img"

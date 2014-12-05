@@ -16,11 +16,14 @@
 
 package com.example.android.bluetoothlegatt;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -31,21 +34,18 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ToggleButton;
 
-import com.example.bzbluetooth.MainActivity;
 import com.example.bzbluetooth.R;
 
 /**
@@ -71,7 +71,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//»•µÙ±ÍÃ‚¿∏
         setContentView(R.layout.layout_prepare);
-//        getActionBar().setTitle(R.string.title_devices);
+        
         mHandler = new Handler();
         
         //init ui
@@ -106,7 +106,27 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             finish();
             return;
         }
+        
+        demo();
     }
+
+	/**
+	 * 
+	 */
+	public void demo() {
+		/*delete FIXME*/
+        String myString = "2015/01/01";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
+        Date d;
+		try {
+			d = sdf.parse(myString);
+			if(d.before(new java.util.Date())){
+				Toast.makeText(this, "This is a demo app!", Toast.LENGTH_SHORT).show();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
