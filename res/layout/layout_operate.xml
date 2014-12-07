@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/black"
+    android:background="@drawable/bg_control"
      >
 
     <Button
@@ -23,7 +23,7 @@
         android:id="@+id/signal_ll"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#7e8336"
+        android:background="#7B8D2E"
         android:orientation="horizontal"
         android:paddingBottom="15dip"
         android:paddingTop="15dip" >

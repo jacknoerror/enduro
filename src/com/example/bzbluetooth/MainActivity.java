@@ -47,6 +47,7 @@ import com.example.bzbluetooth.helper.CampassHelper;
 import com.example.bzbluetooth.helper.GattUtils;
 import com.example.bzbluetooth.helper.MultiToucher;
 
+@Deprecated
 public class MainActivity extends Activity {
 //	private Button discoverButton = null;
 //	private Button scanButton = null;
