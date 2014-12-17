@@ -1,4 +1,4 @@
-package com.example.bzbluetooth;
+package com.bzbluetooth;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -29,7 +28,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -43,9 +41,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.bzbluetooth.helper.CampassHelper;
-import com.example.bzbluetooth.helper.GattUtils;
-import com.example.bzbluetooth.helper.MultiToucher;
+import com.bzbluetooth.R;
+import com.bzbluetooth.helper.CampassHelper;
+import com.bzbluetooth.helper.GattUtils;
+import com.bzbluetooth.helper.MultiToucher;
 
 @Deprecated
 public class MainActivity extends Activity {

@@ -1,4 +1,4 @@
-package com.example.bzbluetooth.helper;
+package com.bzbluetooth.helper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.example.bzbluetooth.R;
+import com.bzbluetooth.R;
 
 /**
  * 

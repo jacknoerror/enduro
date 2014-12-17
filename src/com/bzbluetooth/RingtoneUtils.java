@@ -1,4 +1,4 @@
-package com.example.bzbluetooth;
+package com.bzbluetooth;
 
 import android.content.Context;
 import android.media.Ringtone;

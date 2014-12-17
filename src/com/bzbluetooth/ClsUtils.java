@@ -1,4 +1,4 @@
-package com.example.bzbluetooth;
+package com.bzbluetooth;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

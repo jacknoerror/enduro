@@ -1,4 +1,4 @@
-package com.example.bzbluetooth.helper;
+package com.bzbluetooth.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.bluetoothlegatt;
+package com.bzbluetooth.android.bluetoothlegatt;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.bzbluetooth.R;
+import com.bzbluetooth.R;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.

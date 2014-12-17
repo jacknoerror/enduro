@@ -1,4 +1,4 @@
-package com.example.android.bluetoothlegatt;
+package com.bzbluetooth.android.bluetoothlegatt;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -29,12 +29,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.bzbluetooth.R;
-import com.example.bzbluetooth.RingtoneUtils;
-import com.example.bzbluetooth.helper.CampassHelper;
-import com.example.bzbluetooth.helper.GattUtils;
-import com.example.bzbluetooth.helper.MultiToucher;
-import com.example.bzbluetooth.helper.TokenKeeper;
+import com.bzbluetooth.R;
+import com.bzbluetooth.RingtoneUtils;
+import com.bzbluetooth.helper.CampassHelper;
+import com.bzbluetooth.helper.GattUtils;
+import com.bzbluetooth.helper.MultiToucher;
+import com.bzbluetooth.helper.TokenKeeper;
 
 /**
  * 
@@ -402,6 +402,11 @@ public class ControlActivity extends Activity {
 		setCommandStr(String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204)));
 	}
 	
+	String makeFormatCmd(String tk,String hx,int dx){
+		return String.format("550301%s%s%sEE", tk,hx,GattUtils.computeCRC8("0301"+box_token, dx));
+	}
+
+
 	Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -525,9 +530,6 @@ public class ControlActivity extends Activity {
 				break;
 			}
 		}
-	}
-	String makeFormatCmd(String tk,String hx,int dx){
-		return String.format("550301%s%s%sEE", tk,hx,GattUtils.computeCRC8("0301"+box_token, dx));
 	}
 	/**
 	 * 

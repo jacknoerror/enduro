@@ -1,9 +1,9 @@
-package com.example.bzbluetooth.helper;
+package com.bzbluetooth.helper;
 
 import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 
-import com.example.android.bluetoothlegatt.BluetoothLeService;
+import com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService;
 
 public class GattUtils {
 
