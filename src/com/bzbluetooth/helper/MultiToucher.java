@@ -31,7 +31,7 @@ public class MultiToucher implements OnTouchListener {
 
 	final int[] CP_MASKS = new int[]{0x110000,0x011000,0x000110,0x000011,
 									0x101000,0x000101,
-									0x100001,0x001100
+									0x100001,0x001100,
 	};
 
 	

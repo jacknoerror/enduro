@@ -201,7 +201,8 @@ public class ControlActivity extends Activity {
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
 				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
-				// clearUI();
+				disableBlinks();
+				BLINK_CONNECT = true;//1217
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 				// 发现服务器
 				startScheduleIfPossible();
@@ -227,17 +228,21 @@ public class ControlActivity extends Activity {
 
 	private String box_token;
 
-	private String check_str = "";//TODO 优先级 判断成功
+	private String check_str = "";// 优先级 判断成功
 
 	private boolean needfengming=true;
 
 	private boolean needSetNormalSignal;
 
 	private boolean noSignal;//
+	
+	boolean BLINK_CONNECT,BLINK_OVER,
+		BLINK_HIGH,BLINK_LOW;
+	int blinkTimerCount;
 
 	private SubMultiToucher subMultiToucher;
 	void send(){
-		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ? XXX 其他操作？
+		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ?  
 //		mNotifyCharacteristic = fixedCharacteristic;
         mBluetoothLeService.setCharacteristicNotification(
         		fixedCharacteristic, true);
@@ -268,6 +273,7 @@ public class ControlActivity extends Activity {
 					send();
 					noSignal = true;
 //					Log.i(TAG, "哎哟~你别恶心我~");
+					mHandler.sendEmptyMessage(7);
 				}
 			}, 100, 300, TimeUnit.MILLISECONDS);
 		}
@@ -295,6 +301,13 @@ public class ControlActivity extends Activity {
 		return fixedCharacteristic;
 	}
 	
+	/**
+	 * @param commandStr
+	 */
+	public void setCommandStr(String commandStr) {//如果改好几遍？XXX
+		check_str = commandStr;
+	}
+
 	private void displayData(String rcvStr) {
         if (rcvStr != null) {
         	if(rcvStr.contains("\n")) rcvStr = rcvStr.substring(rcvStr.indexOf("\n")).trim();
@@ -347,16 +360,17 @@ public class ControlActivity extends Activity {
            		 
                	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
                			 .equals(rcvStr.substring(12, 14))
-               			 &&token.equals(rcvStr.substring(4, 10))){
-               		 command = rcvStr.substring(10, 12);
+							&& token.equals(rcvStr.substring(4, 10))) {
+						command = rcvStr.substring(10, 12);
 						if (command.equals("90")) {
 							if (needSetNormalSignal) {
 								mHandler.sendEmptyMessage(3);// setNormalSignal();
 							}
-							if(needfengming){
-								mHandler.sendEmptyMessage(4);//taotao 1204
+							if (needfengming) {
+								mHandler.sendEmptyMessage(4);// taotao 1204
 							}
 							Log.d("--", "--正常-->");
+							disableBlinks();
 						} else if (command.equals("96")) {
 							Log.d("--", "---------高压-------高压--------------->");
 							needSetNormalSignal = true;
@@ -373,17 +387,28 @@ public class ControlActivity extends Activity {
 							Log.d("--", "---小电机工作超时--->");
 						} else if (command.equals("99")) {
 							Log.d("--", "---大电机工作超时---->");
-						}else if(command.equals("2D")||command.equals("2C")){//1204 上部按钮
+						} else if (command.equals("2D") || command.equals("2C")) {// 1204
+																					// 上部按钮
 							resetCommandStr();
-						}else if(command.equals("9A")){
+						} else if (command.equals("9A")) {
 							Log.d("--", "---失去连接报错---->");
 						}
-                   	 
-                   	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//大电机工作中 手指没按着
-//                   		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",GattUtils.computeCRC8("0301"+box_token, 170)));
-                   		 setCommandStr(String.format("%s%s%s%sEE", "550301",box_token,"AA",GattUtils.computeCRC8("0301"+box_token, 170)));
-                        }
-               	 }	                        		 
+
+						if (command.equals("93")
+								&& subMultiToucher.getFingerCount() == 0) {// 大电机工作中
+																			// 手指没按着
+						// sendDataToPairedDevice(String.format("%s%s%s%sEE",",box_token,"AA",GattUtils.computeCRC8("0301"+box_token,)));
+							setCommandStr(String.format("%s%s%s%sEE", "550301",
+									box_token, "AA", GattUtils.computeCRC8(
+											"0301" + box_token, 170)));
+						}
+						if(command.equals("AA")){//停止成功 1217
+							resetCommandStr();
+						}
+						if(command.equals("2A")||command.equals("2B")){//1217 
+							resetCommandStr();
+						}
+					}	                        		 
            	 }	                        	 
             }else{
 //           	 	broken_str = rcvStr;	                        	 
@@ -392,12 +417,15 @@ public class ControlActivity extends Activity {
             
         }
     }
-	/**
-	 * @param commandStr
-	 */
-	public void setCommandStr(String commandStr) {//如果改好几遍？XXX
-		check_str = commandStr;
+	private void disableBlinks() {
+		BLINK_HIGH = false;
+		BLINK_LOW = false;
+		BLINK_OVER = false;
+		BLINK_CONNECT = false;
+		//wifi normal
+		xinhao_img.setVisibility(View.VISIBLE);
 	}
+
 	void resetCommandStr(){
 		setCommandStr(String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204)));
 	}
@@ -413,19 +441,22 @@ public class ControlActivity extends Activity {
             super.handleMessage(msg);
             switch(msg.what){
             case 0:
-            	gaoya_img.setVisibility(View.VISIBLE);
-            	diya_img.setVisibility(View.GONE);
+//            	gaoya_img.setVisibility(View.VISIBLE);
+//            	diya_img.setVisibility(View.GONE);
+            	BLINK_HIGH = true;
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();
             	break;
             case 1:
-            	diya_img.setVisibility(View.VISIBLE);
-            	gaoya_img.setVisibility(View.GONE);
+            	BLINK_LOW = true;
+//            	diya_img.setVisibility(View.VISIBLE);
+//            	gaoya_img.setVisibility(View.GONE);
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();            	
             	break;
             case 2:
-            	guozai_img.setVisibility(View.VISIBLE);
+            	BLINK_OVER = true;
+//            	guozai_img.setVisibility(View.VISIBLE);
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();        	
             	break;
@@ -448,9 +479,29 @@ public class ControlActivity extends Activity {
             	break;
             case 6:
             	xinhao_img.setVisibility(View.VISIBLE);
-            	break;           	
+            	break; 
+			case 7://blink
+				Log.i(TAG, "blinkCount"+blinkTimerCount);
+				blinkTimerCount%=2;
+				if(blinkTimerCount++!=0) break;//时间倍数闪烁
+				if(BLINK_CONNECT) blinkBtn(xinhao_img);
+				if(BLINK_HIGH) blinkBtn(gaoya_img);
+				if(BLINK_LOW) blinkBtn(diya_img);
+				if(BLINK_OVER) blinkBtn(guozai_img);
+				break;
+			default:
+				break;
             }
         }
+
+		private void blinkBtn(ImageView alert_img) {
+			if(alert_img.getVisibility()==View.VISIBLE){
+				alert_img.setVisibility(View.INVISIBLE);
+			}else{
+				alert_img.setVisibility(View.VISIBLE);
+			}
+			
+		}
 
 		/**
 		 * 

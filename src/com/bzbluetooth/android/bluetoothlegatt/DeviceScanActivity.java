@@ -25,14 +25,18 @@ import java.util.Locale;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +56,8 @@ import com.bzbluetooth.R;
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
 public class DeviceScanActivity extends Activity implements View.OnClickListener,OnItemClickListener{
+	private final String TAG = DeviceScanActivity.this.getClass().getSimpleName();
+	
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
@@ -60,19 +66,71 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	private ListView mScanListView;
     private Button btnHow,btnAbout,btnScan;
     private ToggleButton btnSwitch;
-	private BluetoothAdapter btAdapt;
+//	private BluetoothAdapter btAdapt;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
-    @Override
+    /**
+	 * 
+	 */
+	public void demo() {
+		/*delete FIXME*/
+	    String myString = "2015/02/01";
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
+	    Date d;
+		try {
+			d = sdf.parse(myString);
+			if(d.before(new java.util.Date())){
+				Toast.makeText(this, "This is a demo app!", Toast.LENGTH_SHORT).show();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.layout_prepare);
         
-        mHandler = new Handler();
+        mHandler = new Handler(){//TODO test if any error occurs when add device
+        	private ProgressDialog sDialog;
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				switch (msg.what) {
+				case 0:// start scan
+					mScanning = true;
+					mBluetoothAdapter.startLeScan(mLeScanCallback);
+		            invalidateOptionsMenu();
+		            sDialog = showProgressDialog(DeviceScanActivity.this, "scanning..");
+		            sDialog.setCancelable(true);
+		            sDialog.setOnCancelListener(new OnCancelListener() {
+						
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							mHandler.sendEmptyMessage(1);
+							
+						}
+					});
+					break;
+				case 1:
+					mScanning = false;
+		            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+		            invalidateOptionsMenu();
+		            if(null!=sDialog&&sDialog.isShowing()) sDialog.dismiss();
+					break;
+				default:
+					break;
+				}
+			}
+        	public ProgressDialog showProgressDialog(Context context,String text){
+        		return ProgressDialog.show(context, "",text);
+        	}
+        };
         
         //init ui
         mScanListView = (ListView) this.findViewById(R.id.lvDevices);
@@ -85,8 +143,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         btnAbout.setOnClickListener(this);
         btnScan.setOnClickListener(this);
         btnSwitch.setOnClickListener(this);
-        btAdapt = BluetoothAdapter.getDefaultAdapter();// 初始化本机蓝牙功能
-        btnSwitch.setChecked(!btAdapt.isEnabled());
+//        btAdapt = BluetoothAdapter.getDefaultAdapter();// 初始化本机蓝牙功能
+//        btnSwitch.setChecked(!btAdapt.isEnabled());
+        
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -94,18 +153,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             finish();
         }
 
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
-
-        // Checks if Bluetooth is supported on the device.
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "蓝牙不支持", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        initBluetooth();
         
         demo();
     }
@@ -113,20 +161,24 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	/**
 	 * 
 	 */
-	public void demo() {
-		/*delete FIXME*/
-        String myString = "2015/01/01";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
-        Date d;
-		try {
-			d = sdf.parse(myString);
-			if(d.before(new java.util.Date())){
-				Toast.makeText(this, "This is a demo app!", Toast.LENGTH_SHORT).show();
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	public void initBluetooth() {
+		// Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        // BluetoothAdapter through BluetoothManager.
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        // Checks if Bluetooth is supported on the device.
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth not supported!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }else{
+        	enableBluetooth();
+        }
 	}
+
+	
 
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -145,7 +197,22 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     }*/
 
     
-    @Override
+    /**
+	 * 
+	 */
+	public void enableBluetooth() {
+		// Ensures Bluetooth is enabled on the device. If Bluetooth is not
+		// currently enabled,
+		// fire an intent to display a dialog asking the user to grant
+		// permission to enable it.
+		if (!mBluetoothAdapter.isEnabled()) {
+			Intent enableBtIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+		}
+	}
+
+	@Override
 	public void onClick(View v) {
     	AlertDialog.Builder ad;
 		switch (v.getId()) {
@@ -161,26 +228,39 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("About ENDURO?");
-			ad.setMessage("软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\n" +
-					"Add: Staalweg 8  4104 AT  Culemborg\n\n网站链接：\nwww.enduro-europe.eu");
+//			ad.setMessage("软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\n" +
+//					"Add: Staalweg 8  4104 AT  Culemborg\n\n网站链接：\nwww.enduro-europe.eu");
+			View view = LayoutInflater.from(this).inflate(R.layout.layout_about, null);//
+			ad.setView(view);
 			ad.setPositiveButton("OK", null);
 			ad.create().show();	
 			break;
 		case R.id.scanButton:
-			if(!mScanning){
-				
-			mLeDeviceListAdapter.clear();
-            scanLeDevice(true);
+			if(null==mBluetoothAdapter){
+//				initBluetooth();
+				return;
+			}
+			if(!mBluetoothAdapter.isEnabled()){
+//				enableBluetooth();
+				return;
+			}
+			if (!mScanning) {
+				if (null != mLeDeviceListAdapter) {
+					mLeDeviceListAdapter.clear();
+					scanLeDevice(true);
+				}
 			}else{
 				scanLeDevice(false);
 			}
-            //TODO to be tested
 			break;
 		case R.id.tbtnSwitch:
-			if (!btnSwitch.isChecked())
-				btAdapt.enable();
-			else 
-				btAdapt.disable();
+			if(null==mBluetoothAdapter) return;
+			if (!btnSwitch.isChecked()){
+				mBluetoothAdapter.enable();
+			}
+			else {
+				mBluetoothAdapter.disable();
+			}
 			break;
 		default:
 			break;
@@ -202,25 +282,28 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     }*/
 
     @Override
-    protected void onResume() {
-        super.onResume();
+	protected void onResume() {
+		super.onResume();
+		mLeDeviceListAdapter = new LeDeviceListAdapter();
+		mScanListView.setAdapter(mLeDeviceListAdapter);
 
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
+		if (null == mBluetoothAdapter)
+			return;
+//		enableBluetooth();
+		// Initializes list view adapter.
+//		scanLeDevice(true);
 
-        // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
-        mScanListView.setAdapter(mLeDeviceListAdapter);
-        scanLeDevice(true);
-    }
+	}
 
-    @Override
+	@Override
+	protected void onPause() {
+	    super.onPause();
+	    if(null==mBluetoothAdapter||!mBluetoothAdapter.isEnabled()) return;//1217
+	    scanLeDevice(false);
+	    mLeDeviceListAdapter.clear();
+	}
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // User chose not to enable Bluetooth.
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
@@ -228,13 +311,6 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        scanLeDevice(false);
-        mLeDeviceListAdapter.clear();
     }
 
     @Override
@@ -252,25 +328,19 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	}
 
 
-    private void scanLeDevice(final boolean enable) {
+    private void scanLeDevice(final boolean enable) {//modified 1217
         if (enable) {
             // Stops scanning after a pre-defined scan period.
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    invalidateOptionsMenu();
-                }
-            }, SCAN_PERIOD);
+            mHandler.sendEmptyMessageDelayed(1, SCAN_PERIOD);
 
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+            mHandler.sendEmptyMessage(0);
+//            mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        	mHandler.sendEmptyMessage(1);
+//            mScanning = false;
+//            mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
-        invalidateOptionsMenu();
+//        invalidateOptionsMenu();
     }
 
     // Adapter for holding devices found through scanning.
@@ -348,6 +418,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                	if(null==mLeDeviceListAdapter) return;//1217
                     mLeDeviceListAdapter.addDevice(device);
                     mLeDeviceListAdapter.notifyDataSetChanged();
                 }
