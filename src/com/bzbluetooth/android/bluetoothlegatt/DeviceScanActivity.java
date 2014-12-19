@@ -106,6 +106,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 					mScanning = true;
 					mBluetoothAdapter.startLeScan(mLeScanCallback);
 		            invalidateOptionsMenu();
+		            
 		            sDialog = showProgressDialog(DeviceScanActivity.this, "scanning..");
 		            sDialog.setCancelable(true);
 		            sDialog.setOnCancelListener(new OnCancelListener() {
@@ -153,7 +154,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             finish();
         }
 
-        initBluetooth();
+        if(initBluetooth()){
+        	enableBluetooth();
+        }
         
         demo();
     }
@@ -161,7 +164,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	/**
 	 * 
 	 */
-	public void initBluetooth() {
+	public boolean initBluetooth() {
 		// Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager =
@@ -172,9 +175,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth not supported!", Toast.LENGTH_SHORT).show();
             finish();
-            return;
+            return false;
         }else{
-        	enableBluetooth();
+        	return true;
         }
 	}
 

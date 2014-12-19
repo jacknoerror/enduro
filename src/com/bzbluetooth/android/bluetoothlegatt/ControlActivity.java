@@ -26,9 +26,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bzbluetooth.MainActivity;
 import com.bzbluetooth.R;
 import com.bzbluetooth.RingtoneUtils;
 import com.bzbluetooth.helper.CampassHelper;
@@ -65,7 +67,8 @@ public class ControlActivity extends Activity {
 	private ImageButton songkaiBtn,jiajinBtn,upBtn, downBtn,upleftBtn,
 		uprightBtn,downleftBtn,downrightBtn;
 	private ToggleButton tbtnSwitch;
-	
+		private View dianji_ll;
+
 	
 	// Code to manage Service lifecycle.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -145,7 +148,7 @@ public class ControlActivity extends Activity {
 		jiajinBtn.setOnClickListener(new ClickEvent());
 		
 		
-//		dianji_ll = (LinearLayout) this.findViewById(R.id.dianji_ll);//TODO 电机选择
+		dianji_ll = this.findViewById(R.id.dianji_ll);
 		
 		//警号灯
 		diya_img 	= (ImageView) this.findViewById(R.id.diya_img);
@@ -222,7 +225,7 @@ public class ControlActivity extends Activity {
 
 	private boolean needBB;
 
-	private String token;//TODO
+	private String token;//
 
 	private String imei;
 
@@ -231,7 +234,7 @@ public class ControlActivity extends Activity {
 	private String check_str = "";// 优先级 判断成功
 
 	private boolean needfengming=true;
-
+	private boolean needSelectEngine=true;//1218
 	private boolean needSetNormalSignal;
 
 	private boolean noSignal;//
@@ -436,7 +439,9 @@ public class ControlActivity extends Activity {
 
 
 	Handler mHandler = new Handler(){
-        @Override
+
+
+		@Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch(msg.what){
@@ -473,6 +478,7 @@ public class ControlActivity extends Activity {
             	playBeep();
             	findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);
             	setOpBtnEnablity(true);
+            	if(needSelectEngine)showLlDialog();
             	break;
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
@@ -481,7 +487,7 @@ public class ControlActivity extends Activity {
             	xinhao_img.setVisibility(View.VISIBLE);
             	break; 
 			case 7://blink
-				Log.i(TAG, "blinkCount"+blinkTimerCount);
+//				Log.i(TAG, "blinkCount"+blinkTimerCount);
 				blinkTimerCount%=2;
 				if(blinkTimerCount++!=0) break;//时间倍数闪烁
 				if(BLINK_CONNECT) blinkBtn(xinhao_img);
@@ -493,6 +499,23 @@ public class ControlActivity extends Activity {
 				break;
             }
         }
+
+		private void showLlDialog() {
+			AlertDialog.Builder ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
+			ad.setCancelable(false);
+			ad.setTitle("Please select the type of your mover");
+			DialogInterface.OnClickListener dListener = new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					dianji_ll.setVisibility(which == AlertDialog.BUTTON_POSITIVE ? 
+									View.GONE: View.VISIBLE);
+				}
+			};
+			ad.setPositiveButton("Automatic Engaging Mover", dListener);
+			ad.setNegativeButton("Manual Engaging Mover", dListener);
+			ad.create().show();	
+			needSelectEngine = false;
+		}
 
 		private void blinkBtn(ImageView alert_img) {
 			if(alert_img.getVisibility()==View.VISIBLE){
@@ -527,6 +550,7 @@ public class ControlActivity extends Activity {
 			
 		}
     };
+
     
 	class ClickEvent implements View.OnClickListener {
 		@Override
