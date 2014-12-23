@@ -22,6 +22,7 @@ import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -234,7 +235,7 @@ public class ControlActivity extends Activity {
 	private String check_str = "";// 优先级 判断成功
 
 	private boolean needfengming=true;
-	private boolean needSelectEngine=true;//1218
+	private boolean needSelectEngine=false;//1218 1222
 	private boolean needSetNormalSignal;
 
 	private boolean noSignal;//
@@ -356,6 +357,7 @@ public class ControlActivity extends Activity {
 						 TokenKeeper.putValue(this, SP_BOX_TOKEN, box_token = rcvStr.substring(4, 10));
 						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
 						 if(needfengming){
+							 needSelectEngine = true;//1222 首次对码要选择
 							 mHandler.sendEmptyMessage(4);//
 						 }										 
                    	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
@@ -370,6 +372,7 @@ public class ControlActivity extends Activity {
 								mHandler.sendEmptyMessage(3);// setNormalSignal();
 							}
 							if (needfengming) {
+								needfengming=false;//1222 只在第一次对码时蜂鸣
 								mHandler.sendEmptyMessage(4);// taotao 1204
 							}
 							Log.d("--", "--正常-->");
@@ -437,6 +440,19 @@ public class ControlActivity extends Activity {
 		return String.format("550301%s%s%sEE", tk,hx,GattUtils.computeCRC8("0301"+box_token, dx));
 	}
 
+	long lastTimePressBack;
+	@Override
+	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			if(System.currentTimeMillis()-lastTimePressBack>2000){
+				Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+			}else{
+				finish();
+			}
+			lastTimePressBack = System.currentTimeMillis();
+		}
+		return false;
+	};
 
 	Handler mHandler = new Handler(){
 
@@ -479,6 +495,7 @@ public class ControlActivity extends Activity {
             	findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);
             	setOpBtnEnablity(true);
             	if(needSelectEngine)showLlDialog();
+            	else showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
             	break;
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
@@ -507,8 +524,9 @@ public class ControlActivity extends Activity {
 			DialogInterface.OnClickListener dListener = new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
-					dianji_ll.setVisibility(which == AlertDialog.BUTTON_POSITIVE ? 
-									View.GONE: View.VISIBLE);
+					boolean show = which == AlertDialog.BUTTON_POSITIVE;
+					TokenKeeper.getSpInstance(ControlActivity.this).edit().putBoolean("showdianji", show).commit();//1222
+					showDianjiLl(show );
 				}
 			};
 			ad.setPositiveButton("Automatic Engaging Mover", dListener);
@@ -516,7 +534,11 @@ public class ControlActivity extends Activity {
 			ad.create().show();	
 			needSelectEngine = false;
 		}
-
+		
+		private void showDianjiLl(boolean show){
+			dianji_ll.setVisibility(show ? View.GONE: View.VISIBLE);
+		}
+		
 		private void blinkBtn(ImageView alert_img) {
 			if(alert_img.getVisibility()==View.VISIBLE){
 				alert_img.setVisibility(View.INVISIBLE);

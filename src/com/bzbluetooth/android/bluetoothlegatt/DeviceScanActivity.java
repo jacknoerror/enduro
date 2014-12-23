@@ -328,6 +328,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             mScanning = false;
         }
         startActivity(intent);
+        finish();//1222
 	}
 
 
