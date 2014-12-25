@@ -51,6 +51,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bzbluetooth.R;
+import com.bzbluetooth.helper.TokenKeeper;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
@@ -61,6 +62,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
+
+    private boolean AUTO_CONN=true ;//如果要禁止自动连接 修改这个值
     private Handler mHandler;
     /*ui*/
 	private ListView mScanListView;
@@ -88,6 +91,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	@Override
@@ -96,7 +100,10 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.layout_prepare);
         
-        mHandler = new Handler(){//TODO test if any error occurs when add device
+        lastName = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICENAME);
+        lastAddr = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICEADDRESS);
+        
+        mHandler = new Handler(){//
         	private ProgressDialog sDialog;
 			@Override
 			public void handleMessage(Message msg) {
@@ -156,6 +163,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 
         if(initBluetooth()){
         	enableBluetooth();
+        }else{
+        	//
         }
         
         demo();
@@ -290,11 +299,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 		mLeDeviceListAdapter = new LeDeviceListAdapter();
 		mScanListView.setAdapter(mLeDeviceListAdapter);
 
-		if (null == mBluetoothAdapter)
-			return;
-//		enableBluetooth();
-		// Initializes list view adapter.
-//		scanLeDevice(true);
+		if (null != mBluetoothAdapter&&mBluetoothAdapter.isEnabled()){
+			scanLeDevice(true);
+		}			
 
 	}
 
@@ -320,9 +327,17 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
     	final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
-        final Intent intent = new Intent(this, ControlActivity.class);
-        intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        goControl(device.getName(), device.getAddress());
+	}
+
+	/**
+	 * @param dName
+	 * @param dAddr
+	 */
+	public void goControl(String dName, String dAddr) {
+		final Intent intent = new Intent(this, ControlActivity.class);
+		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);
+		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
@@ -412,7 +427,6 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             return view;
         }
     }
-
     // Device scan callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
@@ -420,15 +434,27 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         @Override
         public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
             runOnUiThread(new Runnable() {
-                @Override
+
+				@Override
                 public void run() {
                 	if(null==mLeDeviceListAdapter) return;//1217
                     mLeDeviceListAdapter.addDevice(device);
                     mLeDeviceListAdapter.notifyDataSetChanged();
+                    
+                    if(AUTO_CONN&&!(lastName.isEmpty()||lastAddr.isEmpty())){//1224 自动连接上次设备
+                    	if(device.getName().equals(lastName)&&device.getAddress().equals(lastAddr)){
+                    		scanLeDevice(false);
+                    		goControl(lastName, lastAddr);
+                    	}
+                    }
                 }
             });
         }
     };
+
+	private String lastName;
+
+	private String lastAddr;
 
     static class ViewHolder {
         TextView deviceName;

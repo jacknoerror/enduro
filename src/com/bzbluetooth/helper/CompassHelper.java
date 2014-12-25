@@ -16,7 +16,7 @@ import android.widget.Toast;
  * @author taotao
  * @Date 2014-11-17
  */
-public class CampassHelper {
+public class CompassHelper {
 
 	Context context;
 	
@@ -24,7 +24,7 @@ public class CampassHelper {
 	private SensorListener listener ;
 	View campassImg;
 
-	public CampassHelper(Context context,ImageView campassImg) {
+	public CompassHelper(Context context,ImageView campassImg) {
 		this.context = context;
 		manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		listener = new SensorListener();

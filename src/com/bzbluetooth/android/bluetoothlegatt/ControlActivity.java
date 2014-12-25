@@ -23,6 +23,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -31,10 +32,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bzbluetooth.CompassActivity;
 import com.bzbluetooth.MainActivity;
 import com.bzbluetooth.R;
 import com.bzbluetooth.RingtoneUtils;
-import com.bzbluetooth.helper.CampassHelper;
+import com.bzbluetooth.helper.CompassHelper;
 import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.MultiToucher;
 import com.bzbluetooth.helper.TokenKeeper;
@@ -46,25 +48,26 @@ import com.bzbluetooth.helper.TokenKeeper;
  * @Date 2014-12-4
  */
 public class ControlActivity extends Activity {
+	public static final String SP_DEVICEADDRESS = "deviceaddress";
+	public static final String SP_DEVICENAME = "devicename";
 	private static final String SP_AUTO_BLT = "AUTO_BLT";
-
 	private static final String SP_BOX_TOKEN = "BOX_TOKEN";
-
 	private static final String SP_TOKEN = "TOKEN";
 
 	final static String TAG = "ControlActivity";
 	
 //	private String commandStr = "";
 
-	public static final String EXTRAS_DEVICE_ADDRESS = "deviceaddress";
-	public static final String EXTRAS_DEVICE_NAME = "devicename";
+	public static final String EXTRAS_DEVICE_ADDRESS = SP_DEVICEADDRESS;
+	public static final String EXTRAS_DEVICE_NAME = SP_DEVICENAME;
 	
 	private boolean mConnected = false;
+	private boolean NO_RECONN = true;
 	
 	private BluetoothLeService mBluetoothLeService;
 	
 	/*btns*/
-	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img;
+	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img,dje_img,djd_img;
 	private ImageButton songkaiBtn,jiajinBtn,upBtn, downBtn,upleftBtn,
 		uprightBtn,downleftBtn,downrightBtn;
 	private ToggleButton tbtnSwitch;
@@ -97,7 +100,7 @@ public class ControlActivity extends Activity {
 
 	private String blt_addr_str;
 
-	private CampassHelper cmpsHelper;
+	private CompassHelper cmpsHelper;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -123,7 +126,33 @@ public class ControlActivity extends Activity {
         initBtns();
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
 
-	private void initBtns() {
+	@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
+    }
+	@Override
+    protected void onResume() {
+        super.onResume();
+        if(null!=cmpsHelper) cmpsHelper.onResume();
+        registerReceiver(mGattUpdateReceiver, GattUtils.makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            Log.d(TAG, "Connect request result=" + result);
+        }
+        startScheduleIfPossible();
+    }
+	@Override
+    protected void onPause() {
+        super.onPause();
+        if(null!=cmpsHelper) cmpsHelper.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
+        if(null!=scheduledExecutorService&&!scheduledExecutorService.isShutdown()) scheduledExecutorService.shutdown();
+    }
+	
+	 
+    private void initBtns() {
 		 // Button 设置
 		
 		subMultiToucher = new SubMultiToucher();
@@ -156,38 +185,60 @@ public class ControlActivity extends Activity {
 		gaoya_img 	= (ImageView) this.findViewById(R.id.gaoya_img);
 		xinhao_img 	= (ImageView) this.findViewById(R.id.xinhao_img);
 		guozai_img 	= (ImageView) this.findViewById(R.id.guozai_img);
+		dje_img 	= (ImageView) this.findViewById(R.id.img_djb_e);
+		djd_img 	= (ImageView) this.findViewById(R.id.img_djb_d);
 		
-		cmpsHelper = new CampassHelper(this, (ImageView) this.findViewById(R.id.zhinanzhen_img));//taotao 1117
 		
+		View.OnClickListener l = new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder ad;
+				switch (v.getId()) {
+				case R.id.zhinanzhen_img:
+					startActivity(new Intent(ControlActivity.this,CompassActivity.class));
+					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+					break;
+				case R.id.btn_howto:
+					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
+					ad.setCancelable(false);
+					ad.setTitle("How to use?");
+					ad.setMessage(R.string.howto);
+					ad.setPositiveButton("OK", null);
+					ad.create().show();	
+					break;
+				case R.id.btn_about:
+					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
+					ad.setCancelable(false);
+					ad.setTitle("About ENDURO?");
+//					ad.setMessage("软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\n" +
+//							"Add: Staalweg 8  4104 AT  Culemborg\n\n网站链接：\nwww.enduro-europe.eu");
+					View view = LayoutInflater.from(ControlActivity.this).inflate(R.layout.layout_about, null);//
+					ad.setView(view);
+					ad.setPositiveButton("OK", null);
+					ad.create().show();	
+					break;				
+				default:
+					break;
+				}
+				
+			}
+		};
+		this.findViewById(R.id.btn_about).setOnClickListener(l);
+		this.findViewById(R.id.btn_howto).setOnClickListener(l);
+		ImageView compassImg = (ImageView) this.findViewById(R.id.zhinanzhen_img);
+		cmpsHelper = new CompassHelper(this, compassImg);//taotao 1117
+		compassImg.setOnClickListener(l);
+	}
+
+	private void savDvcInfo() {
+		TokenKeeper.putValue(this, SP_DEVICENAME, mDeviceName);
+		TokenKeeper.putValue(this, SP_DEVICEADDRESS, mDeviceAddress);
 		
 	}
-	@Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbindService(mServiceConnection);
-        mBluetoothLeService = null;
-    }
-	@Override
-    protected void onResume() {
-        super.onResume();
-        if(null!=cmpsHelper) cmpsHelper.onResume();
-        registerReceiver(mGattUpdateReceiver, GattUtils.makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-            Log.d(TAG, "Connect request result=" + result);
-        }
-        startScheduleIfPossible();
-    }
-	@Override
-    protected void onPause() {
-        super.onPause();
-        if(null!=cmpsHelper) cmpsHelper.onPause();
-        unregisterReceiver(mGattUpdateReceiver);
-        if(null!=scheduledExecutorService&&!scheduledExecutorService.isShutdown()) scheduledExecutorService.shutdown();
-    }
-	
-	 
-    /**
+
+
+	/**
      * Handles various events fired by the Service.
      ACTION_GATT_CONNECTED: connected to a GATT server.
      ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
@@ -202,11 +253,13 @@ public class ControlActivity extends Activity {
 			if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
 				mConnected = true;
 				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
+				savDvcInfo();
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
 				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
 				disableBlinks();
 				BLINK_CONNECT = true;//1217
+				NO_RECONN = false;//1224
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 				// 发现服务器
 				startScheduleIfPossible();
@@ -241,8 +294,8 @@ public class ControlActivity extends Activity {
 	private boolean noSignal;//
 	
 	boolean BLINK_CONNECT,BLINK_OVER,
-		BLINK_HIGH,BLINK_LOW;
-	int blinkTimerCount;
+		BLINK_HIGH,BLINK_LOW,BLINK_DJD,BLINK_DJE;
+	int blinkTimerCount,reconnTimerCount;
 
 	private SubMultiToucher subMultiToucher;
 	void send(){
@@ -278,6 +331,7 @@ public class ControlActivity extends Activity {
 					noSignal = true;
 //					Log.i(TAG, "哎哟~你别恶心我~");
 					mHandler.sendEmptyMessage(7);
+					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 重连
 				}
 			}, 100, 300, TimeUnit.MILLISECONDS);
 		}
@@ -430,6 +484,9 @@ public class ControlActivity extends Activity {
 		BLINK_CONNECT = false;
 		//wifi normal
 		xinhao_img.setVisibility(View.VISIBLE);
+		
+		BLINK_DJD = false;
+		BLINK_DJE = false;
 	}
 
 	void resetCommandStr(){
@@ -455,6 +512,8 @@ public class ControlActivity extends Activity {
 	};
 
 	Handler mHandler = new Handler(){
+
+
 
 
 		@Override
@@ -511,6 +570,15 @@ public class ControlActivity extends Activity {
 				if(BLINK_HIGH) blinkBtn(gaoya_img);
 				if(BLINK_LOW) blinkBtn(diya_img);
 				if(BLINK_OVER) blinkBtn(guozai_img);
+				if(BLINK_DJD) blinkBtn(djd_img);
+				if(BLINK_DJE) blinkBtn(dje_img);
+				break;
+				
+			case 100://重联
+				reconnTimerCount%=4;
+				if(null!=mBluetoothLeService&&!mConnected&&!NO_RECONN&&reconnTimerCount++==0){
+					NO_RECONN = mBluetoothLeService.connect(mDeviceAddress);
+				}
 				break;
 			default:
 				break;
@@ -599,6 +667,7 @@ public class ControlActivity extends Activity {
 							Log.d("", "------------电机松开------>" + upString); 
 //							sendDataToPairedDevice(upString);
 							setCommandStr(upString);
+							BLINK_DJD = true;//1224 该在此处?
 						}
 					}
 				});
@@ -618,6 +687,7 @@ public class ControlActivity extends Activity {
 							String upString =String.format("550301%s%s%sEE", box_token,"2C",GattUtils.computeCRC8("0301"+box_token, 44));
 							setCommandStr(upString);
 							Log.d("", "------------电机松开------>" + upString); 
+							BLINK_DJE = true;//1224 该在此处?
 						}
 					}
 				});

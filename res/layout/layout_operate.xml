@@ -97,7 +97,27 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/dianji_songkai_btn_selector" />
             </LinearLayout>
+			<LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center" >
 
+                <ImageView
+                    android:id="@+id/img_djb_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/djblink_d" 
+                    android:visibility="gone"
+                    />
+                <ImageView
+                    android:id="@+id/img_djb_e"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/djblink_e" 
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -122,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/padding_medium" >
+            android:paddingTop="@dimen/padding_medium" >
 
             <ImageView
                 android:layout_width="55dp"
@@ -203,9 +223,39 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:background="@null"
-                        android:src="@drawable/zuohou_btn_selector" />
+                        android:src="@drawable/zuohou_btn_selector" 
+                        
+                        />
                 </RelativeLayout>
             </LinearLayout>
+            <Button 
+                android:id="@+id/btn_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="about ENDURO"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/btn_about"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_marginRight="2dp"
+                />
+            <Button 
+                android:id="@+id/btn_howto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_howto"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/btn_howto"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_marginLeft="2dp"
+                />
         </RelativeLayout>
     </LinearLayout>
 

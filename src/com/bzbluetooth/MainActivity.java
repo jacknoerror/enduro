@@ -42,7 +42,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bzbluetooth.R;
-import com.bzbluetooth.helper.CampassHelper;
+import com.bzbluetooth.helper.CompassHelper;
 import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.MultiToucher;
 
@@ -212,7 +212,7 @@ public class MainActivity extends Activity {
 		guozai_img 	= (ImageView) this.findViewById(R.id.guozai_img);
 		
 		campass_img = (ImageView) this.findViewById(R.id.zhinanzhen_img);//taotao 1117
-		cmpsHelper = new CampassHelper(this, campass_img);
+		cmpsHelper = new CompassHelper(this, campass_img);
 		
 		// ToogleButton…Ë÷√
 		tbtnSwitch = (ToggleButton) this.findViewById(R.id.tbtnSwitch);
@@ -1126,7 +1126,7 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		};
-		private CampassHelper cmpsHelper;
+		private CompassHelper cmpsHelper;
 		private MultiToucher subMultiToucher;
 		@Override
 		protected void onResume() {

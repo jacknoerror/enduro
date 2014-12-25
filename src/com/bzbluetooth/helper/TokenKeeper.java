@@ -17,6 +17,11 @@ public class TokenKeeper {
 	public static boolean putValue(Context context , String key,String value){
 		return getSpInstance(context).edit().putString(key, value).commit();
 	}
+	/**
+	 * @param context
+	 * @param key
+	 * @return if null, return empty string.
+	 */
 	public static String getValue(Context context , String key){
 		return getSpInstance(context).getString(key, "");
 	}
