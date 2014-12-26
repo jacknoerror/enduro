@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="start_search">Suche nach Geräten</string>
+    <string name="bluetooth_off">Bluetooth AUS</string>
+    <string name="bluetooth_on">Bluetooth AN</string>
+    <string name="please_switch">Bitte schalten Sie Bluetooth zuerst ein</string>
+    <string name="bluetooth_near">Bluetooth-Verbindung vorhanden</string>
+    <string name="paired_succ">Erfolgreich gekoppelt</string>
+    <string name="paired_fail">Fehler beim koppeln</string>
+    <string name="select_system">Bitte wählen Sie den passenden Typ Ihrer Rangierhilfe</string>
+    <string name="system_Manual">Manuelles heranfahren der Rangierhilfe</string>
+    <string name="system_auto">Automatisches heranfahren der Rangierhilfe</string>
+    <string name="roller_engage">Antriebsrollen angekuppelt?</string>
+    <string name="roller_disengage">Antriebsrollen abgekuppelt?</string>
+    <string name="answer_yes">Ja</string>
+    <string name="answer_no">Nein</string>
+    <string name="hint_exit">Sind Sie sicher, dass Sie beenden wollen?</string>
+    <string name="exit_yes">Ja</string>
+    <string name="exit_no">Nein</string>
+    
+</resources>

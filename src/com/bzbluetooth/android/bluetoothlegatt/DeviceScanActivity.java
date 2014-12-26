@@ -114,7 +114,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 					mBluetoothAdapter.startLeScan(mLeScanCallback);
 		            invalidateOptionsMenu();
 		            
-		            sDialog = showProgressDialog(DeviceScanActivity.this, "scanning..");
+		            sDialog = showProgressDialog(DeviceScanActivity.this, getString(R.string.start_search));
 		            sDialog.setCancelable(true);
 		            sDialog.setOnCancelListener(new OnCancelListener() {
 						

@@ -17,4 +17,25 @@
     <string name="about2">网站链接：\nwww.enduro-europe.eu\n</string>
     
     <string name="btn_howto">how to use</string>
+    
+    
+    <string name="start_search">Search for devices</string>
+    <string name="bluetooth_off">Bluetooth OFF</string>
+    <string name="bluetooth_on">Bluetooth ON</string>
+    <string name="please_switch">Please switch Bluetooth on first</string>
+    <string name="bluetooth_near">Bluetooth connection available</string>
+    <string name="paired_succ">Paired successfully</string>
+    <string name="paired_fail">Failed to pair</string>
+    <string name="select_system">Please select the type of your manoeuvring system</string>
+    <string name="system_Manual">Manual engaging manoeuvring system</string>
+    <string name="system_auto">Automatic engaging manoeuvring system</string>
+    <string name="roller_engage">Engage the rollers?</string>
+    <string name="roller_disengage">Disengage the rollers?</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
+    <string name="hint_exit">Are you sure to exit?</string>
+    <string name="exit_yes">Yes</string>
+    <string name="exit_no">No</string>
+    
+    
 </resources>

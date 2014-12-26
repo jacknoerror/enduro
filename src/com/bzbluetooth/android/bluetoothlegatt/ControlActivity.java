@@ -656,7 +656,7 @@ public class ControlActivity extends Activity {
 							Toast.LENGTH_LONG).show();
 					return;
 				}
-				ad.setTitle("Disengage the rollers?");
+				ad.setTitle(R.string.roller_disengage);
 				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					
 					public void onClick(DialogInterface dialog, int which) {    						//电机松开
@@ -679,7 +679,7 @@ public class ControlActivity extends Activity {
 							Toast.LENGTH_LONG).show();
 					return;
 				}
-				ad.setTitle("Engage the rollers?");
+				ad.setTitle(R.string.roller_engage);
 				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					
 					public void onClick(DialogInterface dialog, int which) {    						//电机夹紧	

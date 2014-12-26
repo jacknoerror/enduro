@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="start_search">Chercher des appareils</string>
+    <string name="bluetooth_off">Bluetooth OFF</string>
+    <string name="bluetooth_on">Bluetooth ON</string>
+    <string name="please_switch">Mettez d’abord le Bluetooth en route</string>
+    <string name="bluetooth_near">Bluetooth communication disponible</string>
+    <string name="paired_succ">Synchronisation réussie</string>
+    <string name="paired_fail">Echec de la synchronisation Bluetooth</string>
+    <string name="select_system">Sélectionnez le type de votre système de manoeuvre</string>
+    <string name="system_Manual">Système de manoeuvre semi-automatique</string>
+    <string name="system_auto">Système de manoeuvre automatique</string>
+    <string name="roller_engage">Roulettes motorisées connectées ?</string>
+    <string name="roller_disengage">Roulettes motorisées désengagées ?</string>
+    <string name="answer_yes">Oui</string>
+    <string name="answer_no">Non</string>
+    <string name="hint_exit">Êtes-vous certain de vouloir quitter?</string>
+    <string name="exit_yes">Oui</string>
+    <string name="exit_no">Non</string>
+    
+</resources>
