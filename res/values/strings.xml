@@ -13,8 +13,8 @@
 		6. If “Automatic Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
 		7. If users’ cellphone fail to connect with control unit, there’s no need to operate on APP. Simply by pressing sync button on the control unit and waiting for the cellphone to give out a promt sound indicating sync completed. Then sync is completed. APP can now perform normally with control unit.
     </string>
-    <string name="about1">软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
-    <string name="about2">网站链接：\nwww.enduro-europe.eu\n</string>
+    <string name="about1">Software Version：\nv1.01\n\nCompany Info：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
+    <string name="about2">Net Link：\nwww.enduro-europe.eu\n</string>
     
     <string name="btn_howto">how to use</string>
     

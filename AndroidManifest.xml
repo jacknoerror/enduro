@@ -38,10 +38,12 @@
             </intent-filter>
         </activity>
         <activity android:name="com.bzbluetooth.android.bluetoothlegatt.ControlActivity" 
+            android:theme="@style/Activity_Transparent"
             android:screenOrientation="portrait">
             
         </activity>
         <activity android:name="com.bzbluetooth.CompassActivity" 
+            android:theme="@android:style/Theme.Dialog"
             android:screenOrientation="portrait"/>
 
         <service

@@ -33,6 +33,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bzbluetooth.CompassActivity;
+import com.bzbluetooth.CompassDialog;
 import com.bzbluetooth.MainActivity;
 import com.bzbluetooth.R;
 import com.bzbluetooth.RingtoneUtils;
@@ -66,8 +67,9 @@ public class ControlActivity extends Activity {
 	
 	private BluetoothLeService mBluetoothLeService;
 	
+	private View layout_operate;
 	/*btns*/
-	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img,dje_img,djd_img;
+	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img,djl_img,djr_img;
 	private ImageButton songkaiBtn,jiajinBtn,upBtn, downBtn,upleftBtn,
 		uprightBtn,downleftBtn,downrightBtn;
 	private ToggleButton tbtnSwitch;
@@ -106,24 +108,29 @@ public class ControlActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.layout_operate);
+		layout_operate = findViewById(R.id.layout_operate);
 //		findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);//changeto:配对成功后再显示
 		final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 		
-//		mGattServicesList.setOnChildClickListener(servicesListClickListner);
-//        mConnectionState = (TextView) findViewById(R.id.connection_state);
         token = TokenKeeper.getValue(this, SP_TOKEN);
         box_token = TokenKeeper.getValue(this, SP_BOX_TOKEN);
         blt_addr_str = TokenKeeper.getValue(this, SP_AUTO_BLT);
         TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         imei = telephonyManager.getDeviceId().substring(4, 10);    
         check_str = String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204));
-		
+        
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
         
         initBtns();
+        
+        needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
+        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 FIXME
+        else{
+        	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
+        }
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
 
 	@Override
@@ -185,8 +192,8 @@ public class ControlActivity extends Activity {
 		gaoya_img 	= (ImageView) this.findViewById(R.id.gaoya_img);
 		xinhao_img 	= (ImageView) this.findViewById(R.id.xinhao_img);
 		guozai_img 	= (ImageView) this.findViewById(R.id.guozai_img);
-		dje_img 	= (ImageView) this.findViewById(R.id.img_djb_e);
-		djd_img 	= (ImageView) this.findViewById(R.id.img_djb_d);
+		djl_img 	= (ImageView) this.findViewById(R.id.img_djb_e);
+		djr_img 	= (ImageView) this.findViewById(R.id.img_djb_d);
 		
 		
 		View.OnClickListener l = new View.OnClickListener() {
@@ -196,8 +203,9 @@ public class ControlActivity extends Activity {
 				AlertDialog.Builder ad;
 				switch (v.getId()) {
 				case R.id.zhinanzhen_img:
-					startActivity(new Intent(ControlActivity.this,CompassActivity.class));
-					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//					startActivity(new Intent(ControlActivity.this,CompassActivity.class));
+//					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+					new CompassDialog(ControlActivity.this).show();
 					break;
 				case R.id.btn_howto:
 					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
@@ -229,6 +237,8 @@ public class ControlActivity extends Activity {
 		ImageView compassImg = (ImageView) this.findViewById(R.id.zhinanzhen_img);
 		cmpsHelper = new CompassHelper(this, compassImg);//taotao 1117
 		compassImg.setOnClickListener(l);
+		
+		setOpBtnEnablity(false);//对码后才能操作 1230
 	}
 
 	private void savDvcInfo() {
@@ -254,7 +264,6 @@ public class ControlActivity extends Activity {
 				mConnected = true;
 				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
 				savDvcInfo();
-				needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
 				mHandler.sendEmptyMessage(4);
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
@@ -296,8 +305,9 @@ public class ControlActivity extends Activity {
 	private boolean noSignal;//
 	
 	boolean BLINK_CONNECT,BLINK_OVER,
-		BLINK_HIGH,BLINK_LOW,BLINK_DJD,BLINK_DJE;
+		BLINK_HIGH,BLINK_LOW,BLINK_DJR,BLINK_DJL;
 	int blinkTimerCount,reconnTimerCount;
+	private String lastDJ;//记录上次执行的小电机，确保在收到92（小电机工作中）时能正常闪烁
 
 	private SubMultiToucher subMultiToucher;
 	void send(){
@@ -389,9 +399,8 @@ public class ControlActivity extends Activity {
            	 
            	 Log.d("--", "----#--->"+rcvStr);
            	 
-           	 //返回值的crc8校验             	
-           	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
-           			 .equals(rcvStr.substring(12, 14))){
+           	 //返回值的crc8校验        	
+           	 if(comCheckCRC8(rcvStr)){
            		 
            		 String command = rcvStr.substring(10, 12);
            		 Log.d("--","-------- :) ---------------------->command = " +command);
@@ -415,12 +424,12 @@ public class ControlActivity extends Activity {
 						 if(needfengming){
 //							 needSelectEngine = true;//1222 首次对码要选择
 //							 mHandler.sendEmptyMessage(4);//1230注释 改再链接成功时选择
-						 }										 
+						 }			
+						 setOpBtnEnablity(true);//1230 对码成功后可以操作
                    	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
                     }   
            		 
-               	 if(GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
-               			 .equals(rcvStr.substring(12, 14))
+               	 if(comCheckCRC8(rcvStr)
 							&& token.equals(rcvStr.substring(4, 10))) {
 						command = rcvStr.substring(10, 12);
 						if (command.equals("90")) {
@@ -446,14 +455,30 @@ public class ControlActivity extends Activity {
 							needSetNormalSignal = true;
 							mHandler.sendEmptyMessage(2);// guozai();
 						} else if (command.equals("98")) {
+							BLINK_DJR = false;BLINK_DJL = false;
 							Log.d("--", "---小电机工作超时--->");
 						} else if (command.equals("99")) {
 							Log.d("--", "---大电机工作超时---->");
-						} else if (command.equals("2D") || command.equals("2C")) {// 1204
-																					// 上部按钮
+						} else if (command.equals("2D") ) {// 1204 //1230 rightside
+							BLINK_DJR = true;// 其他状态时应当关掉 
+							lastDJ = "2D";
+							resetCommandStr();
+						}else if( command.equals("2C")){//1230 leftside
+							BLINK_DJL = true;// 
+							lastDJ = "2C";
 							resetCommandStr();
 						} else if (command.equals("9A")) {
 							Log.d("--", "---失去连接报错---->");
+							disableBlinks();//1230
+						} else if(command.equals("92")){
+							if(lastDJ.equals("2D")) {
+								BLINK_DJR = true;BLINK_DJL = false;
+								djl_img.setVisibility(View.INVISIBLE);
+							}
+							else if(lastDJ.equals("2C")) {
+								BLINK_DJL = true;BLINK_DJR = false; 
+								djr_img.setVisibility(View.INVISIBLE);
+							}
 						}
 
 						if (command.equals("93")
@@ -479,6 +504,12 @@ public class ControlActivity extends Activity {
             
         }
     }
+
+	//校验
+	private boolean comCheckCRC8(String rcvStr) {
+		return GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
+				 .equals(rcvStr.substring(12, 14));
+	}
 	private void disableBlinks() {
 		BLINK_HIGH = false;
 		BLINK_LOW = false;
@@ -487,8 +518,14 @@ public class ControlActivity extends Activity {
 		//wifi normal
 		xinhao_img.setVisibility(View.VISIBLE);
 		
-		BLINK_DJD = false;
-		BLINK_DJE = false;
+		BLINK_DJR = false;
+		BLINK_DJL = false;
+	}
+
+	private void showDianjiLl(boolean show){
+		dianji_ll.setVisibility(show ? View.GONE: View.VISIBLE);
+		layout_operate.setVisibility(View.VISIBLE);
+		setResult(RESULT_OK);
 	}
 
 	void resetCommandStr(){
@@ -512,11 +549,7 @@ public class ControlActivity extends Activity {
 		}
 		return false;
 	};
-
 	Handler mHandler = new Handler(){
-
-
-
 
 		@Override
         public void handleMessage(Message msg) {
@@ -553,10 +586,11 @@ public class ControlActivity extends Activity {
             	break; 
             case 4:
             	playBeep();
-            	findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);
             	setOpBtnEnablity(true);
-            	if(needSelectEngine)showLlDialog();
-            	else showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
+            	if(needSelectEngine)showChooseLlDialog();
+            	else {
+//            		showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222  1230注视，改到开头
+            	}
             	break;
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
@@ -572,12 +606,12 @@ public class ControlActivity extends Activity {
 				if(BLINK_HIGH) blinkBtn(gaoya_img);
 				if(BLINK_LOW) blinkBtn(diya_img);
 				if(BLINK_OVER) blinkBtn(guozai_img);
-				if(BLINK_DJD) blinkBtn(djd_img);
-				if(BLINK_DJE) blinkBtn(dje_img);
+				if(BLINK_DJR) blinkBtn(djr_img);
+				if(BLINK_DJL) blinkBtn(djl_img);
 				break;
 				
 			case 100://重联
-				reconnTimerCount%=4;
+				reconnTimerCount%=2;
 				if(null!=mBluetoothLeService&&!mConnected&&!NO_RECONN&&reconnTimerCount++==0){
 					NO_RECONN = mBluetoothLeService.connect(mDeviceAddress);
 				}
@@ -587,7 +621,7 @@ public class ControlActivity extends Activity {
             }
         }
 
-		private void showLlDialog() {
+		private void showChooseLlDialog() {
 			AlertDialog.Builder ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("Please select the type of your mover");
@@ -605,9 +639,7 @@ public class ControlActivity extends Activity {
 			needSelectEngine = false;
 		}
 		
-		private void showDianjiLl(boolean show){
-			dianji_ll.setVisibility(show ? View.GONE: View.VISIBLE);
-		}
+		
 		
 		private void blinkBtn(ImageView alert_img) {
 			if(alert_img.getVisibility()==View.VISIBLE){
@@ -625,25 +657,23 @@ public class ControlActivity extends Activity {
 			if(needfengming){
 				RingtoneUtils.playRingtone(ControlActivity.this);
 				needfengming = false;
-				setOpBtnEnablity(false);
+				setOpBtnEnablity(false);//notice here 
 			}
-		}
-		
-		
-		private void setOpBtnEnablity(boolean enable) {
-			upBtn.setEnabled(enable);
-	    	downBtn.setEnabled(enable);
-	    	upleftBtn.setEnabled(enable);
-	    	uprightBtn.setEnabled(enable);
-	    	downleftBtn.setEnabled(enable);
-	    	downrightBtn.setEnabled(enable);
-	    	songkaiBtn.setEnabled(enable);
-	    	jiajinBtn.setEnabled(enable);
-			
 		}
     };
 
     
+	private void setOpBtnEnablity(boolean enable) {
+		upBtn.setEnabled(enable);
+		downBtn.setEnabled(enable);
+		upleftBtn.setEnabled(enable);
+		uprightBtn.setEnabled(enable);
+		downleftBtn.setEnabled(enable);
+		downrightBtn.setEnabled(enable);
+		songkaiBtn.setEnabled(enable);
+		jiajinBtn.setEnabled(enable);
+		
+	}
 	class ClickEvent implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -669,7 +699,6 @@ public class ControlActivity extends Activity {
 							Log.d("", "------------电机松开------>" + upString); 
 //							sendDataToPairedDevice(upString);
 							setCommandStr(upString);
-							BLINK_DJD = true;//1224 该在此处?
 						}
 					}
 				});
@@ -689,7 +718,6 @@ public class ControlActivity extends Activity {
 							String upString =String.format("550301%s%s%sEE", box_token,"2C",GattUtils.computeCRC8("0301"+box_token, 44));
 							setCommandStr(upString);
 							Log.d("", "------------电机松开------>" + upString); 
-							BLINK_DJE = true;//1224 该在此处?
 						}
 					}
 				});
@@ -712,7 +740,17 @@ public class ControlActivity extends Activity {
 				
 				usMap = new SparseArray<String>();
 				usMap.put(0, makeFormatCmd(box_token, "AA", 170));
+				//非法操作时
+				usMap.put(0x100100, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x001001, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x010010, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x100010, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x001010, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x010100, makeFormatCmd(box_token, "AA", 170));
+				usMap.put(0x010001, makeFormatCmd(box_token, "AA", 170));
+//				usMap.put(0x, makeFormatCmd(box_token, "AA", 170));
 				//makeFormatCmd(box_token, "2B", 43)
+				//组合键
 				usMap.put(0x100000, makeFormatCmd(box_token, "21", 33));
 				usMap.put(0x010000, makeFormatCmd(box_token, "20", 32));
 				usMap.put(0x001000, makeFormatCmd(box_token, "22", 34));
@@ -723,10 +761,9 @@ public class ControlActivity extends Activity {
 				usMap.put(0x011000, makeFormatCmd(box_token, "24", 36));
 				usMap.put(0x000110, makeFormatCmd(box_token, "28", 40));
 				usMap.put(0x000011, makeFormatCmd(box_token, "29", 41));
-				
 				usMap.put(0x101000, makeFormatCmd(box_token, "20", 32));//左右
 				usMap.put(0x000101, makeFormatCmd(box_token, "25", 37));
-				
+				//原地
 				usMap.put(0x100001, makeFormatCmd(box_token, "2A", 42));//向右原地
 				usMap.put(0x001100, makeFormatCmd(box_token, "2B", 43));//向左原地
 			}
@@ -736,7 +773,7 @@ public class ControlActivity extends Activity {
 		public void send(int order) {
 			super.send(order);
 			if (box_token.equals("")) { // 未对码的情况下禁止用户操作
-				Toast.makeText(ControlActivity.this, "请先进行对码操作", Toast.LENGTH_LONG).show();
+				Toast.makeText(ControlActivity.this, "Please get paired first", Toast.LENGTH_LONG).show();
 				return;
 			} 
 //			if (btSocket == null)	return;

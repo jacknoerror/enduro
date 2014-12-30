@@ -71,7 +71,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private ToggleButton btnSwitch;
 //	private BluetoothAdapter btAdapt;
 
-    private static final int REQUEST_ENABLE_BT = 1;
+    private static final int REQUEST_ENABLE_BT = 0x001;
+    private static final int REQUEST_ENGINESELECTED = 0x002;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
@@ -168,6 +169,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         }
         
         demo();
+        
+//        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
     }
 
 	/**
@@ -190,7 +193,6 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         }
 	}
 
-	
 
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -315,12 +317,14 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
         // User chose not to enable Bluetooth.
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
             finish();
-            return;
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        else if(requestCode == REQUEST_ENGINESELECTED && resultCode == RESULT_OK){
+        	finish();
+        }
     }
 
     @Override
@@ -336,14 +340,18 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void goControl(String dName, String dAddr) {
 		final Intent intent = new Intent(this, ControlActivity.class);
-		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);
+		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);//FIXME delete us when testing
 		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
         }
-        startActivity(intent);
-        finish();//1222
+//        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ENGINESELECTED);//1230
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        boolean needSelectEngine = !TokenKeeper.getSpInstance(DeviceScanActivity.this).contains("showdianji");//1230
+        if(!needSelectEngine) finish();//1230
+//        finish();//1222，不需要返回该界面	1230注释，选择engine后再finish
 	}
 
 

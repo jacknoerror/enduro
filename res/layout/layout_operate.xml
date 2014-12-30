@@ -27,14 +27,13 @@
         android:orientation="horizontal"
         android:paddingBottom="15dip"
         android:paddingTop="15dip" >
-
-        <ImageView
-            android:id="@+id/diya_img"
+		<ImageView
+            android:id="@+id/xinhao_img"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/diya"
-            android:visibility="gone" />
+            android:src="@drawable/xinhao"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/gaoya_img"
@@ -45,12 +44,13 @@
             android:visibility="invisible" />
 
         <ImageView
-            android:id="@+id/xinhao_img"
+            android:id="@+id/diya_img"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/xinhao"
-            android:visibility="visible" />
+            android:src="@drawable/diya"
+            android:visibility="gone" />
+        
 
         <ImageView
             android:id="@+id/guozai_img"
@@ -74,7 +74,9 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/padding_medium"
         android:background="@drawable/bg_rect"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:paddingTop="20dp"
+        >
 
         <LinearLayout
             android:id="@+id/dianji_ll"
@@ -106,7 +108,7 @@
                 <ImageView
                     android:id="@+id/img_djb_d"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/djblink_d" 
                     android:visibility="gone"
                     />
