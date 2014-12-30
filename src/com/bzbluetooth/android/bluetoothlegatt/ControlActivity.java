@@ -254,6 +254,8 @@ public class ControlActivity extends Activity {
 				mConnected = true;
 				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
 				savDvcInfo();
+				needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
+				mHandler.sendEmptyMessage(4);
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
 				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
@@ -411,8 +413,8 @@ public class ControlActivity extends Activity {
 						 TokenKeeper.putValue(this, SP_BOX_TOKEN, box_token = rcvStr.substring(4, 10));
 						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
 						 if(needfengming){
-							 needSelectEngine = true;//1222 首次对码要选择
-							 mHandler.sendEmptyMessage(4);//
+//							 needSelectEngine = true;//1222 首次对码要选择
+//							 mHandler.sendEmptyMessage(4);//1230注释 改再链接成功时选择
 						 }										 
                    	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
                     }   
