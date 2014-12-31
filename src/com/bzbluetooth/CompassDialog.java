@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnShowListener;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -19,6 +20,8 @@ public class CompassDialog extends Dialog implements OnShowListener, OnDismissLi
 		super(context);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_compass);
+		
+		getWindow().setGravity(Gravity.BOTTOM);
 		
 		View img = this.findViewById(R.id.img_compass);
 		ch = new CompassHelper(context, (ImageView)img);
