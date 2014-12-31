@@ -127,7 +127,8 @@ public class ControlActivity extends Activity {
         initBtns();
         
         needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
-        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 FIXME
+        needSelectEngine = false;//FIXME delete
+        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 XXX
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
         }
