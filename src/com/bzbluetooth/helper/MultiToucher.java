@@ -18,7 +18,7 @@ import com.bzbluetooth.R;
  * @author taotao
  * @Date 2014-11-18
  */
-public class MultiToucher implements OnTouchListener {
+public class MultiToucher implements OnTouchListener, CutOutImpl{
 	private final String TAG = getClass().getSimpleName();
 	
 	private static final int MAX_FINGERS = 2;
@@ -33,6 +33,8 @@ public class MultiToucher implements OnTouchListener {
 									0x101000,0x000101,
 									0x100001,0x001100,
 	};
+
+	private boolean alive;
 
 	
 
@@ -52,6 +54,7 @@ public class MultiToucher implements OnTouchListener {
 		int id = v.getId();
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
+			born();
 			int order = 0;
 			Integer intToAdd = contrastMap.get(id);//得到btnValue
 			if(addToAvailable(intToAdd)){//添加有效区成功
@@ -64,21 +67,19 @@ public class MultiToucher implements OnTouchListener {
 			}
 			break;
 		case MotionEvent.ACTION_UP:
-			Integer intToRemove = contrastMap.get(id);
-//			if(availableZone.contains(intToRemove))stop();
-			removeElement(intToRemove);
-			if(availableZone.size()<2&&waitingZone.size()>0){
-				addToAvailable(waitingZone.poll());
+			if(isAlive())cut(id);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			float x = event.getX(),y = event.getY();
+			if(x<0||x>v.getMeasuredWidth()||y<0||y>v.getMeasuredHeight()) {
+				if(isAlive())cut(id);
+				kill();
 			}
-			if (availableZone.size() > 0)
-				send(getAvailableValue(availableZone.get(0)));// 松开一个手指后补发按下的
-			else
-				stop();
 			break;
 		default:
 			break;
 		}
-		return false;
+		return true;
 	}
 
 
@@ -185,6 +186,38 @@ public class MultiToucher implements OnTouchListener {
 
 	public int getFingerCount() {//1126
 		return availableZone.size()+waitingZone.size();
+	}
+
+
+	@Override
+	public void cut(int id) {
+		Integer intToRemove = contrastMap.get(id);
+		removeElement(intToRemove);
+		if(availableZone.size()<2&&waitingZone.size()>0){
+			addToAvailable(waitingZone.poll());
+		}
+		if (availableZone.size() > 0)
+			send(getAvailableValue(availableZone.get(0)));// 松开一个手指后补发按下的
+		else
+			stop();
+	}
+
+
+	@Override
+	public void kill() {
+		alive = false;
+	}
+
+
+	@Override
+	public void born() {
+		alive = true;
+	}
+
+
+	@Override
+	public boolean isAlive() {
+		return alive;
 	}
 
 }
