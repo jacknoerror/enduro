@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -67,6 +70,7 @@ public class ControlActivity extends Activity {
 	
 	private BluetoothLeService mBluetoothLeService;
 	
+	ProgressDialog connectingDialog;//0104
 	private View layout_operate;
 	/*btns*/
 	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img,djl_img,djr_img;
@@ -88,12 +92,13 @@ public class ControlActivity extends Activity {
             }
             // Automatically connects to the device upon successful start-up initialization.
             mBluetoothLeService.connect(mDeviceAddress);
+            mHandler.sendEmptyMessage(101);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
-            Log.e(TAG, "notice!onServiceDisconnected:LINE_96");
+            Log.e(TAG, "---notice!onServiceDisconnected:LINE_96");
         }
     };
 
@@ -128,11 +133,12 @@ public class ControlActivity extends Activity {
         initBtns();
         
         needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
-        needSelectEngine = false;//FIXME delete
-        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 XXX
+//        needSelectEngine = false;//FIXME delete
+        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 XXX 
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
         }
+        //TODO 链接不上 该页面不会消失
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
 
 	@Override
@@ -267,14 +273,22 @@ public class ControlActivity extends Activity {
 				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
 				savDvcInfo();
 				mHandler.sendEmptyMessage(4);
+				if(null!=connectingDialog&&connectingDialog.isShowing()) connectingDialog.dismiss();//0104
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
 				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
 				disableBlinks();
-				BLINK_CONNECT = true;//1217
-				NO_RECONN = false;//1224
+//				BLINK_CONNECT = true;//1217 0104zs(to mHandler 5&6)
+				NO_RECONN = false;//1224 0104zs
+				Context mCtx = ControlActivity.this;
+				BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(mCtx).getAdapter();
+				if(null!=btAdapter&&btAdapter.isEnabled()){
+					btAdapter.startLeScan(mLeScanCallback);
+				}else{
+					Toast.makeText(context, "Bluetooth not enable!", Toast.LENGTH_LONG).show();
+				}
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-				Log.e(TAG, "notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
+//				Log.e(TAG, "---notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
 				// 发现服务器
 				startScheduleIfPossible();
 				// displayGattServices(mBluetoothLeService.getSupportedGattServices());
@@ -283,6 +297,27 @@ public class ControlActivity extends Activity {
 			}
 		}
 	};
+	
+	// Device cntrl callback.
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+            runOnUiThread(new Runnable() {
+
+				@Override
+                public void run() {
+					if(!NO_RECONN&&device.getName().equals(mDeviceName)&&device.getAddress().equals(mDeviceAddress)){
+						BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(ControlActivity.this).getAdapter();
+						if(null!=btAdapter)btAdapter.stopLeScan(mLeScanCallback);
+						NO_RECONN = true;
+						mBluetoothLeService.connect(mDeviceAddress);
+					}
+                }
+            });
+        }
+    };
     byte[] WriteBytes = new byte[20];
     /** 固定使用的读写字符     */
     BluetoothGattCharacteristic fixedCharacteristic = null;
@@ -346,7 +381,7 @@ public class ControlActivity extends Activity {
 					noSignal = true;
 //					Log.i(TAG, "哎哟~你别恶心我~");
 					mHandler.sendEmptyMessage(7);
-					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 重连
+//					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 重连 0104jazz
 				}
 			}, 100, 300, TimeUnit.MILLISECONDS);
 		}
@@ -476,11 +511,11 @@ public class ControlActivity extends Activity {
 						} else if(command.equals("92")){
 							if(lastDJ.equals("2D")) {
 								BLINK_DJR = true;BLINK_DJL = false;
-								djl_img.setVisibility(View.INVISIBLE);
+								djl_img.setVisibility(View.GONE);
 							}
 							else if(lastDJ.equals("2C")) {
 								BLINK_DJL = true;BLINK_DJR = false; 
-								djr_img.setVisibility(View.INVISIBLE);
+								djr_img.setVisibility(View.GONE);
 							}
 						}
 
@@ -523,6 +558,8 @@ public class ControlActivity extends Activity {
 		
 		BLINK_DJR = false;
 		BLINK_DJL = false;
+		djl_img.setVisibility(View.GONE);//0104
+		djr_img.setVisibility(View.GONE);
 	}
 
 	private void showDianjiLl(boolean show){
@@ -588,18 +625,22 @@ public class ControlActivity extends Activity {
 	       		setOpBtnEnablity(true);
             	break; 
             case 4:
-            	playBeep();
             	setOpBtnEnablity(true);
-            	if(needSelectEngine)showChooseLlDialog();
+            	if(needSelectEngine){
+            		showChooseLlDialog();
+            		playBeep();
+            	}
             	else {
 //            		showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222  1230注视，改到开头
             	}
             	break;
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
+            	BLINK_CONNECT = true;
             	break;
             case 6:
             	xinhao_img.setVisibility(View.VISIBLE);
+            	BLINK_CONNECT = false;
             	break; 
 			case 7://blink
 //				Log.i(TAG, "blinkCount"+blinkTimerCount);
@@ -613,10 +654,18 @@ public class ControlActivity extends Activity {
 				if(BLINK_DJL) blinkBtn(djl_img);
 				break;
 				
-			case 100://重联
-				reconnTimerCount%=2;
-				if(null!=mBluetoothLeService&&!mConnected&&!NO_RECONN&&reconnTimerCount++==0){
-					NO_RECONN = mBluetoothLeService.connect(mDeviceAddress);
+			case 101://连接中loading框
+				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, "connecting device..");
+				connectingDialog.setCancelable(false);
+				mHandler.sendEmptyMessageDelayed(102, 10*1000);
+				break;
+			case 102://判断是否连接失败
+				if(null!=connectingDialog&&connectingDialog.isShowing()){
+					connectingDialog.dismiss();
+					Context context = ControlActivity.this;
+					CharSequence text = "connecting failed";
+					GattUtils.showToast(context, text);
+					finish();
 				}
 				break;
 			default:
@@ -739,7 +788,7 @@ public class ControlActivity extends Activity {
 	public class SubMultiToucher extends MultiToucher{
 		SparseArray<String> usMap;
 		protected SparseArray<String> getmap() {
-			if(null==usMap){
+			if(null==usMap){//添加组合时，要在父类的mask中添加
 				
 				usMap = new SparseArray<String>();
 				usMap.put(0, makeFormatCmd(box_token, "AA", 170));
@@ -778,7 +827,10 @@ public class ControlActivity extends Activity {
 			if (box_token.equals("")) { // 未对码的情况下禁止用户操作
 				Toast.makeText(ControlActivity.this, "Please get paired first", Toast.LENGTH_LONG).show();
 				return;
-			} 
+			}
+			if(BLINK_DJL||BLINK_DJR){
+				return;
+			}
 //			if (btSocket == null)	return;
 //			sendDataToPairedDevice(getmap().get(order));
 			setCommandStr(getmap().get(order));

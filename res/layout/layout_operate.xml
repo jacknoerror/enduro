@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/btn_high"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/diya_img"
@@ -197,7 +197,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_below="@id/layout_upperbtns"
                     android:layout_marginTop="@dimen/padding_large"
                     android:layout_weight="1" >
 

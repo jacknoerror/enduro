@@ -5,12 +5,12 @@ import android.view.View;
 
 public interface CutOutImpl {
 
-	public abstract void cut(int id);
+	public abstract void cut(View v);
 
-	public abstract void kill();
+	public abstract void kill(View v);
 
-	public abstract void born();
+	public abstract void born(View v);
 
-	public abstract boolean isAlive();
+	public abstract boolean isAlive(View v);
 
 }

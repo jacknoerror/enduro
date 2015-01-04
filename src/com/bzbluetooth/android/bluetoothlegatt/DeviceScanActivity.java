@@ -29,7 +29,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -37,6 +36,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +51,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bzbluetooth.R;
+import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.TokenKeeper;
 
 /**
@@ -94,7 +95,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 		}
 		
 	}
-
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         lastName = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICENAME);
         lastAddr = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICEADDRESS);
         
-        mHandler = new Handler(){//
+        mHandler = new Handler(){
         	private ProgressDialog sDialog;
 			@Override
 			public void handleMessage(Message msg) {
@@ -115,7 +116,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 					mBluetoothAdapter.startLeScan(mLeScanCallback);
 		            invalidateOptionsMenu();
 		            
-		            sDialog = showProgressDialog(DeviceScanActivity.this, getString(R.string.start_search));
+		            sDialog = GattUtils.showProgressDialog(DeviceScanActivity.this, getString(R.string.start_search));
 		            sDialog.setCancelable(true);
 		            sDialog.setOnCancelListener(new OnCancelListener() {
 						
@@ -136,9 +137,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 					break;
 				}
 			}
-        	public ProgressDialog showProgressDialog(Context context,String text){
-        		return ProgressDialog.show(context, "",text);
-        	}
+        	
         };
         
         //init ui
@@ -170,7 +169,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         
         demo();
         
-        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
+//        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
     }
 
 	/**
@@ -179,9 +178,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	public boolean initBluetooth() {
 		// Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+        mBluetoothAdapter = GattUtils.getBluetoothAdapter(this).getAdapter();
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
@@ -340,8 +337,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void goControl(String dName, String dAddr) {
 		final Intent intent = new Intent(this, ControlActivity.class);
-//		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);//FIXME delete us when testing
-//		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
+		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);//FIXME delete us when testing
+		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;
@@ -448,7 +445,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
                 	if(null==mLeDeviceListAdapter) return;//1217
                     mLeDeviceListAdapter.addDevice(device);
                     mLeDeviceListAdapter.notifyDataSetChanged();
-                    
+                    Log.i(TAG, device.getAddress()+"_"+device.getName());
                     if(AUTO_CONN&&!(lastName.isEmpty()||lastAddr.isEmpty())){//1224 自动连接上次设备
                     	if(device.getName().equals(lastName)&&device.getAddress().equals(lastAddr)){
                     		scanLeDevice(false);

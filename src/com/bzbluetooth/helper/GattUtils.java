@@ -1,7 +1,10 @@
 package com.bzbluetooth.helper;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.IntentFilter;
+import android.widget.Toast;
 
 import com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService;
 
@@ -15,7 +18,21 @@ public class GattUtils {
 	    intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
 	    return intentFilter;
 	}
-
+	
+	static BluetoothManager bluetoothManager;
+	/**
+	 * @param context
+	 * @return
+	 */
+	public static BluetoothManager getBluetoothAdapter(Context context){
+		if(null==bluetoothManager){
+			bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+		}
+		return bluetoothManager;
+	}
+/**
+ * hexUtils start
+ * */
 	public static String bin2hex(String bin) {
 	    char[] digital = "0123456789ABCDEF".toCharArray();
 	    StringBuffer sb = new StringBuffer("");
@@ -92,5 +109,18 @@ public class GattUtils {
 			}
 			GattUtils.dscrc_table[i] = (byte) crc;
 		}
+	}
+	/**
+	 * hexUtils end
+	 * */
+	
+	/**
+	 * uiUtils start
+	 * */
+	public static ProgressDialog showProgressDialog(Context context,String text){
+		return ProgressDialog.show(context, "",text);
+	}
+	public static void showToast(Context context, CharSequence text) {
+		Toast.makeText(context, text , Toast.LENGTH_LONG);
 	}
 }

@@ -1,8 +1,10 @@
 package com.bzbluetooth.helper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import android.util.Log;
@@ -32,10 +34,13 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 	final int[] CP_MASKS = new int[]{0x110000,0x011000,0x000110,0x000011,
 									0x101000,0x000101,
 									0x100001,0x001100,
-									//如果是停止，理论上不用加入mask  TODO to be tested
+									//如果是停止，依然要mask   
+									0x100100,0x001001, 0x100010,0x001010,0x010100,0x010001, 
+									0x010010,
 	};
 
-	private boolean alive;
+//	private boolean alive;
+	private SparseArray<Boolean> aliveMap = new SparseArray<Boolean>();
 
 	
 
@@ -55,7 +60,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 		int id = v.getId();
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			born();
+			born(v);
 			int order = 0;
 			Integer intToAdd = contrastMap.get(id);//得到btnValue
 			if(addToAvailable(intToAdd)){//添加有效区成功
@@ -66,15 +71,18 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 			if(order>0){
 				send(order);
 			}
+			v.setSelected(true);
+//			v.setFocusable(true);
+//			v.requestFocus();//useless
 			break;
 		case MotionEvent.ACTION_UP:
-			if(isAlive())cut(id);
+			if(isAlive(v))cut(v);
 			break;
 		case MotionEvent.ACTION_MOVE:
 			float x = event.getX(),y = event.getY();
 			if(x<0||x>v.getMeasuredWidth()||y<0||y>v.getMeasuredHeight()) {
-				if(isAlive())cut(id);
-				kill();
+				if(isAlive(v))cut(v);
+				kill(v);
 			}
 			break;
 		default:
@@ -191,7 +199,8 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 
 
 	@Override
-	public void cut(int id) {
+	public void cut(View v) {
+		int id = v.getId();
 		Integer intToRemove = contrastMap.get(id);
 		removeElement(intToRemove);
 		if(availableZone.size()<2&&waitingZone.size()>0){
@@ -201,24 +210,28 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 			send(getAvailableValue(availableZone.get(0)));// 松开一个手指后补发按下的
 		else
 			stop();
+		v.setSelected(false);
+//		v.setFocusable(false);//useless
 	}
 
 
 	@Override
-	public void kill() {
-		alive = false;
+	public void kill(View v) {
+		aliveMap.put(v.getId(), false);// = false;
 	}
 
 
 	@Override
-	public void born() {
-		alive = true;
+	public void born(View v) {
+		aliveMap.put(v.getId(), true);
 	}
 
 
 	@Override
-	public boolean isAlive() {
-		return alive;
+	public boolean isAlive(View v) {
+		boolean b = aliveMap.get(v.getId());
+		aliveMap.put(v.getId(), b);
+		return b;
 	}
 
 }

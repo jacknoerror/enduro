@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.ImageView;
 
 import com.bzbluetooth.helper.CompassHelper;
-
+@Deprecated
 public class CompassActivity extends Activity {
 	
 	
