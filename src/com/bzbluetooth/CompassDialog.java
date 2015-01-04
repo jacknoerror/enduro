@@ -8,6 +8,7 @@ import android.content.DialogInterface.OnShowListener;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 
 import com.bzbluetooth.helper.CompassHelper;
@@ -22,6 +23,12 @@ public class CompassDialog extends Dialog implements OnShowListener, OnDismissLi
 		setContentView(R.layout.activity_compass);
 		
 		getWindow().setGravity(Gravity.BOTTOM);
+		getWindow().setDimAmount(0);
+		LayoutParams params = new LayoutParams(); 
+		params.width = LayoutParams.WRAP_CONTENT;
+		params.height = LayoutParams.WRAP_CONTENT;
+		params.y = (int) context.getResources().getDimension(R.dimen.v_upper);
+		getWindow().setAttributes(params);
 		
 		View img = this.findViewById(R.id.img_compass);
 		ch = new CompassHelper(context, (ImageView)img);

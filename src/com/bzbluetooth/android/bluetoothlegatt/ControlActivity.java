@@ -44,7 +44,7 @@ import com.bzbluetooth.helper.TokenKeeper;
 
 /**
  * 
- * @@ icon touchmove titlebig weburl
+ * http://my.oschina.net/tingzi/blog/215008
  * @author taotao
  * @Date 2014-12-4
  */
@@ -93,6 +93,7 @@ public class ControlActivity extends Activity {
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
+            Log.e(TAG, "notice!onServiceDisconnected:LINE_96");
         }
     };
 
@@ -273,6 +274,7 @@ public class ControlActivity extends Activity {
 				BLINK_CONNECT = true;//1217
 				NO_RECONN = false;//1224
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+				Log.e(TAG, "notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
 				// 发现服务器
 				startScheduleIfPossible();
 				// displayGattServices(mBluetoothLeService.getSupportedGattServices());
