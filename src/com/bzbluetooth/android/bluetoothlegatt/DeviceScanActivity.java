@@ -82,7 +82,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void demo() {
 		/*delete FIXME*/
-	    String myString = "2015/02/01";
+	    String myString = "2015/02/09";
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
 	    Date d;
 		try {

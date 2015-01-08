@@ -596,22 +596,22 @@ public class ControlActivity extends Activity {
             super.handleMessage(msg);
             switch(msg.what){
             case 0:
-//            	gaoya_img.setVisibility(View.VISIBLE);
-//            	diya_img.setVisibility(View.GONE);
+            	gaoya_img.setVisibility(View.VISIBLE);//0108
+            	diya_img.setVisibility(View.INVISIBLE);
             	BLINK_HIGH = true;
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();
             	break;
             case 1:
             	BLINK_LOW = true;
-//            	diya_img.setVisibility(View.VISIBLE);
-//            	gaoya_img.setVisibility(View.GONE);
+            	diya_img.setVisibility(View.VISIBLE);//0108
+            	gaoya_img.setVisibility(View.INVISIBLE);
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();            	
             	break;
             case 2:
             	BLINK_OVER = true;
-//            	guozai_img.setVisibility(View.VISIBLE);
+            	guozai_img.setVisibility(View.VISIBLE);//0108
             	xinhao_img.setVisibility(View.VISIBLE);
             	playBeep();        	
             	break;
@@ -685,8 +685,8 @@ public class ControlActivity extends Activity {
 					showDianjiLl(show );
 				}
 			};
-			ad.setPositiveButton("Automatic Engaging Mover", dListener);
-			ad.setNegativeButton("Manual Engaging Mover", dListener);
+			ad.setPositiveButton("Manual Engaging Mover", dListener);
+			ad.setNegativeButton("Automatic Engaging Mover", dListener);
 			ad.create().show();	
 			needSelectEngine = false;
 		}
