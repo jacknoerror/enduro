@@ -138,7 +138,7 @@ public class ControlActivity extends Activity {
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
         }
-        //TODO 链接不上 该页面不会消失
+        // 连接不上 该页面消失
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
 
 	@Override
@@ -211,9 +211,9 @@ public class ControlActivity extends Activity {
 				AlertDialog.Builder ad;
 				switch (v.getId()) {
 				case R.id.zhinanzhen_img:
-//					startActivity(new Intent(ControlActivity.this,CompassActivity.class));
-//					overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-					new CompassDialog(ControlActivity.this).show();
+//					new CompassDialog(ControlActivity.this).show();
+					//0111
+					if(null!=cmpsLayout)cmpsLayout.setVisibility(cmpsLayout.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE);
 					break;
 				case R.id.btn_howto:
 					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
@@ -242,9 +242,13 @@ public class ControlActivity extends Activity {
 		};
 		this.findViewById(R.id.btn_about).setOnClickListener(l);
 		this.findViewById(R.id.btn_howto).setOnClickListener(l);
+		cmpsLayout = findViewById(R.id.layout_compass_big);//0111
+		ImageView compassImg_b = (ImageView) this.findViewById(R.id.img_compass);
+		
 		ImageView compassImg = (ImageView) this.findViewById(R.id.zhinanzhen_img);
-		cmpsHelper = new CompassHelper(this, compassImg);//taotao 1117
+		cmpsHelper = new CompassHelper(this, compassImg,compassImg_b);//taotao 1117
 		compassImg.setOnClickListener(l);
+		
 		
 		setOpBtnEnablity(false);//对码后才能操作 1230
 	}
@@ -427,7 +431,7 @@ public class ControlActivity extends Activity {
 //            broken_str =  broken_str + rcvStr;//?
             if(rcvStr.length() == 18){//rcvStr.length() == 16 || broken_str.length() == 18){
 
-           	 noSignal = false;
+           	 noSignal = false;//jazz this?
            	 
 //           	 if(rcvStr.length() == 16){
 //           		 
@@ -499,10 +503,14 @@ public class ControlActivity extends Activity {
 							Log.d("--", "---大电机工作超时---->");
 						} else if (command.equals("2D") ) {// 1204 //1230 rightside
 							BLINK_DJR = true;// 其他状态时应当关掉 
+							BLINK_DJL = false;//0111
+							djl_img.setVisibility(View.GONE);//0111
 							lastDJ = "2D";
 							resetCommandStr();
 						}else if( command.equals("2C")){//1230 leftside
 							BLINK_DJL = true;// 
+							BLINK_DJR = false;// 其他状态时应当关掉 
+							djr_img.setVisibility(View.GONE);
 							lastDJ = "2C";
 							resetCommandStr();
 						} else if (command.equals("9A")) {
@@ -522,7 +530,6 @@ public class ControlActivity extends Activity {
 						if (command.equals("93")
 								&& subMultiToucher.getFingerCount() == 0) {// 大电机工作中
 																			// 手指没按着
-						// sendDataToPairedDevice(String.format("%s%s%s%sEE",",box_token,"AA",GattUtils.computeCRC8("0301"+box_token,)));
 							setCommandStr(String.format("%s%s%s%sEE", "550301",
 									box_token, "AA", GattUtils.computeCRC8(
 											"0301" + box_token, 170)));
@@ -581,7 +588,7 @@ public class ControlActivity extends Activity {
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			if(System.currentTimeMillis()-lastTimePressBack>2000){
-				Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "press again to exit", Toast.LENGTH_SHORT).show();
 			}else{
 				finish();
 			}
@@ -621,7 +628,7 @@ public class ControlActivity extends Activity {
 	       		xinhao_img.setVisibility(View.VISIBLE);	       		
 	       		guozai_img.setVisibility(View.INVISIBLE);	       		
 	       		gaoya_img.setVisibility(View.INVISIBLE);
-	       		diya_img.setVisibility(View.GONE);
+	       		diya_img.setVisibility(View.INVISIBLE);
 	       		setOpBtnEnablity(true);
             	break; 
             case 4:
@@ -665,7 +672,7 @@ public class ControlActivity extends Activity {
 					Context context = ControlActivity.this;
 					CharSequence text = "connecting failed";
 					GattUtils.showToast(context, text);
-					finish();
+					finish();//FIXME delete me when testing
 				}
 				break;
 			default:
@@ -713,6 +720,7 @@ public class ControlActivity extends Activity {
 			}
 		}
     };
+	private View cmpsLayout;
 
     
 	private void setOpBtnEnablity(boolean enable) {
@@ -736,7 +744,7 @@ public class ControlActivity extends Activity {
 			switch (v.getId()) {
 			case R.id.songkaiBtn:
 				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
-					Toast.makeText(ControlActivity.this, "请先进行对码操作",
+					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
 							Toast.LENGTH_LONG).show();
 					return;
 				}
@@ -758,7 +766,7 @@ public class ControlActivity extends Activity {
 				break;
 			case R.id.jiajinBtn:
 				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
-					Toast.makeText(ControlActivity.this, "请先进行对码操作",
+					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
 							Toast.LENGTH_LONG).show();
 					return;
 				}

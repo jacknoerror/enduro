@@ -22,13 +22,16 @@ public class CompassDialog extends Dialog implements OnShowListener, OnDismissLi
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_compass);
 		
-		getWindow().setGravity(Gravity.BOTTOM);
-		getWindow().setDimAmount(0);
+		Window mWindow = getWindow();
+		mWindow.setGravity(Gravity.BOTTOM);
+		mWindow.setDimAmount(0);
 		LayoutParams params = new LayoutParams(); 
 		params.width = LayoutParams.WRAP_CONTENT;
 		params.height = LayoutParams.WRAP_CONTENT;
 		params.y = (int) context.getResources().getDimension(R.dimen.v_upper);
-		getWindow().setAttributes(params);
+		mWindow.setAttributes(params);
+		mWindow.setBackgroundDrawableResource(android.R.color.transparent);
+		
 		
 		View img = this.findViewById(R.id.img_compass);
 		ch = new CompassHelper(context, (ImageView)img);

@@ -157,7 +157,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, "BLE不支持", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "BLE not available", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -426,7 +426,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             if (deviceName != null && deviceName.length() > 0)
                 viewHolder.deviceName.setText(deviceName);
             else
-                viewHolder.deviceName.setText("未知设备");
+                viewHolder.deviceName.setText("UNKNOWN DEVICE");
             viewHolder.deviceAddress.setText(device.getAddress());
 
             return view;

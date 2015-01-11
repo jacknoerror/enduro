@@ -20,29 +20,36 @@ public class CompassHelper {
 
 	Context context;
 	
-	private SensorManager manager;
+	static private SensorManager manager;
 	private SensorListener listener ;
-	View campassImg;
+	ImageView[] campassImgs;
 
-	public CompassHelper(Context context,ImageView campassImg) {
+	public CompassHelper(Context context,ImageView... campassImgs) {
 		this.context = context;
-		manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		if(null==manager)manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		listener = new SensorListener();
-		this.campassImg = campassImg;
+		this.campassImgs = campassImgs;
 	}
 	
 	public void onResume(){
 		Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 		// 应用在前台时候注册监听器
-		manager.registerListener(listener, sensor,
-				SensorManager.SENSOR_DELAY_GAME);
+		manager.registerListener(listener, sensor,				SensorManager.SENSOR_DELAY_GAME);
 		
 		if(null == sensor){//taotao 1117
-			Toast.makeText(context, "对不起，您的手机不支持指南针功能", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Sorry, compass is not available on your device!", Toast.LENGTH_LONG).show();
 		}
 	}
 	public void onPause(){
+		clearAllAnim();
 		manager.unregisterListener(listener);
+	}
+
+	public void clearAllAnim() {
+		if(null==campassImgs)return;
+		for(ImageView v : campassImgs){
+			v.clearAnimation();
+		}
 	}
 	
 	private final class SensorListener implements SensorEventListener {
@@ -57,11 +64,15 @@ public class CompassHelper {
 			 */
 			float degree = event.values[0];// 存放了方向值
 			/** 动画效果 */
-			RotateAnimation animation = new RotateAnimation(predegree, degree,
-					Animation.RELATIVE_TO_SELF, 0.5f,
-					Animation.RELATIVE_TO_SELF, 0.5f);
-			animation.setDuration(200);
-			campassImg.startAnimation(animation);
+			clearAllAnim();
+			for (ImageView v : campassImgs) {//
+				RotateAnimation animation = new RotateAnimation(predegree,
+						degree, Animation.RELATIVE_TO_SELF, 0.5f,
+						Animation.RELATIVE_TO_SELF, 0.5f);
+				animation.setDuration(200);
+				// campassImg.startAnimation(animation);
+				v.startAnimation(animation);
+			}
 			predegree = -degree;
 
 			/**
