@@ -31,13 +31,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.bzbluetooth.CompassActivity;
-import com.bzbluetooth.CompassDialog;
-import com.bzbluetooth.MainActivity;
 import com.bzbluetooth.R;
 import com.bzbluetooth.RingtoneUtils;
 import com.bzbluetooth.helper.CompassHelper;
