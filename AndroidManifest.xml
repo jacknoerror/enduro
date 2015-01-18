@@ -31,11 +31,7 @@
             android:name="com.bzbluetooth.android.bluetoothlegatt.DeviceScanActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            
         </activity>
         <activity android:name="com.bzbluetooth.android.bluetoothlegatt.ControlActivity" 
             android:theme="@style/Activity_Transparent"
@@ -45,6 +41,15 @@
         <activity android:name="com.bzbluetooth.CompassActivity" 
             android:theme="@android:style/Theme.Dialog"
             android:screenOrientation="portrait"/>
+        <activity android:name="com.bzbluetooth.StartActivity" 
+            android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name="com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService"
