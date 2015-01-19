@@ -38,11 +38,7 @@
             android:screenOrientation="portrait">
             
         </activity>
-        <activity android:name="com.bzbluetooth.CompassActivity" 
-            android:theme="@android:style/Theme.Dialog"
-            android:screenOrientation="portrait"/>
         <activity android:name="com.bzbluetooth.StartActivity" 
-            android:theme="@android:style/Theme.Dialog"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

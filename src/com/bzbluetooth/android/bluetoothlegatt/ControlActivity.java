@@ -207,7 +207,7 @@ public class ControlActivity extends Activity {
 				AlertDialog.Builder ad;
 				switch (v.getId()) {
 				case R.id.zhinanzhen_img:
-//					new CompassDialog(ControlActivity.this).show();
+				case R.id.layout_compass_big:
 					//0111
 					if(null!=cmpsLayout)cmpsLayout.setVisibility(cmpsLayout.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE);
 					break;
@@ -239,6 +239,7 @@ public class ControlActivity extends Activity {
 		this.findViewById(R.id.btn_about).setOnClickListener(l);
 		this.findViewById(R.id.btn_howto).setOnClickListener(l);
 		cmpsLayout = findViewById(R.id.layout_compass_big);//0111
+		cmpsLayout.setOnClickListener(l);//0119
 		ImageView compassImg_b = (ImageView) this.findViewById(R.id.img_compass);
 		
 		ImageView compassImg = (ImageView) this.findViewById(R.id.zhinanzhen_img);
@@ -584,7 +585,7 @@ public class ControlActivity extends Activity {
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			if(System.currentTimeMillis()-lastTimePressBack>2000){
-				Toast.makeText(this, "press again to exit", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Press again to exit!", Toast.LENGTH_SHORT).show();
 			}else{
 				finish();
 			}
@@ -720,6 +721,7 @@ public class ControlActivity extends Activity {
 
     
 	private void setOpBtnEnablity(boolean enable) {
+//		enable = true;//FIXME 
 		upBtn.setEnabled(enable);
 		downBtn.setEnabled(enable);
 		upleftBtn.setEnabled(enable);
