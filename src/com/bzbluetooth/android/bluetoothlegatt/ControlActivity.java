@@ -140,6 +140,8 @@ public class ControlActivity extends Activity {
 	@Override
     protected void onDestroy() {
         super.onDestroy();
+        mBluetoothLeService.disconnect();//0122
+        mBluetoothLeService.close();//0122
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
     }
@@ -277,17 +279,10 @@ public class ControlActivity extends Activity {
 				if(null!=connectingDialog&&connectingDialog.isShowing()) connectingDialog.dismiss();//0104
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
-				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
+//				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
 				disableBlinks();
 //				BLINK_CONNECT = true;//1217 0104zs(to mHandler 5&6)
-				NO_RECONN = false;//1224 0104zs
-				Context mCtx = ControlActivity.this;
-				BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(mCtx).getAdapter();
-				if(null!=btAdapter&&btAdapter.isEnabled()){
-					btAdapter.startLeScan(mLeScanCallback);
-				}else{
-					Toast.makeText(context, "Bluetooth not enable!", Toast.LENGTH_LONG).show();
-				}
+				startScan(context);
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 //				Log.e(TAG, "---notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
 				// 发现服务器
@@ -298,6 +293,23 @@ public class ControlActivity extends Activity {
 			}
 		}
 	};
+	void startScan(Context context){
+		NO_RECONN = false;//1224 0104zs
+//		Context mCtx = ControlActivity.this;
+		BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(context).getAdapter();
+		if(null!=btAdapter&&btAdapter.isEnabled()){
+			btAdapter.startLeScan(mLeScanCallback);
+		}else{
+			
+			Toast.makeText(context, "Bluetooth not enable!", Toast.LENGTH_LONG).show();
+		}
+	}
+	void stopScanAndConnect(Context context){
+		BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(context).getAdapter();
+		if(null!=btAdapter)btAdapter.stopLeScan(mLeScanCallback);
+		NO_RECONN = true;
+		mBluetoothLeService.connect(mDeviceAddress);
+	}
 	
 	// Device cntrl callback.
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
@@ -310,10 +322,7 @@ public class ControlActivity extends Activity {
 				@Override
                 public void run() {
 					if(!NO_RECONN&&device.getName().equals(mDeviceName)&&device.getAddress().equals(mDeviceAddress)){
-						BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(ControlActivity.this).getAdapter();
-						if(null!=btAdapter)btAdapter.stopLeScan(mLeScanCallback);
-						NO_RECONN = true;
-						mBluetoothLeService.connect(mDeviceAddress);
+						stopScanAndConnect(ControlActivity.this);
 					}
                 }
             });
@@ -349,6 +358,7 @@ public class ControlActivity extends Activity {
 	private String lastDJ;//记录上次执行的小电机，确保在收到92（小电机工作中）时能正常闪烁
 
 	private SubMultiToucher subMultiToucher;
+	private String lastCmd="";//0122
 	void send(){
 		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ?  
 //		mNotifyCharacteristic = fixedCharacteristic;
@@ -413,17 +423,16 @@ public class ControlActivity extends Activity {
 	/**
 	 * @param commandStr
 	 */
-	public void setCommandStr(String commandStr) {//如果改好几遍？XXX
+	public void setCommandStr(String commandStr) {//如果改好几遍？ 
 		check_str = commandStr;
 	}
 
 	private void displayData(String rcvStr) {
         if (rcvStr != null) {
-        	if(rcvStr.contains("\n")) rcvStr = rcvStr.substring(rcvStr.indexOf("\n")).trim();
-        	if(rcvStr.contains(" ")) rcvStr = rcvStr.replace(" ", "");
-        	
-//            Toast.makeText(this, rcvStr, Toast.LENGTH_SHORT).show();
-            Log.i(TAG, String.format("receiving:%s", rcvStr));
+        	if(rcvStr.contains("\n")) rcvStr = rcvStr.substring(rcvStr.indexOf("\n")).trim();//unnecessary
+//        	if(rcvStr.contains(" ")) rcvStr = rcvStr.replace(" ", "");
+        	rcvStr = rcvStr.replaceAll("[^0-9a-zA-Z]","");//0122
+        	Log.i(TAG+"r", String.format("receiving:%s", rcvStr));
             
 //            broken_str =  broken_str + rcvStr;//?
             if(rcvStr.length() == 18){//rcvStr.length() == 16 || broken_str.length() == 18){
@@ -471,6 +480,7 @@ public class ControlActivity extends Activity {
                	 if(comCheckCRC8(rcvStr)
 							&& token.equals(rcvStr.substring(4, 10))) {
 						command = rcvStr.substring(10, 12);
+						lastCmd = command;//0122 for pre-send-check
 						if (command.equals("90")) {
 							if (needSetNormalSignal) {
 								mHandler.sendEmptyMessage(3);// setNormalSignal();
@@ -522,6 +532,13 @@ public class ControlActivity extends Activity {
 								BLINK_DJL = true;BLINK_DJR = false; 
 								djr_img.setVisibility(View.GONE);
 							}
+						} else if (command.equals("21") || command.equals("20")
+								|| command.equals("22") || command.equals("26")
+								|| command.equals("25") || command.equals("27")
+								|| command.equals("23") || command.equals("24")
+								|| command.equals("28") || command.equals("29")
+								|| command.equals("2A") || command.equals("2B")){
+							resetCommandStr();
 						}
 
 						if (command.equals("93")
@@ -641,10 +658,12 @@ public class ControlActivity extends Activity {
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
             	BLINK_CONNECT = true;
+            	if(!box_token.equals(""))startScan(ControlActivity.this);//0122 XXX
             	break;
             case 6:
             	xinhao_img.setVisibility(View.VISIBLE);
             	BLINK_CONNECT = false;
+            	if(!box_token.equals(""))stopScanAndConnect(ControlActivity.this);//0122
             	break; 
 			case 7://blink
 //				Log.i(TAG, "blinkCount"+blinkTimerCount);
@@ -824,6 +843,7 @@ public class ControlActivity extends Activity {
 				//原地
 				usMap.put(0x100001, makeFormatCmd(box_token, "2A", 42));//向右原地
 				usMap.put(0x001100, makeFormatCmd(box_token, "2B", 43));//向左原地
+				
 			}
 			return usMap;
 		}
@@ -838,8 +858,8 @@ public class ControlActivity extends Activity {
 				return;
 			}
 //			if (btSocket == null)	return;
-//			sendDataToPairedDevice(getmap().get(order));
-			setCommandStr(getmap().get(order));
+			String curCmdStr = getmap().get(order);
+			setCommandStr(curCmdStr);
 		}
 	}
 }
