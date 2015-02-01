@@ -22,7 +22,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Vibrator;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -35,7 +37,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bzbluetooth.R;
-import com.bzbluetooth.RingtoneUtils;
 import com.bzbluetooth.helper.CompassHelper;
 import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.MultiToucher;
@@ -105,6 +106,7 @@ public class ControlActivity extends Activity {
 	private String blt_addr_str;
 
 	private CompassHelper cmpsHelper;
+	private Vibrator mVibrator;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,13 +117,14 @@ public class ControlActivity extends Activity {
 		final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-		
+        
         token = TokenKeeper.getValue(this, SP_TOKEN);
         box_token = TokenKeeper.getValue(this, SP_BOX_TOKEN);
         blt_addr_str = TokenKeeper.getValue(this, SP_AUTO_BLT);
         TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         imei = telephonyManager.getDeviceId().substring(4, 10);    
         check_str = String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204));
+        mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE); //0201
         
 		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
@@ -130,7 +133,7 @@ public class ControlActivity extends Activity {
         
         needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
 //        needSelectEngine = false;//FIXME delete
-        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明 XXX 
+        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明  
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
         }
@@ -282,7 +285,8 @@ public class ControlActivity extends Activity {
 //				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
 				disableBlinks();
 //				BLINK_CONNECT = true;//1217 0104zs(to mHandler 5&6)
-				startScan(context);
+				reconnect();//0201
+//				startScan(context); //0201 jazz
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 //				Log.e(TAG, "---notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
 				// 发现服务器
@@ -292,8 +296,15 @@ public class ControlActivity extends Activity {
 				displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
 			}
 		}
+
 	};
-	void startScan(Context context){
+	//0201
+	private void reconnect() {
+		if(null==mBluetoothLeService||TextUtils.isEmpty(mDeviceAddress)) return;
+		Toast.makeText(ControlActivity.this, "reconnecting",Toast.LENGTH_SHORT).show();
+		mHandler.sendEmptyMessage(103);
+	}
+	private void startScan(Context context){
 		NO_RECONN = false;//1224 0104zs
 //		Context mCtx = ControlActivity.this;
 		BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(context).getAdapter();
@@ -645,7 +656,7 @@ public class ControlActivity extends Activity {
 	       		diya_img.setVisibility(View.INVISIBLE);
 	       		setOpBtnEnablity(true);
             	break; 
-            case 4:
+            case 4://connected
             	setOpBtnEnablity(true);
             	if(needSelectEngine){
             		showChooseLlDialog();
@@ -658,12 +669,12 @@ public class ControlActivity extends Activity {
             case 5:
             	xinhao_img.setVisibility(View.INVISIBLE);
             	BLINK_CONNECT = true;
-            	if(!box_token.equals(""))startScan(ControlActivity.this);//0122 XXX
+//            	if(!box_token.equals(""))startScan(ControlActivity.this);//0122 0201jazz
             	break;
             case 6:
             	xinhao_img.setVisibility(View.VISIBLE);
             	BLINK_CONNECT = false;
-            	if(!box_token.equals(""))stopScanAndConnect(ControlActivity.this);//0122
+//            	if(!box_token.equals(""))stopScanAndConnect(ControlActivity.this);//0122 0201jazz
             	break; 
 			case 7://blink
 //				Log.i(TAG, "blinkCount"+blinkTimerCount);
@@ -690,6 +701,11 @@ public class ControlActivity extends Activity {
 					GattUtils.showToast(context, text);
 					finish();//FIXME delete me when testing
 				}
+				break;
+			case 103://0201
+				if(mConnected) return;
+				mBluetoothLeService.connect(mDeviceAddress);
+				mHandler.sendEmptyMessageDelayed(103, 5000);
 				break;
 			default:
 				break;
@@ -725,15 +741,17 @@ public class ControlActivity extends Activity {
 			
 		}
 
+		long [] vPattern = {0,600};   // 停止 开启 停止 开启   
 		/**
 		 * 
 		 */
 		public void playBeep() {
 			if(needfengming){
-				RingtoneUtils.playRingtone(ControlActivity.this);
+//				RingtoneUtils.playRingtone(ControlActivity.this);
+		        mVibrator.vibrate(vPattern,-1);  
 				needfengming = false;
-				setOpBtnEnablity(false);//notice here 
 			}
+			setOpBtnEnablity(false);//notice here 	0201
 		}
     };
 	private View cmpsLayout;
