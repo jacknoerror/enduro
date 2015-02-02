@@ -31,6 +31,40 @@
         android:paddingLeft="@dimen/padding_small"
         android:paddingRight="@dimen/padding_small"
         >
+        <ImageView
+            android:id="@+id/xinhao_img"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/btn_hint"
+            android:visibility="visible" />
+		
+		<FrameLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		    <ImageView
+		        android:id="@+id/gaoya_img"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/btn_high"
+		        android:visibility="invisible" />
+
+		    <ImageView
+		        android:id="@+id/diya_img"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/btn_low"
+		        android:visibility="invisible" />
+
+		    <ImageView
+		        android:id="@+id/guozai_img"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/btn_max"
+		        android:visibility="invisible" />
+		</FrameLayout>
 		<ImageView
             android:id="@+id/xinhao_img"
             android:layout_width="fill_parent"
@@ -38,32 +72,11 @@
             android:layout_weight="1"
             android:src="@drawable/btn_conn"
             android:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/gaoya_img"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/btn_high"
-            android:visibility="invisible" />
-
-        <ImageView
-            android:id="@+id/diya_img"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/btn_low"
-            android:visibility="invisible" />
-        
-
-        <ImageView
-            android:id="@+id/guozai_img"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/btn_max"
-            android:visibility="invisible" />
-
+		
+		<FrameLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" />
         <ImageView
             android:id="@+id/zhinanzhen_img"
             android:layout_width="fill_parent"

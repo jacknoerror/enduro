@@ -2,4 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">  
        <item android:state_window_focused="false" android:drawable="@drawable/switch_shape_unselected" />    
        <item android:state_pressed="true" android:drawable="@drawable/switch_shape_selected" />
+       <item  android:drawable="@drawable/switch_shape_unselected" />
 </selector>  

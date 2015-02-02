@@ -8,12 +8,6 @@
     android:background="@android:color/black"
     android:visibility="visible" >
 
-    <Button
-        android:id="@+id/discoverButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="设置可见性"
-        android:visibility="gone" />
 
     <Button
         android:id="@+id/scanButton"
@@ -23,21 +17,9 @@
         android:layout_marginRight="60dip"
         android:background="@drawable/search_btn_selector"
         android:text="Start Scanning"
+        android:textSize="16sp"
         android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/btnDis"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="本机可见性设置"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/checkButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="设备自检"
-        android:visibility="gone" />
 
     <ToggleButton
         android:id="@+id/tbtnSwitch"
@@ -48,13 +30,18 @@
         android:layout_marginRight="60dip"
         android:layout_marginTop="10dip"
         android:background="@drawable/tbtnswitch_btn_selector"
+        android:textSize="16sp"
         android:textOff="Bluetooth OFF"
         android:textOn="Bluetooth ON" />
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="300dip"
-        android:orientation="vertical" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/green0"
+        android:paddingBottom="@dimen/padding_large"
+         >
 
         <TextView
             android:id="@+id/lvTitle"
@@ -69,19 +56,29 @@
         <ListView
             android:id="@+id/lvDevices"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:background="#7e8336" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+             />
 
         <Button
             android:id="@+id/clearButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/clear_btn_selector"
-            android:text="clear"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@android:color/black"
+            android:text="clear history"
             android:textColor="@color/white"
-            android:visibility="gone" />
+            android:layout_margin="@dimen/padding_small"
+            android:paddingLeft="@dimen/padding_large"
+            android:paddingRight="@dimen/padding_large"
+            android:layout_gravity="center"
+            />
+        <ImageView 
+            android:id="@+id/img_howto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_hint"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -101,6 +98,7 @@
             android:background="@drawable/howto_btn_selector"
             android:text="How to use?"
             android:textColor="@color/white"
+            android:visibility="gone"
             android:textSize="12sp" />
 
         <Button
@@ -113,6 +111,7 @@
             android:background="@drawable/about_btn_selector"
             android:text="About ENDURO"
             android:textColor="@color/white"
+            android:visibility="gone"
             android:textSize="12sp" />
     </LinearLayout>
 

@@ -169,7 +169,7 @@ public class MainActivity extends Activity {
 		btnSearch.setOnClickListener(new ClickEvent());
 		btnExit = (Button) this.findViewById(R.id.exitButton);
 		btnExit.setOnClickListener(new ClickEvent());
-		btnDis = (Button) this.findViewById(R.id.btnDis);
+//		btnDis = (Button) this.findViewById(R.id.btnDis);
 		btnDis.setOnClickListener(new ClickEvent());
 		
 		subMultiToucher = new SubMultiToucher();

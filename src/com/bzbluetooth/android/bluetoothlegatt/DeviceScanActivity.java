@@ -45,11 +45,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bzbluetooth.ClsUtils;
 import com.bzbluetooth.R;
 import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.TokenKeeper;
@@ -72,6 +74,10 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private ToggleButton btnSwitch;
 //	private BluetoothAdapter btAdapt;
 
+	private Button btnClear;
+
+	private ImageView imgHowto;
+
     private static final int REQUEST_ENABLE_BT = 0x001;
     private static final int REQUEST_ENGINESELECTED = 0x002;
     // Stops scanning after 10 seconds.
@@ -82,7 +88,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void demo() {
 		/*delete FIXME*/
-	    String myString = "2015/02/09";
+	    String myString = "2015/02/28";
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
 	    Date d;
 		try {
@@ -147,10 +153,14 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         btnAbout = (Button) this.findViewById(R.id.aboutButton);
         btnScan = (Button) this.findViewById(R.id.scanButton);
         btnSwitch = (ToggleButton) this.findViewById(R.id.tbtnSwitch);
+        btnClear = (Button) this.findViewById(R.id.clearButton);
+        imgHowto = (ImageView) this.findViewById(R.id.img_howto);
         btnHow.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnScan.setOnClickListener(this);
         btnSwitch.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+        imgHowto.setOnClickListener(this);
 //        btAdapt = BluetoothAdapter.getDefaultAdapter();// 初始化本机蓝牙功能
 //        btnSwitch.setChecked(!btAdapt.isEnabled());
         
@@ -227,15 +237,16 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	public void onClick(View v) {
     	AlertDialog.Builder ad;
 		switch (v.getId()) {
-		case R.id.howtoButton:
+		case R.id.howtoButton://abandon 0202
+		case R.id.img_howto:
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("How to use?");
-			ad.setMessage(R.string.howto);
+			ad.setMessage(String.format("%sV%s\n%s", "Version:",ClsUtils.getVersionName(this) , getString(R.string.howto)));
 			ad.setPositiveButton("OK", null);
 			ad.create().show();	
 			break;
-		case R.id.aboutButton:
+		case R.id.aboutButton://abandon 0202
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("About ENDURO?");
@@ -271,6 +282,12 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			}
 			else {
 				mBluetoothAdapter.disable();
+			}
+			break;
+		case R.id.clearButton:
+			if(null!=mLeDeviceListAdapter){
+				mLeDeviceListAdapter.clear();
+				mLeDeviceListAdapter.notifyDataSetChanged();
 			}
 			break;
 		default:

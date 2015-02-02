@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
  
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 public class ClsUtils
 {
@@ -125,4 +128,17 @@ public class ClsUtils
             e.printStackTrace();
         }
     }
+    
+    
+    static String vvnn = null;
+    public static String getVersionName(Context context)//获取版本号(内部识别号)
+	{
+		if(!vvnn.isEmpty()) return vvnn;
+		try {
+			PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return (vvnn=pi.versionName);
+		} catch (NameNotFoundException e) {
+			return "";
+		}
+	}
 }
