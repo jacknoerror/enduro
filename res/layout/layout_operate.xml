@@ -32,7 +32,7 @@
         android:paddingRight="@dimen/padding_small"
         >
         <ImageView
-            android:id="@+id/xinhao_img"
+            android:id="@+id/img_hint"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -269,6 +269,7 @@
                 android:paddingRight="2dp"
                 android:layout_marginRight="4dp"
                 android:singleLine="true"
+                android:visibility="invisible"
                 />
             <Button 
                 android:id="@+id/btn_howto"
@@ -283,6 +284,7 @@
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
                 android:layout_marginLeft="4dp"
+                android:visibility="invisible"
                 />
         </RelativeLayout>
     </LinearLayout>

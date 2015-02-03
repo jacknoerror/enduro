@@ -16,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -73,6 +74,7 @@ public class ControlActivity extends Activity {
 	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img,djl_img,djr_img;
 	private ImageButton songkaiBtn,jiajinBtn,upBtn, downBtn,upleftBtn,
 		uprightBtn,downleftBtn,downrightBtn;
+	ImageView hintImg;
 	private ToggleButton tbtnSwitch;
 		private View dianji_ll;
 
@@ -193,7 +195,6 @@ public class ControlActivity extends Activity {
 		jiajinBtn = (ImageButton) this.findViewById(R.id.jiajinBtn);
 		jiajinBtn.setOnClickListener(new ClickEvent());
 		
-		
 		dianji_ll = this.findViewById(R.id.dianji_ll);
 		
 		//警号灯
@@ -217,6 +218,7 @@ public class ControlActivity extends Activity {
 					if(null!=cmpsLayout)cmpsLayout.setVisibility(cmpsLayout.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE);
 					break;
 				case R.id.btn_howto:
+				case R.id.img_hint:
 					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 					ad.setCancelable(false);
 					ad.setTitle("How to use?");
@@ -241,6 +243,8 @@ public class ControlActivity extends Activity {
 				
 			}
 		};
+		hintImg = (ImageView) this.findViewById(R.id.img_hint);
+		hintImg.setOnClickListener(l);
 		this.findViewById(R.id.btn_about).setOnClickListener(l);
 		this.findViewById(R.id.btn_howto).setOnClickListener(l);
 		cmpsLayout = findViewById(R.id.layout_compass_big);//0111
@@ -275,17 +279,30 @@ public class ControlActivity extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+				Log.i("RECON", "CONND");
 				mConnected = true;
+				/*if(noSignal>0	){
+					displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA)); //重连之后发一次
+					noSignal=-20;//0203
+				}*/
 				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
 				savDvcInfo();
 				mHandler.sendEmptyMessage(4);
 				if(null!=connectingDialog&&connectingDialog.isShowing()) connectingDialog.dismiss();//0104
 			} else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 				mConnected = false;
+				Log.i("RECON", "DIS");
 //				Toast.makeText(ControlActivity.this, "disconnected",Toast.LENGTH_SHORT).show();
 				disableBlinks();
 //				BLINK_CONNECT = true;//1217 0104zs(to mHandler 5&6)
-				reconnect();//0201
+//				reconnect();//0201 0203jazz
+				restartactivity();
+//				GattUtils.showDialog(ControlActivity.this, "bluetooth disconnected, reconnect?", new OnClickListener() {
+//					
+//					@Override
+//					public void onClick(DialogInterface arg0, int arg1) {
+//					}
+//				});
 //				startScan(context); //0201 jazz
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 //				Log.e(TAG, "---notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
@@ -302,6 +319,7 @@ public class ControlActivity extends Activity {
 	private void reconnect() {
 		if(null==mBluetoothLeService||TextUtils.isEmpty(mDeviceAddress)) return;
 		Toast.makeText(ControlActivity.this, "reconnecting",Toast.LENGTH_SHORT).show();
+		mBluetoothLeService.disconnect();//0203
 		mHandler.sendEmptyMessage(103);
 	}
 	private void startScan(Context context){
@@ -361,7 +379,7 @@ public class ControlActivity extends Activity {
 	private boolean needSelectEngine=false;//1218 1222
 	private boolean needSetNormalSignal;
 
-	private boolean noSignal;//
+	private int noSignal;//0203 改为int
 	
 	boolean BLINK_CONNECT,BLINK_OVER,
 		BLINK_HIGH,BLINK_LOW,BLINK_DJR,BLINK_DJL;
@@ -369,7 +387,8 @@ public class ControlActivity extends Activity {
 	private String lastDJ;//记录上次执行的小电机，确保在收到92（小电机工作中）时能正常闪烁
 
 	private SubMultiToucher subMultiToucher;
-	private String lastCmd="";//0122
+	private String lastCmdRcv="";//0122
+	private String lastCmdSnd="";//0203
 	void send(){
 		if (null == (fixedCharacteristic = getFixedChar())) {return;}// still nil ?  
 //		mNotifyCharacteristic = fixedCharacteristic;
@@ -398,14 +417,18 @@ public class ControlActivity extends Activity {
 
 				@Override
 				public void run() {
-					mHandler.sendEmptyMessage(noSignal?5:6);
+					mHandler.sendEmptyMessage(noSignal>3?5:6);
 					send();
-					noSignal = true;
+					noSignal++;
 //					Log.i(TAG, "哎哟~你别恶心我~");
 					mHandler.sendEmptyMessage(7);
 //					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 重连 0104jazz
+					if(noSignal>20&&mConnected) {
+//						mBluetoothLeService.disconnect();//0203 //0203
+						Log.i("RECON", "nosignal-disc");
+					}
 				}
-			}, 100, 300, TimeUnit.MILLISECONDS);
+			}, 100, 200, TimeUnit.MILLISECONDS);
 		}
     }  
 	
@@ -448,7 +471,7 @@ public class ControlActivity extends Activity {
 //            broken_str =  broken_str + rcvStr;//?
             if(rcvStr.length() == 18){//rcvStr.length() == 16 || broken_str.length() == 18){
 
-           	 noSignal = false;//jazz this?
+           	 noSignal = 0;//jazz this?
            	 
 //           	 if(rcvStr.length() == 16){
 //           		 
@@ -491,7 +514,7 @@ public class ControlActivity extends Activity {
                	 if(comCheckCRC8(rcvStr)
 							&& token.equals(rcvStr.substring(4, 10))) {
 						command = rcvStr.substring(10, 12);
-						lastCmd = command;//0122 for pre-send-check
+						lastCmdRcv = command;//0122 for pre-send-check
 						if (command.equals("90")) {
 							if (needSetNormalSignal) {
 								mHandler.sendEmptyMessage(3);// setNormalSignal();
@@ -549,7 +572,9 @@ public class ControlActivity extends Activity {
 								|| command.equals("23") || command.equals("24")
 								|| command.equals("28") || command.equals("29")
 								|| command.equals("2A") || command.equals("2B")){
-							resetCommandStr();
+							if(!lastCmdRcv.isEmpty()&&lastCmdRcv.equals(lastCmdSnd))//0203
+								resetCommandStr();
+							
 						}
 
 						if (command.equals("93")
@@ -560,7 +585,8 @@ public class ControlActivity extends Activity {
 											"0301" + box_token, 170)));
 						}
 						if(command.equals("AA")){//停止成功 1217
-							resetCommandStr();
+							if(subMultiToucher.getFingerCount() == 0)//0203 没按着才重置 
+								resetCommandStr();
 						}
 						if(command.equals("2A")||command.equals("2B")){//1217 
 							resetCommandStr();
@@ -706,6 +732,7 @@ public class ControlActivity extends Activity {
 				if(mConnected) return;
 				mBluetoothLeService.connect(mDeviceAddress);
 				mHandler.sendEmptyMessageDelayed(103, 5000);
+				Log.i("RECON", "CONN");
 				break;
 			default:
 				break;
@@ -768,6 +795,10 @@ public class ControlActivity extends Activity {
 		songkaiBtn.setEnabled(enable);
 		jiajinBtn.setEnabled(enable);
 		
+	}
+	public void restartactivity() {
+		startActivity(new Intent(ControlActivity.this, DeviceScanActivity.class));
+		finish();
 	}
 	class ClickEvent implements View.OnClickListener {
 		@Override
@@ -878,6 +909,7 @@ public class ControlActivity extends Activity {
 //			if (btSocket == null)	return;
 			String curCmdStr = getmap().get(order);
 			setCommandStr(curCmdStr);
+			lastCmdSnd = curCmdStr.substring(12,14);
 		}
 	}
 }

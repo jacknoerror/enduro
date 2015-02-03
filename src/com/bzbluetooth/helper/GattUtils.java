@@ -1,8 +1,12 @@
 package com.bzbluetooth.helper;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -137,5 +141,27 @@ public class GattUtils {
 		} catch (NameNotFoundException e) {
 			return "";
 		}
+	}
+	
+	public static AlertDialog showDialog(final Activity acti, String hintContent,
+			DialogInterface.OnClickListener positiveListener) {
+		AlertDialog.Builder builder = new Builder(acti);
+		builder.setMessage(hintContent);
+
+		builder.setTitle("提示");
+
+		if (null != positiveListener)
+			builder.setPositiveButton("确认", positiveListener);// 0408
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				acti.finish();
+			}
+		});
+
+		return builder.show();
 	}
 }
