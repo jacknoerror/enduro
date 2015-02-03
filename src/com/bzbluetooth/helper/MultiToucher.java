@@ -34,7 +34,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 	final int[] CP_MASKS = new int[]{0x110000,0x011000,0x000110,0x000011,
 									0x101000,0x000101,
 									0x100001,0x001100,
-									//Èç¹ûÊÇÍ£Ö¹£¬ÒÀÈ»Òªmask   
+									//å¦‚æœæ˜¯åœæ­¢ï¼Œä¾ç„¶è¦mask   
 									0x100100,0x001001, 0x100010,0x001010,0x010100,0x010001, 
 									0x010010,
 	};
@@ -62,8 +62,8 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 		case MotionEvent.ACTION_DOWN:
 			born(v);
 			int order = 0;
-			Integer intToAdd = contrastMap.get(id);//µÃµ½btnValue
-			if(addToAvailable(intToAdd)){//Ìí¼ÓÓĞĞ§Çø³É¹¦
+			Integer intToAdd = contrastMap.get(id);//å¾—åˆ°btnValue
+			if(addToAvailable(intToAdd)){//æ·»åŠ æœ‰æ•ˆåŒºæˆåŠŸ
 				order = getAvailableValue(intToAdd);
 			}else{
 				addToWaiting(intToAdd);
@@ -93,7 +93,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 
 
 	/**
-	 * ÖÕÖ¹Ö¸Áî
+	 * ç»ˆæ­¢æŒ‡ä»¤
 	 */
 	public void stop() {
 		Log.i(TAG, "stop--");
@@ -102,11 +102,11 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 
 
 	/**
-	 * ·¢ËÍÖ¸Áî
+	 * å‘é€æŒ‡ä»¤
 	 * @param order
 	 */
 	public void send(int order) {
-		if(order==0&&availableZone.size()>0) order = availableZone.get(0);//ËÉ¿ªµÚÈı¿ÅÊÖÖ¸¶øÊ£ÏÂÁ½¸öÓĞ³åÍ»Ê±
+		if(order==0&&availableZone.size()>0) order = availableZone.get(0);//æ¾å¼€ç¬¬ä¸‰é¢—æ‰‹æŒ‡è€Œå‰©ä¸‹ä¸¤ä¸ªæœ‰å†²çªæ—¶
 		
 		logHex(order);
 	}
@@ -126,7 +126,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 	/**
 	 * 
 		 * @param intToAdd
-		 * @return ×éºÏ¼üvalue£¬µ¥¸ö°´¼üvalue£¬0
+		 * @return ç»„åˆé”®valueï¼Œå•ä¸ªæŒ‰é”®valueï¼Œ0
 		 */
 		private int getAvailableValue(Integer intToAdd) {
 			int order = intToAdd;
@@ -137,7 +137,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 				}else{
 					removeElement(intToAdd);
 					addToWaiting(intToAdd);
-					order=0; //Èç¹û²»ÄÜ×é³É×éºÏ¼ü£¬ÄÇÕâ¸ö°´Å¥ÊÇÎŞĞ§µÄ£¬¼ÓÈëµÈ´ı¶ÓÁĞÖĞ
+					order=0; //å¦‚æœä¸èƒ½ç»„æˆç»„åˆé”®ï¼Œé‚£è¿™ä¸ªæŒ‰é’®æ˜¯æ— æ•ˆçš„ï¼ŒåŠ å…¥ç­‰å¾…é˜Ÿåˆ—ä¸­
 				}
 			}
 			return order;
@@ -173,7 +173,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 	}
 
 	/**
-	 * ´ÓÓĞĞ§Çø»òµÈ´ıÇøÉ¾³ı
+	 * ä»æœ‰æ•ˆåŒºæˆ–ç­‰å¾…åŒºåˆ é™¤
 	 * 
 	 * @param intToRemove
 	 * @return
@@ -207,7 +207,7 @@ public class MultiToucher implements OnTouchListener, CutOutImpl{
 			addToAvailable(waitingZone.poll());
 		}
 		if (availableZone.size() > 0)
-			send(getAvailableValue(availableZone.get(0)));// ËÉ¿ªÒ»¸öÊÖÖ¸ºó²¹·¢°´ÏÂµÄ
+			send(getAvailableValue(availableZone.get(0)));// æ¾å¼€ä¸€ä¸ªæ‰‹æŒ‡åè¡¥å‘æŒ‰ä¸‹çš„
 		else
 			stop();
 		v.setSelected(false);

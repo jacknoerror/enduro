@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.widget.Toast;
 
 import com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService;
@@ -49,12 +51,12 @@ public class GattUtils {
 
 	public static byte[] hex2byte(byte[] b) {
 	    if ((b.length % 2) != 0) {
-	        throw new IllegalArgumentException("³¤¶È²»ÊÇÅ¼Êı");
+	        throw new IllegalArgumentException("é•¿åº¦ä¸æ˜¯å¶æ•°");
 	    }
 	    byte[] b2 = new byte[b.length / 2];
 	    for (int n = 0; n < b.length; n += 2) {
 	        String item = new String(b, n, 2);
-	        // Á½Î»Ò»×é£¬±íÊ¾Ò»¸ö×Ö½Ú,°ÑÕâÑù±íÊ¾µÄ16½øÖÆ×Ö·û´®£¬»¹Ô­³ÉÒ»¸ö½øÖÆ×Ö½Ú
+	        // ä¸¤ä½ä¸€ç»„ï¼Œè¡¨ç¤ºä¸€ä¸ªå­—èŠ‚,æŠŠè¿™æ ·è¡¨ç¤ºçš„16è¿›åˆ¶å­—ç¬¦ä¸²ï¼Œè¿˜åŸæˆä¸€ä¸ªè¿›åˆ¶å­—èŠ‚
 	        b2[n / 2] = (byte) Integer.parseInt(item, 16);
 	    }
 	    b = null;
@@ -62,7 +64,7 @@ public class GattUtils {
 	}
 
 	/**
-	 * ¶¯Ì¬¼ÆËãCRC8
+	 * åŠ¨æ€è®¡ç®—CRC8
 	 */
 	public static String computeCRC8(String str, int flag) {
 	
@@ -76,7 +78,7 @@ public class GattUtils {
 		if (c.length() == 1) {
 			c = "0" + c;
 		}
-		// Log.d("--", "--------------------crc8 ½á¹û---------->" + c);
+		// Log.d("--", "--------------------crc8 ç»“æœ---------->" + c);
 		return c.toUpperCase();
 	}
 
@@ -121,6 +123,18 @@ public class GattUtils {
 		return ProgressDialog.show(context, "",text);
 	}
 	public static void showToast(Context context, CharSequence text) {
-		Toast.makeText(context, text , Toast.LENGTH_LONG);
+		Toast.makeText(context, text , Toast.LENGTH_LONG).show();
+	}
+
+	public static String vvnn = null;
+	public static String getVersionName(Context context)//è·å–ç‰ˆæœ¬å·(å†…éƒ¨è¯†åˆ«å·)
+	{
+		if(!vvnn.isEmpty()) return vvnn;
+		try {
+			PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return (vvnn=pi.versionName);
+		} catch (NameNotFoundException e) {
+			return "";
+		}
 	}
 }

@@ -110,10 +110,10 @@ public class ControlActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);//È¥µô±êÌâÀ¸
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//å»æ‰æ ‡é¢˜æ 
 		setContentView(R.layout.layout_operate);
 		layout_operate = findViewById(R.id.layout_operate);
-//		findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);//changeto:Åä¶Ô³É¹¦ºóÔÙÏÔÊ¾
+//		findViewById(R.id.layout_operate).setVisibility(View.VISIBLE);//changeto:é…å¯¹æˆåŠŸåå†æ˜¾ç¤º
 		final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -133,11 +133,11 @@ public class ControlActivity extends Activity {
         
         needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
 //        needSelectEngine = false;//FIXME delete
-        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 ÔÚÁ¬½ÓÖ®Ç° Í¸Ã÷  
+        if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 åœ¨è¿æ¥ä¹‹å‰ é€æ˜  
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
         }
-        // Á¬½Ó²»ÉÏ ¸ÃÒ³ÃæÏûÊ§
+        // è¿æ¥ä¸ä¸Š è¯¥é¡µé¢æ¶ˆå¤±
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
 
 	@Override
@@ -169,7 +169,7 @@ public class ControlActivity extends Activity {
 	
 	 
     private void initBtns() {
-		 // Button ÉèÖÃ
+		 // Button è®¾ç½®
 		
 		subMultiToucher = new SubMultiToucher();
 		
@@ -196,7 +196,7 @@ public class ControlActivity extends Activity {
 		
 		dianji_ll = this.findViewById(R.id.dianji_ll);
 		
-		//¾¯ºÅµÆ
+		//è­¦å·ç¯
 		diya_img 	= (ImageView) this.findViewById(R.id.diya_img);
 		gaoya_img 	= (ImageView) this.findViewById(R.id.gaoya_img);
 		xinhao_img 	= (ImageView) this.findViewById(R.id.xinhao_img);
@@ -228,8 +228,8 @@ public class ControlActivity extends Activity {
 					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 					ad.setCancelable(false);
 					ad.setTitle("About ENDURO?");
-//					ad.setMessage("Èí¼ş°æ±¾£º\nv1.01\n\n¹«Ë¾ĞÅÏ¢£º\nTradekar International B.V.\n\n" +
-//							"Add: Staalweg 8  4104 AT  Culemborg\n\nÍøÕ¾Á´½Ó£º\nwww.enduro-europe.eu");
+//					ad.setMessage("è½¯ä»¶ç‰ˆæœ¬ï¼š\nv1.01\n\nå…¬å¸ä¿¡æ¯ï¼š\nTradekar International B.V.\n\n" +
+//							"Add: Staalweg 8  4104 AT  Culemborg\n\nç½‘ç«™é“¾æ¥ï¼š\nwww.enduro-europe.eu");
 					View view = LayoutInflater.from(ControlActivity.this).inflate(R.layout.layout_about, null);//
 					ad.setView(view);
 					ad.setPositiveButton("OK", null);
@@ -252,7 +252,7 @@ public class ControlActivity extends Activity {
 		compassImg.setOnClickListener(l);
 		
 		
-		setOpBtnEnablity(false);//¶ÔÂëºó²ÅÄÜ²Ù×÷ 1230
+		setOpBtnEnablity(false);//å¯¹ç åæ‰èƒ½æ“ä½œ 1230
 	}
 
 	private void savDvcInfo() {
@@ -288,8 +288,8 @@ public class ControlActivity extends Activity {
 				reconnect();//0201
 //				startScan(context); //0201 jazz
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-//				Log.e(TAG, "---notice£¡ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
-				// ·¢ÏÖ·şÎñÆ÷
+//				Log.e(TAG, "---noticeï¼ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
+				// å‘ç°æœåŠ¡å™¨
 				startScheduleIfPossible();
 				// displayGattServices(mBluetoothLeService.getSupportedGattServices());
 			} else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
@@ -340,7 +340,7 @@ public class ControlActivity extends Activity {
         }
     };
     byte[] WriteBytes = new byte[20];
-    /** ¹Ì¶¨Ê¹ÓÃµÄ¶ÁĞ´×Ö·û     */
+    /** å›ºå®šä½¿ç”¨çš„è¯»å†™å­—ç¬¦     */
     BluetoothGattCharacteristic fixedCharacteristic = null;
 
 	private ScheduledExecutorService scheduledExecutorService;
@@ -355,7 +355,7 @@ public class ControlActivity extends Activity {
 
 	private String box_token;
 
-	private String check_str = "";// ÓÅÏÈ¼¶ ÅĞ¶Ï³É¹¦
+	private String check_str = "";// ä¼˜å…ˆçº§ åˆ¤æ–­æˆåŠŸ
 
 	private boolean needfengming=true;
 	private boolean needSelectEngine=false;//1218 1222
@@ -366,7 +366,7 @@ public class ControlActivity extends Activity {
 	boolean BLINK_CONNECT,BLINK_OVER,
 		BLINK_HIGH,BLINK_LOW,BLINK_DJR,BLINK_DJL;
 	int blinkTimerCount,reconnTimerCount;
-	private String lastDJ;//¼ÇÂ¼ÉÏ´ÎÖ´ĞĞµÄĞ¡µç»ú£¬È·±£ÔÚÊÕµ½92£¨Ğ¡µç»ú¹¤×÷ÖĞ£©Ê±ÄÜÕı³£ÉÁË¸
+	private String lastDJ;//è®°å½•ä¸Šæ¬¡æ‰§è¡Œçš„å°ç”µæœºï¼Œç¡®ä¿åœ¨æ”¶åˆ°92ï¼ˆå°ç”µæœºå·¥ä½œä¸­ï¼‰æ—¶èƒ½æ­£å¸¸é—ªçƒ
 
 	private SubMultiToucher subMultiToucher;
 	private String lastCmd="";//0122
@@ -379,7 +379,7 @@ public class ControlActivity extends Activity {
         value[0] = (byte) 0x00;
         
         Log.i(TAG, String.format("sending:%s", check_str));
-		WriteBytes = GattUtils.hex2byte(check_str.getBytes());// ¹Ì¶¨Ê¹ÓÃ16½øÖÆ´«Êä
+		WriteBytes = GattUtils.hex2byte(check_str.getBytes());// å›ºå®šä½¿ç”¨16è¿›åˆ¶ä¼ è¾“
 		// WriteBytes = "1234abcd".getBytes();
 		fixedCharacteristic.setValue(value[0],BluetoothGattCharacteristic.FORMAT_UINT8, 0);
 		fixedCharacteristic.setValue(WriteBytes);
@@ -393,7 +393,7 @@ public class ControlActivity extends Activity {
 
 			scheduledExecutorService = Executors
 					.newSingleThreadScheduledExecutor();
-			// µ±ActivityÏÔÊ¾³öÀ´ºó£¬Ã¿Á½ÃëÖÓÇĞ»»Ò»´ÎÍ¼Æ¬ÏÔÊ¾
+			// å½“Activityæ˜¾ç¤ºå‡ºæ¥åï¼Œæ¯ä¸¤ç§’é’Ÿåˆ‡æ¢ä¸€æ¬¡å›¾ç‰‡æ˜¾ç¤º
 			scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
 				@Override
@@ -401,9 +401,9 @@ public class ControlActivity extends Activity {
 					mHandler.sendEmptyMessage(noSignal?5:6);
 					send();
 					noSignal = true;
-//					Log.i(TAG, "°¥Ó´~Äã±ğ¶ñĞÄÎÒ~");
+//					Log.i(TAG, "å“å“Ÿ~ä½ åˆ«æ¶å¿ƒæˆ‘~");
 					mHandler.sendEmptyMessage(7);
-//					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 ÖØÁ¬ 0104jazz
+//					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 é‡è¿ 0104jazz
 				}
 			}, 100, 300, TimeUnit.MILLISECONDS);
 		}
@@ -411,7 +411,7 @@ public class ControlActivity extends Activity {
 	
 
 	/**
-	 * ±éÀúÀ¶ÑÀgatt·şÎñ»ñµÃffe1¶ÁĞ´×Ö·ûÌØÕ÷Âë
+	 * éå†è“ç‰™gattæœåŠ¡è·å¾—ffe1è¯»å†™å­—ç¬¦ç‰¹å¾ç 
 	 * @return 
 	 * taotao 1204
 	 */
@@ -434,7 +434,7 @@ public class ControlActivity extends Activity {
 	/**
 	 * @param commandStr
 	 */
-	public void setCommandStr(String commandStr) {//Èç¹û¸ÄºÃ¼¸±é£¿ 
+	public void setCommandStr(String commandStr) {//å¦‚æœæ”¹å¥½å‡ éï¼Ÿ 
 		check_str = commandStr;
 	}
 
@@ -458,34 +458,34 @@ public class ControlActivity extends Activity {
            	 
            	 Log.d("--", "----#--->"+rcvStr);
            	 
-           	 //·µ»ØÖµµÄcrc8Ğ£Ñé        	
+           	 //è¿”å›å€¼çš„crc8æ ¡éªŒ        	
            	 if(comCheckCRC8(rcvStr)){
            		 
            		 String command = rcvStr.substring(10, 12);
            		 Log.d("--","-------- :) ---------------------->command = " +command);
-           		 //ÊÇ²»ÊÇ¶ÔÂë²Ù×÷,·µ»ØµÄÃüÁîÎ»ÊÇ91 
+           		 //æ˜¯ä¸æ˜¯å¯¹ç æ“ä½œ,è¿”å›çš„å‘½ä»¤ä½æ˜¯91 
            		 if(command.equals("91")){
            			 needfengming = true;
            			 needBB = true;
-                   	 Log.d("--", "---------111½øÈë¶ÔÂë×´Ì¬----->" + rcvStr);
+                   	 Log.d("--", "---------111è¿›å…¥å¯¹ç çŠ¶æ€----->" + rcvStr);
                    	TokenKeeper.putValue(this, SP_TOKEN, token = rcvStr.substring(4, 10));
 						 String duima = "550301"+imei+"BB" + GattUtils.computeCRC8("0301"+imei, 187) + "EE";
-						 Log.d("--", "-------·¢ËÍ¶ÔÂëÇëÇó------->"+duima);		     						 
+						 Log.d("--", "-------å‘é€å¯¹ç è¯·æ±‚------->"+duima);		     						 
 //                   	 sendDataToPairedDevice(duima);
 						 setCommandStr(duima);
                     }
 
            		 if(command.equals("BB") && needBB){
            			 needBB = false;
-           			 Log.d("--", "---------222½øÈë¶ÔÂë×´Ì¬----->" + rcvStr);
+           			 Log.d("--", "---------222è¿›å…¥å¯¹ç çŠ¶æ€----->" + rcvStr);
 						 TokenKeeper.putValue(this, SP_BOX_TOKEN, box_token = rcvStr.substring(4, 10));
 						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
 						 if(needfengming){
-//							 needSelectEngine = true;//1222 Ê×´Î¶ÔÂëÒªÑ¡Ôñ
-//							 mHandler.sendEmptyMessage(4);//1230×¢ÊÍ ¸ÄÔÙÁ´½Ó³É¹¦Ê±Ñ¡Ôñ
+//							 needSelectEngine = true;//1222 é¦–æ¬¡å¯¹ç è¦é€‰æ‹©
+//							 mHandler.sendEmptyMessage(4);//1230æ³¨é‡Š æ”¹å†é“¾æ¥æˆåŠŸæ—¶é€‰æ‹©
 						 }			
-						 setOpBtnEnablity(true);//1230 ¶ÔÂë³É¹¦ºó¿ÉÒÔ²Ù×÷
-                   	 Log.d("--","--------------¶ÔÂë³É¹¦----ÖØĞÂÂÖÑ¯µÄ×Ö´®ÊÇ---->" + check_str);
+						 setOpBtnEnablity(true);//1230 å¯¹ç æˆåŠŸåå¯ä»¥æ“ä½œ
+                   	 Log.d("--","--------------å¯¹ç æˆåŠŸ----é‡æ–°è½®è¯¢çš„å­—ä¸²æ˜¯---->" + check_str);
                     }   
            		 
                	 if(comCheckCRC8(rcvStr)
@@ -497,42 +497,42 @@ public class ControlActivity extends Activity {
 								mHandler.sendEmptyMessage(3);// setNormalSignal();
 							}
 							if (needfengming) {
-								needfengming=false;//1222 Ö»ÔÚµÚÒ»´Î¶ÔÂëÊ±·äÃù
+								needfengming=false;//1222 åªåœ¨ç¬¬ä¸€æ¬¡å¯¹ç æ—¶èœ‚é¸£
 								mHandler.sendEmptyMessage(4);// taotao 1204
 							}
-							Log.d("--", "--Õı³£-->");
+							Log.d("--", "--æ­£å¸¸-->");
 							disableBlinks();
 						} else if (command.equals("96")) {
-							Log.d("--", "---------¸ßÑ¹-------¸ßÑ¹--------------->");
+							Log.d("--", "---------é«˜å‹-------é«˜å‹--------------->");
 							needSetNormalSignal = true;
 							mHandler.sendEmptyMessage(0);// gaodianya();
 						} else if (command.equals("95")) {
-							Log.d("--", "---------µÍÑ¹-------µÍÑ¹-------------->");
+							Log.d("--", "---------ä½å‹-------ä½å‹-------------->");
 							needSetNormalSignal = true;
 							mHandler.sendEmptyMessage(1);// didianya();
 						} else if (command.equals("97")) {
-							Log.d("--", "---------¹ıÔØ-------¹ıÔØ------------->");
+							Log.d("--", "---------è¿‡è½½-------è¿‡è½½------------->");
 							needSetNormalSignal = true;
 							mHandler.sendEmptyMessage(2);// guozai();
 						} else if (command.equals("98")) {
 							BLINK_DJR = false;BLINK_DJL = false;
-							Log.d("--", "---Ğ¡µç»ú¹¤×÷³¬Ê±--->");
+							Log.d("--", "---å°ç”µæœºå·¥ä½œè¶…æ—¶--->");
 						} else if (command.equals("99")) {
-							Log.d("--", "---´óµç»ú¹¤×÷³¬Ê±---->");
+							Log.d("--", "---å¤§ç”µæœºå·¥ä½œè¶…æ—¶---->");
 						} else if (command.equals("2D") ) {// 1204 //1230 rightside
-							BLINK_DJR = true;// ÆäËû×´Ì¬Ê±Ó¦µ±¹Øµô 
+							BLINK_DJR = true;// å…¶ä»–çŠ¶æ€æ—¶åº”å½“å…³æ‰ 
 							BLINK_DJL = false;//0111
 							djl_img.setVisibility(View.GONE);//0111
 							lastDJ = "2D";
 							resetCommandStr();
 						}else if( command.equals("2C")){//1230 leftside
 							BLINK_DJL = true;// 
-							BLINK_DJR = false;// ÆäËû×´Ì¬Ê±Ó¦µ±¹Øµô 
+							BLINK_DJR = false;// å…¶ä»–çŠ¶æ€æ—¶åº”å½“å…³æ‰ 
 							djr_img.setVisibility(View.GONE);
 							lastDJ = "2C";
 							resetCommandStr();
 						} else if (command.equals("9A")) {
-							Log.d("--", "---Ê§È¥Á¬½Ó±¨´í---->");
+							Log.d("--", "---å¤±å»è¿æ¥æŠ¥é”™---->");
 							disableBlinks();//1230
 						} else if(command.equals("92")){
 							if(lastDJ.equals("2D")) {
@@ -553,13 +553,13 @@ public class ControlActivity extends Activity {
 						}
 
 						if (command.equals("93")
-								&& subMultiToucher.getFingerCount() == 0) {// ´óµç»ú¹¤×÷ÖĞ
-																			// ÊÖÖ¸Ã»°´×Å
+								&& subMultiToucher.getFingerCount() == 0) {// å¤§ç”µæœºå·¥ä½œä¸­
+																			// æ‰‹æŒ‡æ²¡æŒ‰ç€
 							setCommandStr(String.format("%s%s%s%sEE", "550301",
 									box_token, "AA", GattUtils.computeCRC8(
 											"0301" + box_token, 170)));
 						}
-						if(command.equals("AA")){//Í£Ö¹³É¹¦ 1217
+						if(command.equals("AA")){//åœæ­¢æˆåŠŸ 1217
 							resetCommandStr();
 						}
 						if(command.equals("2A")||command.equals("2B")){//1217 
@@ -575,7 +575,7 @@ public class ControlActivity extends Activity {
         }
     }
 
-	//Ğ£Ñé
+	//æ ¡éªŒ
 	private boolean comCheckCRC8(String rcvStr) {
 		return GattUtils.computeCRC8(rcvStr.substring(0, 10),Integer.parseInt(rcvStr.substring(10, 12), 16))
 				 .equals(rcvStr.substring(12, 14));
@@ -663,7 +663,7 @@ public class ControlActivity extends Activity {
             		playBeep();
             	}
             	else {
-//            		showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222  1230×¢ÊÓ£¬¸Äµ½¿ªÍ·
+//            		showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222  1230æ³¨è§†ï¼Œæ”¹åˆ°å¼€å¤´
             	}
             	break;
             case 5:
@@ -679,7 +679,7 @@ public class ControlActivity extends Activity {
 			case 7://blink
 //				Log.i(TAG, "blinkCount"+blinkTimerCount);
 				blinkTimerCount%=2;
-				if(blinkTimerCount++!=0) break;//Ê±¼ä±¶ÊıÉÁË¸
+				if(blinkTimerCount++!=0) break;//æ—¶é—´å€æ•°é—ªçƒ
 				if(BLINK_CONNECT) blinkBtn(xinhao_img);
 				if(BLINK_HIGH) blinkBtn(gaoya_img);
 				if(BLINK_LOW) blinkBtn(diya_img);
@@ -688,12 +688,12 @@ public class ControlActivity extends Activity {
 				if(BLINK_DJL) blinkBtn(djl_img);
 				break;
 				
-			case 101://Á¬½ÓÖĞloading¿ò
+			case 101://è¿æ¥ä¸­loadingæ¡†
 				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, "connecting device..");
 				connectingDialog.setCancelable(false);
 				mHandler.sendEmptyMessageDelayed(102, 10*1000);
 				break;
-			case 102://ÅĞ¶ÏÊÇ·ñÁ¬½ÓÊ§°Ü
+			case 102://åˆ¤æ–­æ˜¯å¦è¿æ¥å¤±è´¥
 				if(null!=connectingDialog&&connectingDialog.isShowing()){
 					connectingDialog.dismiss();
 					Context context = ControlActivity.this;
@@ -741,7 +741,7 @@ public class ControlActivity extends Activity {
 			
 		}
 
-		long [] vPattern = {0,600};   // Í£Ö¹ ¿ªÆô Í£Ö¹ ¿ªÆô   
+		long [] vPattern = {0,600};   // åœæ­¢ å¼€å¯ åœæ­¢ å¼€å¯   
 		/**
 		 * 
 		 */
@@ -778,7 +778,7 @@ public class ControlActivity extends Activity {
 			ad.setNegativeButton("No", null);
 			switch (v.getId()) {
 			case R.id.songkaiBtn:
-				if (box_token.equals("")) { // Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
+				if (box_token.equals("")) { // æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
 					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
 							Toast.LENGTH_LONG).show();
 					return;
@@ -786,12 +786,12 @@ public class ControlActivity extends Activity {
 				ad.setTitle(R.string.roller_disengage);
 				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					
-					public void onClick(DialogInterface dialog, int which) {    						//µç»úËÉ¿ª
+					public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºæ¾å¼€
 //						if (btSocket != null){
 						if(mConnected){
 //							String upString = "550301"+box_token+"2D"+GattUtils.computeCRC8("0301"+box_token, 45)+"EE";								
 							String upString =String.format("550301%s%s%sEE", box_token,"2D",GattUtils.computeCRC8("0301"+box_token, 45));
-							Log.d("", "------------µç»úËÉ¿ª------>" + upString); 
+							Log.d("", "------------ç”µæœºæ¾å¼€------>" + upString); 
 //							sendDataToPairedDevice(upString);
 							setCommandStr(upString);
 						}
@@ -800,7 +800,7 @@ public class ControlActivity extends Activity {
 				ad.create().show();
 				break;
 			case R.id.jiajinBtn:
-				if (box_token.equals("")) { // Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
+				if (box_token.equals("")) { // æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
 					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
 							Toast.LENGTH_LONG).show();
 					return;
@@ -808,11 +808,11 @@ public class ControlActivity extends Activity {
 				ad.setTitle(R.string.roller_engage);
 				ad.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					
-					public void onClick(DialogInterface dialog, int which) {    						//µç»ú¼Ğ½ô	
+					public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºå¤¹ç´§	
 						if(mConnected){
 							String upString =String.format("550301%s%s%sEE", box_token,"2C",GattUtils.computeCRC8("0301"+box_token, 44));
 							setCommandStr(upString);
-							Log.d("", "------------µç»úËÉ¿ª------>" + upString); 
+							Log.d("", "------------ç”µæœºæ¾å¼€------>" + upString); 
 						}
 					}
 				});
@@ -831,11 +831,11 @@ public class ControlActivity extends Activity {
 	public class SubMultiToucher extends MultiToucher{
 		SparseArray<String> usMap;
 		protected SparseArray<String> getmap() {
-			if(null==usMap){//Ìí¼Ó×éºÏÊ±£¬ÒªÔÚ¸¸ÀàµÄmaskÖĞÌí¼Ó
+			if(null==usMap){//æ·»åŠ ç»„åˆæ—¶ï¼Œè¦åœ¨çˆ¶ç±»çš„maskä¸­æ·»åŠ 
 				
 				usMap = new SparseArray<String>();
 				usMap.put(0, makeFormatCmd(box_token, "AA", 170));
-				//·Ç·¨²Ù×÷Ê±
+				//éæ³•æ“ä½œæ—¶
 				usMap.put(0x100100, makeFormatCmd(box_token, "AA", 170));
 				usMap.put(0x001001, makeFormatCmd(box_token, "AA", 170));
 				usMap.put(0x010010, makeFormatCmd(box_token, "AA", 170));
@@ -845,7 +845,7 @@ public class ControlActivity extends Activity {
 				usMap.put(0x010001, makeFormatCmd(box_token, "AA", 170));
 //				usMap.put(0x, makeFormatCmd(box_token, "AA", 170));
 				//makeFormatCmd(box_token, "2B", 43)
-				//×éºÏ¼ü
+				//ç»„åˆé”®
 				usMap.put(0x100000, makeFormatCmd(box_token, "21", 33));
 				usMap.put(0x010000, makeFormatCmd(box_token, "20", 32));
 				usMap.put(0x001000, makeFormatCmd(box_token, "22", 34));
@@ -856,11 +856,11 @@ public class ControlActivity extends Activity {
 				usMap.put(0x011000, makeFormatCmd(box_token, "24", 36));
 				usMap.put(0x000110, makeFormatCmd(box_token, "28", 40));
 				usMap.put(0x000011, makeFormatCmd(box_token, "29", 41));
-				usMap.put(0x101000, makeFormatCmd(box_token, "20", 32));//×óÓÒ
+				usMap.put(0x101000, makeFormatCmd(box_token, "20", 32));//å·¦å³
 				usMap.put(0x000101, makeFormatCmd(box_token, "25", 37));
-				//Ô­µØ
-				usMap.put(0x100001, makeFormatCmd(box_token, "2A", 42));//ÏòÓÒÔ­µØ
-				usMap.put(0x001100, makeFormatCmd(box_token, "2B", 43));//Ïò×óÔ­µØ
+				//åŸåœ°
+				usMap.put(0x100001, makeFormatCmd(box_token, "2A", 42));//å‘å³åŸåœ°
+				usMap.put(0x001100, makeFormatCmd(box_token, "2B", 43));//å‘å·¦åŸåœ°
 				
 			}
 			return usMap;
@@ -868,7 +868,7 @@ public class ControlActivity extends Activity {
 		@Override
 		public void send(int order) {
 			super.send(order);
-			if (box_token.equals("")) { // Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
+			if (box_token.equals("")) { // æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
 				Toast.makeText(ControlActivity.this, "Please get paired first", Toast.LENGTH_LONG).show();
 				return;
 			}

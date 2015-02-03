@@ -2,17 +2,15 @@ package com.bzbluetooth;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
  
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 public class ClsUtils
 {
  
     /**
-     * ÓëÉè±¸Åä¶Ô ²Î¿¼Ô´Âë£ºplatform/packages/apps/Settings.git
+     * ä¸è®¾å¤‡é…å¯¹ å‚è€ƒæºç ï¼šplatform/packages/apps/Settings.git
      * /Settings/src/com/android/settings/bluetooth/CachedBluetoothDevice.java
      */
     static public boolean createBond(Class btClass, BluetoothDevice btDevice)
@@ -24,7 +22,7 @@ public class ClsUtils
     }
  
     /**
-     * ÓëÉè±¸½â³ıÅä¶Ô ²Î¿¼Ô´Âë£ºplatform/packages/apps/Settings.git
+     * ä¸è®¾å¤‡è§£é™¤é…å¯¹ å‚è€ƒæºç ï¼šplatform/packages/apps/Settings.git
      * /Settings/src/com/android/settings/bluetooth/CachedBluetoothDevice.java
      */
     static public boolean removeBond(Class btClass, BluetoothDevice btDevice)
@@ -59,14 +57,13 @@ public class ClsUtils
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return true;
  
     }
  
-    // È¡ÏûÓÃ»§ÊäÈë
+    // å–æ¶ˆç”¨æˆ·è¾“å…¥
     static public boolean cancelPairingUserInput(Class btClass,
             BluetoothDevice device)
  
@@ -78,7 +75,7 @@ public class ClsUtils
         return returnValue.booleanValue();
     }
  
-    // È¡ÏûÅä¶Ô
+    // å–æ¶ˆé…å¯¹
     static public boolean cancelBondProcess(Class btClass,
             BluetoothDevice device)
  
@@ -97,7 +94,7 @@ public class ClsUtils
     {
         try
         {
-            // È¡µÃËùÓĞ·½·¨
+            // å–å¾—æ‰€æœ‰æ–¹æ³•
             Method[] hideMethod = clsShow.getMethods();
             int i = 0;
             for (; i < hideMethod.length; i++)
@@ -105,7 +102,7 @@ public class ClsUtils
                 Log.e("method name", hideMethod[i].getName() + ";and the i is:"
                         + i);
             }
-            // È¡µÃËùÓĞ³£Á¿
+            // å–å¾—æ‰€æœ‰å¸¸é‡
             Field[] allFields = clsShow.getFields();
             for (i = 0; i < allFields.length; i++)
             {
@@ -124,21 +121,7 @@ public class ClsUtils
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    
-    
-    static String vvnn = null;
-    public static String getVersionName(Context context)//»ñÈ¡°æ±¾ºÅ(ÄÚ²¿Ê¶±ğºÅ)
-	{
-		if(!vvnn.isEmpty()) return vvnn;
-		try {
-			PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-			return (vvnn=pi.versionName);
-		} catch (NameNotFoundException e) {
-			return "";
-		}
-	}
 }

@@ -1,2 +1,16 @@
 eclipse.preferences.version=1
 encoding//assets/1230_SUGGESTION.txt=UTF-8
+encoding//src/com/bzbluetooth/ClsUtils.java=UTF-8
+encoding//src/com/bzbluetooth/MainActivity.java=UTF-8
+encoding//src/com/bzbluetooth/RingtoneUtils.java=UTF-8
+encoding//src/com/bzbluetooth/StartActivity.java=UTF-8
+encoding//src/com/bzbluetooth/android/bluetoothlegatt/BluetoothLeService.java=UTF-8
+encoding//src/com/bzbluetooth/android/bluetoothlegatt/ControlActivity.java=UTF-8
+encoding//src/com/bzbluetooth/android/bluetoothlegatt/DeviceScanActivity.java=UTF-8
+encoding//src/com/bzbluetooth/android/bluetoothlegatt/SampleGattAttributes.java=UTF-8
+encoding//src/com/bzbluetooth/helper/CompassHelper.java=UTF-8
+encoding//src/com/bzbluetooth/helper/CutOutImpl.java=UTF-8
+encoding//src/com/bzbluetooth/helper/GattUtils.java=UTF-8
+encoding//src/com/bzbluetooth/helper/MultiToucher.java=UTF-8
+encoding//src/com/bzbluetooth/helper/TokenKeeper.java=UTF-8
+encoding/<project>=UTF-8

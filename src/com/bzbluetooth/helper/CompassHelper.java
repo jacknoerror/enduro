@@ -33,7 +33,7 @@ public class CompassHelper {
 	
 	public void onResume(){
 		Sensor sensor = manager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-		// Ó¦ÓÃÔÚÇ°Ì¨Ê±ºò×¢²á¼àÌıÆ÷
+		// åº”ç”¨åœ¨å‰å°æ—¶å€™æ³¨å†Œç›‘å¬å™¨
 		manager.registerListener(listener, sensor,				SensorManager.SENSOR_DELAY_GAME);
 		
 		if(null == sensor){//taotao 1117
@@ -59,11 +59,11 @@ public class CompassHelper {
 		@Override
 		public void onSensorChanged(SensorEvent event) {
 			/**
-			 * values[0]: x-axis ·½Ïò¼ÓËÙ¶È ¡¡¡¡ values[1]: y-axis ·½Ïò¼ÓËÙ¶È ¡¡¡¡ values[2]:
-			 * z-axis ·½Ïò¼ÓËÙ¶È
+			 * values[0]: x-axis æ–¹å‘åŠ é€Ÿåº¦ ã€€ã€€ values[1]: y-axis æ–¹å‘åŠ é€Ÿåº¦ ã€€ã€€ values[2]:
+			 * z-axis æ–¹å‘åŠ é€Ÿåº¦
 			 */
-			float degree = event.values[0];// ´æ·ÅÁË·½ÏòÖµ
-			/** ¶¯»­Ğ§¹û */
+			float degree = event.values[0];// å­˜æ”¾äº†æ–¹å‘å€¼
+			/** åŠ¨ç”»æ•ˆæœ */
 			clearAllAnim();
 			for (ImageView v : campassImgs) {//
 				RotateAnimation animation = new RotateAnimation(predegree,

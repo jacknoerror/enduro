@@ -51,7 +51,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.bzbluetooth.ClsUtils;
 import com.bzbluetooth.R;
 import com.bzbluetooth.helper.GattUtils;
 import com.bzbluetooth.helper.TokenKeeper;
@@ -66,7 +65,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
 
-    private boolean AUTO_CONN=true ;//Èç¹ûÒª½ûÖ¹×Ô¶¯Á¬½Ó ĞŞ¸ÄÕâ¸öÖµ
+    private boolean AUTO_CONN=true ;//å¦‚æœè¦ç¦æ­¢è‡ªåŠ¨è¿æ¥ ä¿®æ”¹è¿™ä¸ªå€¼
     private Handler mHandler;
     /*ui*/
 	private ListView mScanListView;
@@ -105,7 +104,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//È¥µô±êÌâÀ¸
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//å»æ‰æ ‡é¢˜æ 
         setContentView(R.layout.layout_prepare);
         
         lastName = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICENAME);
@@ -161,7 +160,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         btnSwitch.setOnClickListener(this);
         btnClear.setOnClickListener(this);
         imgHowto.setOnClickListener(this);
-//        btAdapt = BluetoothAdapter.getDefaultAdapter();// ³õÊ¼»¯±¾»úÀ¶ÑÀ¹¦ÄÜ
+//        btAdapt = BluetoothAdapter.getDefaultAdapter();// åˆå§‹åŒ–æœ¬æœºè“ç‰™åŠŸèƒ½
 //        btnSwitch.setChecked(!btAdapt.isEnabled());
         
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -242,7 +241,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("How to use?");
-			ad.setMessage(String.format("%sV%s\n%s", "Version:",ClsUtils.getVersionName(this) , getString(R.string.howto)));
+			ad.setMessage(String.format("%sV%s\n%s", "Version:",GattUtils.getVersionName(this) , getString(R.string.howto)));
 			ad.setPositiveButton("OK", null);
 			ad.create().show();	
 			break;
@@ -250,8 +249,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("About ENDURO?");
-//			ad.setMessage("Èí¼ş°æ±¾£º\nv1.01\n\n¹«Ë¾ĞÅÏ¢£º\nTradekar International B.V.\n\n" +
-//					"Add: Staalweg 8  4104 AT  Culemborg\n\nÍøÕ¾Á´½Ó£º\nwww.enduro-europe.eu");
+//			ad.setMessage("è½¯ä»¶ç‰ˆæœ¬ï¼š\nv1.01\n\nå…¬å¸ä¿¡æ¯ï¼š\nTradekar International B.V.\n\n" +
+//					"Add: Staalweg 8  4104 AT  Culemborg\n\nç½‘ç«™é“¾æ¥ï¼š\nwww.enduro-europe.eu");
 			View view = LayoutInflater.from(this).inflate(R.layout.layout_about, null);//
 			ad.setView(view);
 			ad.setPositiveButton("OK", null);
@@ -365,7 +364,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         boolean needSelectEngine = !TokenKeeper.getSpInstance(DeviceScanActivity.this).contains("showdianji");//1230
         if(!needSelectEngine) finish();//1230
-//        finish();//1222£¬²»ĞèÒª·µ»Ø¸Ã½çÃæ	1230×¢ÊÍ£¬Ñ¡ÔñengineºóÔÙfinish
+//        finish();//1222ï¼Œä¸éœ€è¦è¿”å›è¯¥ç•Œé¢	1230æ³¨é‡Šï¼Œé€‰æ‹©engineåå†finish
 	}
 
 
@@ -463,7 +462,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
                     mLeDeviceListAdapter.addDevice(device);
                     mLeDeviceListAdapter.notifyDataSetChanged();
                     Log.i(TAG, device.getAddress()+"_"+device.getName());
-                    if(AUTO_CONN&&!(lastName.isEmpty()||lastAddr.isEmpty())){//1224 ×Ô¶¯Á¬½ÓÉÏ´ÎÉè±¸
+                    if(AUTO_CONN&&!(lastName.isEmpty()||lastAddr.isEmpty())){//1224 è‡ªåŠ¨è¿æ¥ä¸Šæ¬¡è®¾å¤‡
                     	if(device.getName().equals(lastName)&&device.getAddress().equals(lastAddr)){
                     		scanLeDevice(false);
                     		goControl(lastName, lastAddr);

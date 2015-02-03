@@ -57,17 +57,17 @@ public class MainActivity extends Activity {
 	private String command;
 	private String imei;
 //	private String ctrl_id;
-	private String check_str;  	//¶¯Ì¬¼ÆËãcrc8Âë
+	private String check_str;  	//åŠ¨æ€è®¡ç®—crc8ç 
 	private Thread mThread;
-	private String token;		//¿ØÖÆºĞµÄÂë
-	public String box_token; 	//Ò£¿ØÆ÷µÄÂë
-	private String broken_str;	//½Ø¶ÏµÄ·µ»ØÂë
-	private String blt_addr_str;//×Ô¶¯Á¬½ÓµÄÀ¶ÑÀµØÖ·
+	private String token;		//æ§åˆ¶ç›’çš„ç 
+	public String box_token; 	//é¥æ§å™¨çš„ç 
+	private String broken_str;	//æˆªæ–­çš„è¿”å›ç 
+	private String blt_addr_str;//è‡ªåŠ¨è¿æ¥çš„è“ç‰™åœ°å€
 	private boolean needBB = true;
 	private TextView lvTitle;
 	private boolean needSetNormalSignal = false;
-	private boolean needfengming = true;  // ¶ÔÂë³É¹¦ÊÇ·ñĞèÒª·äÃù
-	private boolean hasSignal = false; 		  //ÊÇ·ñÏÔÊ¾ĞÅºÅÍ¼±ê
+	private boolean needfengming = true;  // å¯¹ç æˆåŠŸæ˜¯å¦éœ€è¦èœ‚é¸£
+	private boolean hasSignal = false; 		  //æ˜¯å¦æ˜¾ç¤ºä¿¡å·å›¾æ ‡
 	
 	private ImageView diya_img,gaoya_img,xinhao_img,guozai_img;
 	private ImageView campass_img;//taotao 1117
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 
 	
 	 /**
-	  * ¶¯Ì¬¼ÆËãCRC8
+	  * åŠ¨æ€è®¡ç®—CRC8
 	  */
 	 public String computeCRC8(String str,int flag){
 		
@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 		 if(c.length() == 1){
 			c = "0"+c;
 		 }
-//		 Log.d("--", "--------------------crc8 ½á¹û---------->" + c);
+//		 Log.d("--", "--------------------crc8 ç»“æœ---------->" + c);
 		 return c.toUpperCase();
 	 }
 	 
@@ -133,13 +133,13 @@ public class MainActivity extends Activity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//È¥µô±êÌâÀ¸
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//å»æ‰æ ‡é¢˜æ 
         setContentView(R.layout.activity_main);
         
-        //×¢²áhome¼ü¼àÌı
+        //æ³¨å†Œhomeé”®ç›‘å¬
 		receiver = new HomeKeyEventBroadCastReceiver();
 		registerReceiver(receiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-		//×¢²áµçÔ´¼àÌı
+		//æ³¨å†Œç”µæºç›‘å¬
 		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);  
 	    registerReceiver(mBatInfoReceiver, filter); 
 	    
@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
         	check_str ="550301"+imei +"CC"+ computeCRC8("0301"+imei,204) +"EE";
         }
         
-        // Button ÉèÖÃ
+        // Button è®¾ç½®
 		btnSearch = (Button) this.findViewById(R.id.scanButton);
 		btnSearch.setOnClickListener(new ClickEvent());
 		btnExit = (Button) this.findViewById(R.id.exitButton);
@@ -205,7 +205,7 @@ public class MainActivity extends Activity {
 		prepare_ll = (LinearLayout) this.findViewById(R.id.prepare_ll);
 		dianji_ll = (LinearLayout) this.findViewById(R.id.dianji_ll);
 		
-		//¾¯ºÅµÆ
+		//è­¦å·ç¯
 		diya_img 	= (ImageView) this.findViewById(R.id.diya_img);
 		gaoya_img 	= (ImageView) this.findViewById(R.id.gaoya_img);
 		xinhao_img 	= (ImageView) this.findViewById(R.id.xinhao_img);
@@ -214,24 +214,24 @@ public class MainActivity extends Activity {
 		campass_img = (ImageView) this.findViewById(R.id.zhinanzhen_img);//taotao 1117
 		cmpsHelper = new CompassHelper(this, campass_img);
 		
-		// ToogleButtonÉèÖÃ
+		// ToogleButtonè®¾ç½®
 		tbtnSwitch = (ToggleButton) this.findViewById(R.id.tbtnSwitch);
 		tbtnSwitch.setOnClickListener(new ClickEvent());
 
 		
-		// ListView¼°ÆäÊı¾İÔ´ ÊÊÅäÆ÷
+		// ListViewåŠå…¶æ•°æ®æº é€‚é…å™¨
 		lvBTDevices = (ListView) this.findViewById(R.id.lvDevices);
 		adtDevices = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, lstDevices);
 		lvBTDevices.setAdapter(adtDevices);
 		lvBTDevices.setOnItemClickListener(new ItemClickEvent());
 
-		btAdapt = BluetoothAdapter.getDefaultAdapter();// ³õÊ¼»¯±¾»úÀ¶ÑÀ¹¦ÄÜ
+		btAdapt = BluetoothAdapter.getDefaultAdapter();// åˆå§‹åŒ–æœ¬æœºè“ç‰™åŠŸèƒ½
 
 		// ========================================================
-		// modified by jason0539 ËÑË÷jason0539½øÈëÎÒµÄ²©¿Í
+		// modified by jason0539 æœç´¢jason0539è¿›å…¥æˆ‘çš„åšå®¢
 		/*
-		 * if (btAdapt.getState() == BluetoothAdapter.STATE_OFF)// ¶ÁÈ¡À¶ÑÀ×´Ì¬²¢ÏÔÊ¾
+		 * if (btAdapt.getState() == BluetoothAdapter.STATE_OFF)// è¯»å–è“ç‰™çŠ¶æ€å¹¶æ˜¾ç¤º
 		 * tbtnSwitch.setChecked(false); else if (btAdapt.getState() ==
 		 * BluetoothAdapter.STATE_ON) tbtnSwitch.setChecked(true);
 		 */
@@ -241,16 +241,16 @@ public class MainActivity extends Activity {
 			tbtnSwitch.setChecked(true);
 		}
 		// ============================================================
-		// ×¢²áReceiverÀ´»ñÈ¡À¶ÑÀÉè±¸Ïà¹ØµÄ½á¹û
+		// æ³¨å†ŒReceiveræ¥è·å–è“ç‰™è®¾å¤‡ç›¸å…³çš„ç»“æœ
 		IntentFilter intent = new IntentFilter();
-		intent.addAction(BluetoothDevice.ACTION_FOUND);// ÓÃBroadcastReceiverÀ´È¡µÃËÑË÷½á¹û
+		intent.addAction(BluetoothDevice.ACTION_FOUND);// ç”¨BroadcastReceiveræ¥å–å¾—æœç´¢ç»“æœ
 		intent.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
 		intent.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED);
 		intent.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 		registerReceiver(searchDevices, intent);
 		
 		
-		if (btAdapt.getState() == BluetoothAdapter.STATE_OFF) {// Èç¹ûÀ¶ÑÀ»¹Ã»¿ªÆô
+		if (btAdapt.getState() == BluetoothAdapter.STATE_OFF) {// å¦‚æœè“ç‰™è¿˜æ²¡å¼€å¯
 			Toast.makeText(MainActivity.this, "Please switch Bluetooth on first", 1000).show();
 			return;
 		}
@@ -268,9 +268,9 @@ public class MainActivity extends Activity {
 			
 			if(blt_addr_str.equals(device.getAddress())){
 				BluetoothDevice mDevice = btAdapt.getRemoteDevice(blt_addr_str);
-				if(mDevice.getBondState() != BluetoothDevice.BOND_BONDED){//ÅĞ¶Ï¸ø¶¨µØÖ·ÏÂµÄdeviceÊÇ·ñÒÑ¾­Åä¶Ô  
+				if(mDevice.getBondState() != BluetoothDevice.BOND_BONDED){//åˆ¤æ–­ç»™å®šåœ°å€ä¸‹çš„deviceæ˜¯å¦å·²ç»é…å¯¹  
 			         try{  
-			              ClsUtils.setPin(mDevice.getClass(), mDevice, "1234"); // ÊÖ»úºÍÀ¶ÑÀ²É¼¯Æ÷Åä¶Ô
+			              ClsUtils.setPin(mDevice.getClass(), mDevice, "1234"); // æ‰‹æœºå’Œè“ç‰™é‡‡é›†å™¨é…å¯¹
 			              ClsUtils.createBond(mDevice.getClass(), mDevice);
 			              ClsUtils.cancelPairingUserInput(mDevice.getClass(), mDevice);
 			              remoteDevice = mDevice; 
@@ -287,13 +287,13 @@ public class MainActivity extends Activity {
 			
 			String str = "Paired successfully|" + device.getName() + "|"
 					+ device.getAddress();
-			lstDevices.add(str); // »ñÈ¡Éè±¸Ãû³ÆºÍmacµØÖ·
+			lstDevices.add(str); // è·å–è®¾å¤‡åç§°å’Œmacåœ°å€
 			adtDevices.notifyDataSetChanged();
 		}
 		if(lstDevices.size() > 0){
 			lvTitle.setVisibility(View.VISIBLE);
 		}
-//		setTitle("±¾»úÀ¶ÑÀµØÖ·£º" + btAdapt.getAddress());
+//		setTitle("æœ¬æœºè“ç‰™åœ°å€ï¼š" + btAdapt.getAddress());
 		btAdapt.startDiscovery();		
 		
 		
@@ -313,11 +313,11 @@ public class MainActivity extends Activity {
 				String reason = intent.getStringExtra(SYSTEM_REASON);
 				if (reason != null) {
 					if (reason.equals(SYSTEM_HOME_KEY)) {
-						// home key´¦Àíµã
-						Toast.makeText(MainActivity.this, "°´home¼ü", Toast.LENGTH_SHORT).show();
+						// home keyå¤„ç†ç‚¹
+						Toast.makeText(MainActivity.this, "æŒ‰homeé”®", Toast.LENGTH_SHORT).show();
 					} else if (reason.equals(SYSTEM_RECENT_APPS)) {
-						// long home key´¦Àíµã
-						Toast.makeText(MainActivity.this, "³¤°´home¼ü", Toast.LENGTH_SHORT).show();
+						// long home keyå¤„ç†ç‚¹
+						Toast.makeText(MainActivity.this, "é•¿æŒ‰homeé”®", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
@@ -329,7 +329,7 @@ public class MainActivity extends Activity {
         public void onReceive(final Context context, final Intent intent) {
             final String action = intent.getAction();  
             if(Intent.ACTION_SCREEN_OFF.equals(action)) {
-            	Log.d("--", "-------------ÆÁÄ»¹Ø±ÕÁË----------------->");
+            	Log.d("--", "-------------å±å¹•å…³é—­äº†----------------->");
             	if (btSocket != null){
 					Log.d("", "---------socket  closed--------->");
 					try {
@@ -353,19 +353,19 @@ public class MainActivity extends Activity {
 			Bundle b = intent.getExtras();
 			Object[] lstName = b.keySet().toArray();
 			
-			// ÏÔÊ¾ËùÓĞÊÕµ½µÄÏûÏ¢¼°ÆäÏ¸½Ú
+			// æ˜¾ç¤ºæ‰€æœ‰æ”¶åˆ°çš„æ¶ˆæ¯åŠå…¶ç»†èŠ‚
 			for (int i = 0; i < lstName.length; i++) {
 				String keyName = lstName[i].toString();
 				Log.e(keyName, String.valueOf(b.get(keyName)));
 			}
 			BluetoothDevice device = null;
-			// ËÑË÷Éè±¸Ê±£¬È¡µÃÉè±¸µÄMACµØÖ·
+			// æœç´¢è®¾å¤‡æ—¶ï¼Œå–å¾—è®¾å¤‡çš„MACåœ°å€
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				if (device.getBondState() == BluetoothDevice.BOND_NONE) {
 					String str = "Failed to pair|" + device.getName() + "|" + device.getAddress();
-					if (lstDevices.indexOf(str) == -1)// ·ÀÖ¹ÖØ¸´Ìí¼Ó
-						lstDevices.add(str); // »ñÈ¡Éè±¸Ãû³ÆºÍmacµØÖ·
+					if (lstDevices.indexOf(str) == -1)// é˜²æ­¢é‡å¤æ·»åŠ 
+						lstDevices.add(str); // è·å–è®¾å¤‡åç§°å’Œmacåœ°å€
 					adtDevices.notifyDataSetChanged();
 				}
 			}
@@ -373,26 +373,26 @@ public class MainActivity extends Activity {
 				device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				switch (device.getBondState()) {
 				case BluetoothDevice.BOND_BONDING:
-					Log.d("BlueToothTestActivity", "ÕıÔÚÅä¶Ô......");
+					Log.d("BlueToothTestActivity", "æ­£åœ¨é…å¯¹......");
 					break;
 				case BluetoothDevice.BOND_BONDED:
-					Log.d("BlueToothTestActivity", "Íê³ÉÅä¶Ô");
-					connect(device);//Á¬½ÓÉè±¸
+					Log.d("BlueToothTestActivity", "å®Œæˆé…å¯¹");
+					connect(device);//è¿æ¥è®¾å¤‡
 					break;
 				case BluetoothDevice.BOND_NONE:
-					Log.d("BlueToothTestActivity", "È¡ÏûÅä¶Ô");
+					Log.d("BlueToothTestActivity", "å–æ¶ˆé…å¯¹");
 				default:
 					break;
 				}
 			}
 //			else if (intent.getAction().equals("android.bluetooth.device.action.PAIRING_REQUEST")){
-//				Log.d("-----------", "×Ô¶¯Åä¶Ô");	
+//				Log.d("-----------", "è‡ªåŠ¨é…å¯¹");	
 //	            BluetoothDevice btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);		 
 //	            // byte[] pinBytes = BluetoothDevice.convertPinToBytes("1234");
 //	            // device.setPin(pinBytes);
 //	            Log.d("-------------------", "ddd");
 //	            try{
-//	                ClsUtils.setPin(btDevice.getClass(), btDevice, strPsw); // ÊÖ»úºÍÀ¶ÑÀ²É¼¯Æ÷Åä¶Ô
+//	                ClsUtils.setPin(btDevice.getClass(), btDevice, strPsw); // æ‰‹æœºå’Œè“ç‰™é‡‡é›†å™¨é…å¯¹
 //	                ClsUtils.createBond(btDevice.getClass(), btDevice);
 //	                ClsUtils.cancelPairingUserInput(btDevice.getClass(), btDevice);
 //	            }catch (Exception e){
@@ -426,10 +426,10 @@ public class MainActivity extends Activity {
 			try {
 				Boolean returnValue = false;
 				if (btDev.getBondState() == BluetoothDevice.BOND_NONE) {
-					//ÀûÓÃ·´Éä·½·¨µ÷ÓÃBluetoothDevice.createBond(BluetoothDevice remoteDevice);
+					//åˆ©ç”¨åå°„æ–¹æ³•è°ƒç”¨BluetoothDevice.createBond(BluetoothDevice remoteDevice);
 					Method createBondMethod = BluetoothDevice.class
 							.getMethod("createBond");
-					Log.d("BlueToothTestActivity", "¿ªÊ¼Åä¶Ô");
+					Log.d("BlueToothTestActivity", "å¼€å§‹é…å¯¹");
 					returnValue = (Boolean) createBondMethod.invoke(btDev);
 					
 				}else if(btDev.getBondState() == BluetoothDevice.BOND_BONDED){
@@ -444,7 +444,7 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * À¶ÑÀÁ¬½Ó³É¹¦Ö®ºóUIÇĞ»»
+	 * è“ç‰™è¿æ¥æˆåŠŸä¹‹åUIåˆ‡æ¢
 	 */
 	private void afterConnectUIChange(){
 		AlertDialog.Builder ad = new Builder(MainActivity.this,AlertDialog.THEME_HOLO_DARK);
@@ -457,18 +457,18 @@ public class MainActivity extends Activity {
 		RingtoneUtils.playRingtone(MainActivity.this);
 	}
 	
-	//´øµç»ú
+	//å¸¦ç”µæœº
 	private DialogInterface.OnClickListener ui_change_0_listener = new DialogInterface.OnClickListener() {
 		
-		public void onClick(DialogInterface dialog, int which) {    						//µç»úËÉ¿ª	
+		public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºæ¾å¼€	
 			oprate_ll.setVisibility(View.VISIBLE);
 			prepare_ll.setVisibility(View.GONE);
 		}
 	};
-	//²»´øµç»ú
+	//ä¸å¸¦ç”µæœº
 	private DialogInterface.OnClickListener ui_change_1_listener = new DialogInterface.OnClickListener() {
 		
-		public void onClick(DialogInterface dialog, int which) {    						//µç»úËÉ¿ª	
+		public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºæ¾å¼€	
 			oprate_ll.setVisibility(View.VISIBLE);
 			prepare_ll.setVisibility(View.GONE);
 			dianji_ll.setVisibility(View.GONE);
@@ -479,7 +479,7 @@ public class MainActivity extends Activity {
 		UUID uuid = UUID.fromString(SPP_UUID);
 		try {
 			btSocket = btDev.createRfcommSocketToServiceRecord(uuid);
-			Log.d("BlueToothTestActivity", "¿ªÊ¼Á¬½Ósocket...");	
+			Log.d("BlueToothTestActivity", "å¼€å§‹è¿æ¥socket...");	
 			Log.d("--", "----------------0-------------->");
 			btSocket.connect();
 			Log.d("--", "----------------1-------------->");
@@ -490,7 +490,7 @@ public class MainActivity extends Activity {
 			mmInputStream = btSocket.getInputStream();
 			Log.d("--", "----------------3-------------->");
 			editorAuto.putString("AUTO_BLT", btDev.getAddress());
-			editorAuto.commit();//Ìá½»
+			editorAuto.commit();//æäº¤
 			Log.d("--", "----------------4-------------->");
 			afterConnectUIChange();
 		    beginListenForData();
@@ -526,10 +526,10 @@ public class MainActivity extends Activity {
 	    public void run() {
 	        while (true) {
 	            try {
-	                Thread.sleep(300);// Ã¿¸ônºÁÃë·¢ËÍÒ»´Î
+	                Thread.sleep(300);// æ¯éš”næ¯«ç§’å‘é€ä¸€æ¬¡
 	                Message message = new Message();
 	                message.what = 1;
-	                handler1.sendMessage(message);// ·¢ËÍÏûÏ¢
+	                handler1.sendMessage(message);// å‘é€æ¶ˆæ¯
 	            } catch (InterruptedException e) {
 	                e.printStackTrace();
 	            }
@@ -542,8 +542,8 @@ public class MainActivity extends Activity {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			if(box_token.equals("")){ 	//Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
-				Toast.makeText(MainActivity.this, "ÇëÏÈ½øĞĞ¶ÔÂë²Ù×÷", Toast.LENGTH_LONG).show();
+			if(box_token.equals("")){ 	//æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
+				Toast.makeText(MainActivity.this, "è¯·å…ˆè¿›è¡Œå¯¹ç æ“ä½œ", Toast.LENGTH_LONG).show();
 				return false;
 			}
 			if(event.getAction() == MotionEvent.ACTION_DOWN)
@@ -551,45 +551,45 @@ public class MainActivity extends Activity {
 				if( v == upBtn ){
 					if (btSocket != null){
 						String upString = "550301"+box_token+"20"+computeCRC8("0301"+box_token, 32)+"EE";
-						Log.d("", "------------Ç°½ø------>" + upString);  
+						Log.d("", "------------å‰è¿›------>" + upString);  
 						sendDataToPairedDevice(upString);
 					}
 				} else if( v == downBtn ){
 					if (btSocket != null){		
 						String upString = "550301"+box_token+"25"+computeCRC8("0301"+box_token, 37)+"EE";
-						Log.d("", "------------ºóÍË------>" + upString);  
+						Log.d("", "------------åé€€------>" + upString);  
 						sendDataToPairedDevice(upString);
 					}
 				} 
 				else if(v == upleftBtn ){
 					if (btSocket != null){						
 						String upString = "550301"+box_token+"22"+computeCRC8("0301"+box_token, 34)+"EE";	
-						Log.d("", "------------Ç°ÓÒ×ª------>" + upString); 
+						Log.d("", "------------å‰å³è½¬------>" + upString); 
 						sendDataToPairedDevice(upString);
 					}
 				} else if( v == uprightBtn){
 					if (btSocket != null){
 						String upString = "550301"+box_token+"21"+computeCRC8("0301"+box_token, 33)+"EE";						
-						Log.d("", "------------Ç°×ó×ª------>" + upString);  
+						Log.d("", "------------å‰å·¦è½¬------>" + upString);  
 						sendDataToPairedDevice(upString);
 					}
 				}else if( v == downleftBtn){
 					if (btSocket != null){
 						String upString = "550301"+box_token+"27"+computeCRC8("0301"+box_token, 39)+"EE";								
-						Log.d("", "------------ºóÓÒ×ª------>" + upString); 
+						Log.d("", "------------åå³è½¬------>" + upString); 
 						sendDataToPairedDevice(upString);
 					}
 				} else if( v == downrightBtn){
 					if (btSocket != null){
 						String upString = "550301"+box_token+"26"+computeCRC8("0301"+box_token, 38)+"EE";						
-						Log.d("", "------------ºó×ó×ª------>" + upString); 
+						Log.d("", "------------åå·¦è½¬------>" + upString); 
 						sendDataToPairedDevice(upString);
 					}
 				} 
 			}else if(event.getAction() == MotionEvent.ACTION_UP){
 				if (btSocket != null){
 					String upString = "550301"+box_token+"AA"+computeCRC8("0301"+box_token, 170)+"EE";	
-					Log.d("", "------------£¡£¡£¡Í£Ö¹µ±Ç°¹¤×÷£¡£¡£¡------>" + upString); 
+					Log.d("", "------------ï¼ï¼ï¼åœæ­¢å½“å‰å·¥ä½œï¼ï¼ï¼------>" + upString); 
 					sendDataToPairedDevice(upString);
 					sendDataToPairedDevice(upString);
 				}
@@ -608,8 +608,8 @@ public class MainActivity extends Activity {
 		@Override
 		public void send(int order) {
 			super.send(order);
-			if (box_token.equals("")) { // Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
-				Toast.makeText(MainActivity.this, "ÇëÏÈ½øĞĞ¶ÔÂë²Ù×÷", Toast.LENGTH_LONG).show();
+			if (box_token.equals("")) { // æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
+				Toast.makeText(MainActivity.this, "è¯·å…ˆè¿›è¡Œå¯¹ç æ“ä½œ", Toast.LENGTH_LONG).show();
 				return;
 			}//TODO testtest
 			if (btSocket == null)	return;
@@ -633,11 +633,11 @@ public class MainActivity extends Activity {
 				usMap.put(0x000110, String.format("%s%s%s%sEE", "550301",box_token,"28",GattUtils.computeCRC8("0301"+box_token, 40)));
 				usMap.put(0x000011, String.format("%s%s%s%sEE", "550301",box_token,"29",GattUtils.computeCRC8("0301"+box_token, 41)));
 				
-				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",GattUtils.computeCRC8("0301"+box_token, 32)));//×óÓÒ
+				usMap.put(0x101000, String.format("%s%s%s%sEE", "550301",box_token,"20",GattUtils.computeCRC8("0301"+box_token, 32)));//å·¦å³
 				usMap.put(0x000101, String.format("%s%s%s%sEE", "550301",box_token,"25",GattUtils.computeCRC8("0301"+box_token, 37)));
 				
-				usMap.put(0x100001, String.format("%s%s%s%sEE", "550301",box_token,"2A",GattUtils.computeCRC8("0301"+box_token, 42)));//ÏòÓÒÔ­µØ
-				usMap.put(0x001100, String.format("%s%s%s%sEE", "550301",box_token,"2B",GattUtils.computeCRC8("0301"+box_token, 43)));//Ïò×óÔ­µØ
+				usMap.put(0x100001, String.format("%s%s%s%sEE", "550301",box_token,"2A",GattUtils.computeCRC8("0301"+box_token, 42)));//å‘å³åŸåœ°
+				usMap.put(0x001100, String.format("%s%s%s%sEE", "550301",box_token,"2B",GattUtils.computeCRC8("0301"+box_token, 43)));//å‘å·¦åŸåœ°
 			}
 			return usMap;
 		}
@@ -645,10 +645,10 @@ public class MainActivity extends Activity {
 	
 	private DialogInterface.OnClickListener songkai_listener = new DialogInterface.OnClickListener() {
 		
-		public void onClick(DialogInterface dialog, int which) {    						//µç»úËÉ¿ª
+		public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºæ¾å¼€
 			if (btSocket != null){
 				String upString = "550301"+box_token+"2D"+computeCRC8("0301"+box_token, 45)+"EE";								
-				Log.d("", "------------µç»úËÉ¿ª------>" + upString); 
+				Log.d("", "------------ç”µæœºæ¾å¼€------>" + upString); 
 				sendDataToPairedDevice(upString);
 			}
 		}
@@ -656,10 +656,10 @@ public class MainActivity extends Activity {
 	
 	private DialogInterface.OnClickListener jiajin_listener = new DialogInterface.OnClickListener() {
 		
-		public void onClick(DialogInterface dialog, int which) {    						//µç»ú¼Ğ½ô	
+		public void onClick(DialogInterface dialog, int which) {    						//ç”µæœºå¤¹ç´§	
 			if (btSocket != null){
 				String upString = "550301"+box_token+"2C"+computeCRC8("0301"+box_token, 44)+"EE";								
-				Log.d("", "-------------µç»ú¼Ğ½ô------>" + upString); 
+				Log.d("", "-------------ç”µæœºå¤¹ç´§------>" + upString); 
 				sendDataToPairedDevice(upString);
 			}
 		}
@@ -679,8 +679,8 @@ public class MainActivity extends Activity {
 				AlertDialog.Builder ad = new Builder(MainActivity.this,AlertDialog.THEME_HOLO_DARK);
 				ad.setCancelable(false);
 				ad.setTitle("About ENDURO?");
-				ad.setMessage("Èí¼ş°æ±¾£º\nv1.01\n\n¹«Ë¾ĞÅÏ¢£º\nTradekar International B.V.\n\n" +
-						"Add: Staalweg 8  4104 AT  Culemborg\n\nÍøÕ¾Á´½Ó£º\nwww.enduro-europe.eu");
+				ad.setMessage("è½¯ä»¶ç‰ˆæœ¬ï¼š\nv1.01\n\nå…¬å¸ä¿¡æ¯ï¼š\nTradekar International B.V.\n\n" +
+						"Add: Staalweg 8  4104 AT  Culemborg\n\nç½‘ç«™é“¾æ¥ï¼š\nwww.enduro-europe.eu");
 				ad.setPositiveButton("OK", null);
 				ad.create().show();	
 			}
@@ -688,11 +688,11 @@ public class MainActivity extends Activity {
 //				adtDevices.clear();
 //				adtDevices.notifyDataSetChanged();				
 //			}
-			else if (v == btnSearch)// ËÑË÷À¶ÑÀÉè±¸£¬ÔÚBroadcastReceiverÏÔÊ¾½á¹û
+			else if (v == btnSearch)// æœç´¢è“ç‰™è®¾å¤‡ï¼Œåœ¨BroadcastReceiveræ˜¾ç¤ºç»“æœ
 			{
 //				afterConnectUIChange();
 				
-				if (btAdapt.getState() == BluetoothAdapter.STATE_OFF) {// Èç¹ûÀ¶ÑÀ»¹Ã»¿ªÆô
+				if (btAdapt.getState() == BluetoothAdapter.STATE_OFF) {// å¦‚æœè“ç‰™è¿˜æ²¡å¼€å¯
 					Toast.makeText(MainActivity.this, "Please switch Bluetooth on first", 1000).show();
 					return;
 				}
@@ -706,21 +706,21 @@ public class MainActivity extends Activity {
 					BluetoothDevice device = (BluetoothDevice) lstDevice[i];
 					String str = "Paired successfully|" + device.getName() + "|"
 							+ device.getAddress();
-					lstDevices.add(str); // »ñÈ¡Éè±¸Ãû³ÆºÍmacµØÖ·
+					lstDevices.add(str); // è·å–è®¾å¤‡åç§°å’Œmacåœ°å€
 					adtDevices.notifyDataSetChanged();
 				}
 				if(lstDevices.size() > 0){
 					lvTitle.setVisibility(View.VISIBLE);
 				}
-//				setTitle("±¾»úÀ¶ÑÀµØÖ·£º" + btAdapt.getAddress());
+//				setTitle("æœ¬æœºè“ç‰™åœ°å€ï¼š" + btAdapt.getAddress());
 				btAdapt.startDiscovery();
-			} else if (v == tbtnSwitch) {// ±¾»úÀ¶ÑÀÆô¶¯/¹Ø±Õ
+			} else if (v == tbtnSwitch) {// æœ¬æœºè“ç‰™å¯åŠ¨/å…³é—­
 				if (tbtnSwitch.isChecked() == false)
 					btAdapt.enable();
 
 				else if (tbtnSwitch.isChecked() == true)
 					btAdapt.disable();
-			} else if (v == btnDis)// ±¾»ú¿ÉÒÔ±»ËÑË÷
+			} else if (v == btnDis)// æœ¬æœºå¯ä»¥è¢«æœç´¢
 			{
 				Intent discoverableIntent = new Intent(
 						BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -732,15 +732,15 @@ public class MainActivity extends Activity {
 					if (btSocket != null){
 						Log.d("", "---------socket  closed--------->");
 						btSocket.close();
-						Toast.makeText(MainActivity.this, "°²È«ÍË³ö", Toast.LENGTH_LONG).show();
+						Toast.makeText(MainActivity.this, "å®‰å…¨é€€å‡º", Toast.LENGTH_LONG).show();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				finish();
 			} else if( v == songkaiBtn){
-				if(box_token.equals("")){ 	//Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
-					Toast.makeText(MainActivity.this, "ÇëÏÈ½øĞĞ¶ÔÂë²Ù×÷", Toast.LENGTH_LONG).show();
+				if(box_token.equals("")){ 	//æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
+					Toast.makeText(MainActivity.this, "è¯·å…ˆè¿›è¡Œå¯¹ç æ“ä½œ", Toast.LENGTH_LONG).show();
 					return;
 				}
 				AlertDialog.Builder ad = new Builder(MainActivity.this,AlertDialog.THEME_HOLO_DARK);
@@ -750,8 +750,8 @@ public class MainActivity extends Activity {
 				ad.setNegativeButton("No", null);
 				ad.create().show();	
 			} else if( v == jiajinBtn){
-				if(box_token.equals("")){ 	//Î´¶ÔÂëµÄÇé¿öÏÂ½ûÖ¹ÓÃ»§²Ù×÷
-					Toast.makeText(MainActivity.this, "ÇëÏÈ½øĞĞ¶ÔÂë²Ù×÷", Toast.LENGTH_LONG).show();
+				if(box_token.equals("")){ 	//æœªå¯¹ç çš„æƒ…å†µä¸‹ç¦æ­¢ç”¨æˆ·æ“ä½œ
+					Toast.makeText(MainActivity.this, "è¯·å…ˆè¿›è¡Œå¯¹ç æ“ä½œ", Toast.LENGTH_LONG).show();
 					return;
 				}
 				AlertDialog.Builder ad = new Builder(MainActivity.this,AlertDialog.THEME_HOLO_DARK);
@@ -781,7 +781,7 @@ public class MainActivity extends Activity {
       }
     
 	 /**
-	  * ¼àÌı·µ»ØÊı¾İ
+	  * ç›‘å¬è¿”å›æ•°æ®
 	  */
 	 void beginListenForData()
 	 {
@@ -821,31 +821,31 @@ public class MainActivity extends Activity {
 	                        	 
 	                        	 Log.d("--", "----#--->"+result);
 	                        	 
-	                        	 //·µ»ØÖµµÄcrc8Ğ£Ñé             	
+	                        	 //è¿”å›å€¼çš„crc8æ ¡éªŒ             	
 	                        	 if(computeCRC8(result.substring(0, 10),Integer.parseInt(result.substring(10, 12), 16))
 	                        			 .equals(result.substring(12, 14))){
 	                        		 
 	                        		 command = result.substring(10, 12);
 	                        		 Log.d("--","-------- :) ---------------------->command = " +command);
-	                        		 //ÊÇ²»ÊÇ¶ÔÂë²Ù×÷,·µ»ØµÄÃüÁîÎ»ÊÇ91 
+	                        		 //æ˜¯ä¸æ˜¯å¯¹ç æ“ä½œ,è¿”å›çš„å‘½ä»¤ä½æ˜¯91 
 	                        		 if(command.equals("91")){
 	                        			 needfengming = true;
 	                        			 needBB = true;
-			                        	 Log.d("--", "---------111½øÈë¶ÔÂë×´Ì¬----->" + result);
+			                        	 Log.d("--", "---------111è¿›å…¥å¯¹ç çŠ¶æ€----->" + result);
 			                        	 token = result.substring(4, 10);  	
 			                        	 editorToken.putString("TOKEN", token);
-										 editorToken.commit();//Ìá½»
+										 editorToken.commit();//æäº¤
 			     						 String duima = "550301"+imei+"BB" + computeCRC8("0301"+imei, 187) + "EE";
-			     						 Log.d("--", "-------·¢ËÍ¶ÔÂëÇëÇó------->"+duima);		     						 
+			     						 Log.d("--", "-------å‘é€å¯¹ç è¯·æ±‚------->"+duima);		     						 
 			                        	 sendDataToPairedDevice(duima);
 			                         }
 
 	                        		 if(command.equals("BB") && needBB){
 	                        			 needBB = false;
-	                        			 Log.d("--", "---------222½øÈë¶ÔÂë×´Ì¬----->" + result);
+	                        			 Log.d("--", "---------222è¿›å…¥å¯¹ç çŠ¶æ€----->" + result);
 	                        			 box_token = result.substring(4, 10);  	
 			                        	 editorBox.putString("BOX_TOKEN", box_token);
-										 editorBox.commit();//Ìá½»
+										 editorBox.commit();//æäº¤
 										 check_str = "550301"+box_token +"CC"+ computeCRC8("0301"+box_token,204) +"EE";
 										 if(needfengming){
 											 needfengming = false;
@@ -853,10 +853,10 @@ public class MainActivity extends Activity {
 									         mMsg.what=4;
 									         handler2.sendMessage(mMsg); 
 										 }										 
-			                        	 Log.d("--","--------------¶ÔÂë³É¹¦----ÖØĞÂÂÖÑ¯µÄ×Ö´®ÊÇ---->" + check_str);
+			                        	 Log.d("--","--------------å¯¹ç æˆåŠŸ----é‡æ–°è½®è¯¢çš„å­—ä¸²æ˜¯---->" + check_str);
 			                         }   
 	                        		 
-//	                        		 Log.d("--","-----ÅĞ¶Ïtoken---->"+  result.substring(4, 10) + "    " +token);
+//	                        		 Log.d("--","-----åˆ¤æ–­token---->"+  result.substring(4, 10) + "    " +token);
 //		                        	 if(result.substring(4, 10).equals(token)){
 		                        	 if(computeCRC8(result.substring(0, 10),Integer.parseInt(result.substring(10, 12), 16))
 		                        			 .equals(result.substring(12, 14))){
@@ -865,26 +865,26 @@ public class MainActivity extends Activity {
 			                        		 if(needSetNormalSignal){
 			                        			 setNormalSignal();
 			                        		 }
-				                        	 Log.d("--", "--Õı³£-->");
+				                        	 Log.d("--", "--æ­£å¸¸-->");
 				                         }else if(command.equals("96")){
-				                        	 Log.d("--","---------¸ßÑ¹-------¸ßÑ¹--------------->");
+				                        	 Log.d("--","---------é«˜å‹-------é«˜å‹--------------->");
 				                        	 needSetNormalSignal = true;
 				                        	 gaodianya();
 				                         }else if(command.equals("95")){
-				                        	 Log.d("--","---------µÍÑ¹-------µÍÑ¹-------------->");
+				                        	 Log.d("--","---------ä½å‹-------ä½å‹-------------->");
 				                        	 needSetNormalSignal = true;
 				                        	 didianya(); 
 				                         }else if(command.equals("97")){
-				                        	 Log.d("--","---------¹ıÔØ-------¹ıÔØ------------->");
+				                        	 Log.d("--","---------è¿‡è½½-------è¿‡è½½------------->");
 				                        	 needSetNormalSignal = true;
 				                        	 guozai();
 				                         }else if(command.equals("98")){
-				                        	 Log.d("--", "---Ğ¡µç»ú¹¤×÷³¬Ê±--->");
+				                        	 Log.d("--", "---å°ç”µæœºå·¥ä½œè¶…æ—¶--->");
 				                         }else if(command.equals("99")){
-				                        	 Log.d("--", "---´óµç»ú¹¤×÷³¬Ê±---->");
+				                        	 Log.d("--", "---å¤§ç”µæœºå·¥ä½œè¶…æ—¶---->");
 				                         }
 			                        	 
-			                        	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//´óµç»ú¹¤×÷ÖĞ ÊÖÖ¸Ã»°´×Å
+			                        	 if(command.equals("93")&&subMultiToucher.getFingerCount()==0){//å¤§ç”µæœºå·¥ä½œä¸­ æ‰‹æŒ‡æ²¡æŒ‰ç€
 				                        	 //TODO to be tested
 			                        		 sendDataToPairedDevice(String.format("%s%s%s%sEE", "550301",box_token,"AA",computeCRC8("0301"+box_token, 170)));
 				                         }
@@ -1009,7 +1009,7 @@ public class MainActivity extends Activity {
 	 }
 	 
 	/**
-	 * ×ª»¯×Ö·û´®ÎªÊ®Áù½øÖÆ±àÂë  
+	 * è½¬åŒ–å­—ç¬¦ä¸²ä¸ºåå…­è¿›åˆ¶ç¼–ç   
 	 * @param s
 	 * @return
 	 */
@@ -1024,7 +1024,7 @@ public class MainActivity extends Activity {
 	 }  
 	 
 	 /**
-	  * ×Ö½ÚÊı×é×ª»¯Îª16½øÖÆ×Ö·û´®
+	  * å­—èŠ‚æ•°ç»„è½¬åŒ–ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²
 	  * @param bytes
 	  * @return
 	  */
@@ -1041,7 +1041,7 @@ public class MainActivity extends Activity {
 	 }
 	 
 	 /**
-	  * ×Ö·û´®×ª16½øÖÆ
+	  * å­—ç¬¦ä¸²è½¬16è¿›åˆ¶
 	  * @param message
 	  * @return
 	  */
@@ -1058,7 +1058,7 @@ public class MainActivity extends Activity {
 	 }
 	 
 	 /**
-	  * CRC8 Ëã·¨---²é±í·¨
+	  * CRC8 ç®—æ³•---æŸ¥è¡¨æ³•
 	  */
 	 private static byte dscrc_table [];
 	  /*    * Create the lookup table    */   
@@ -1113,7 +1113,7 @@ public class MainActivity extends Activity {
 		DialogInterface.OnClickListener exit_listener = new DialogInterface.OnClickListener() {
 			
 			public void onClick(DialogInterface dialog, int which) {
-				//ÍË³öÏµÍ³	
+				//é€€å‡ºç³»ç»Ÿ	
 				if (btSocket != null){
 					Log.d("", "---------socket  closed--------->");
 					try {
@@ -1121,7 +1121,7 @@ public class MainActivity extends Activity {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					Toast.makeText(MainActivity.this, "°²È«ÍË³ö", Toast.LENGTH_LONG).show();
+					Toast.makeText(MainActivity.this, "å®‰å…¨é€€å‡º", Toast.LENGTH_LONG).show();
 				}
 				finish();
 			}
