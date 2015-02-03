@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="start_search">Etsi laitteita</string>
+    <string name="bluetooth_off">Bluetooth KINNI</string>
+    <string name="bluetooth_on">Bluetooth PÄÄLLÄ</string>
+    <string name="please_switch">Ole hyvä ja kytke ensin Bluetooth päälle</string>
+    <string name="bluetooth_near">Bluetooth yhteys käytettävissä：</string>
+    <string name="paired_succ">Yhdistäminen onnistui</string>
+    <string name="paired_fail">Mislykket synkronisering</string>
+    <string name="select_system">Valitse tyyppi teidän ohjailujärjestelmään</string>
+    <string name="system_Manual">Manuaalinen ohjaus-siirtolaite</string>
+    <string name="system_auto">Automaattinen ohjaus-siirtolaite</string>
+    <string name="roller_engage">Kytke rullat?</string>
+    <string name="roller_disengage">Irrota rullat?</string>
+    <string name="answer_yes">Kyllä</string>
+    <string name="answer_no">Ei</string>
+    <string name="hint_exit">Oletko varma, että haluat lopettaa?</string>
+    <string name="exit_yes">Kyllä</string>
+    <string name="exit_no">En</string>
+    <string name="reset_bluetooth">Poista aikasemmat tiedot</string>
+    <string name="version">APP versio</string>
+    <string name="company_info">Yrityksen tiedot</string>
+    <string name="address_info">Osoite</string>
+    <string name="website">www-linkki</string>
+    <string name="connected">Yhdistys</string>
+    <string name="please_select">Ilmoitus</string>
+    <string name="exit_touch_backkey">Kosketa back näppäintä poistuaksesi</string>
+    <string name="exit_touch_again">Kosketa Back-avainta uudelleen poistuaksesi</string>
+
+</resources>

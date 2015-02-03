@@ -1,10 +1,10 @@
 <resources>
 
-    <string name="start_search">Apparaten zoeken</string>
+   <string name="start_search">Apparaten zoeken</string>
     <string name="bluetooth_off">Bluetooth UIT</string>
     <string name="bluetooth_on">Bluetooth AAN</string>
     <string name="please_switch">Schakel eerst Bluetooth AAN</string>
-    <string name="bluetooth_near">Bluetooth verbinding beschikbaar</string>
+    <string name="bluetooth_near">Bluetooth verbinding beschikbaar:</string>
     <string name="paired_succ">Bluetooth synchroniseren gelukt</string>
     <string name="paired_fail">Bluetooth synchroniseren mislukt</string>
     <string name="select_system">Selecteer type rangeersysteem</string>
@@ -17,5 +17,15 @@
     <string name="hint_exit">Weet u zeker dat u wilt afsluiten?</string>
     <string name="exit_yes">Ja</string>
     <string name="exit_no">Nee</string>
+    
+	<string name="reset_bluetooth">Reset Bluetooth verbindingen</string>
+	<string name="version">Versie</string>
+	<string name="company_info">Contactgegevens</string>
+	<string name="address_info">Adres</string>
+	<string name="website">Website</string>
+	<string name="connected">Verbonden</string>
+	<string name="please_select">Maak uw keuze</string>
+	<string name="exit_touch_backkey">Druk de terug toets om af te sluiten</string>
+	<string name="exit_touch_again">Druk de terug toets om af te sluiten</string>
     
 </resources>

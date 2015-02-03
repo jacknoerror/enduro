@@ -241,7 +241,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("How to use?");
-			ad.setMessage(String.format("%sV%s\n%s", "Version:",GattUtils.getVersionName(this) , getString(R.string.howto)));
+			ad.setMessage(String.format("%sv%s\n\n%s", "Software version:",GattUtils.getVersionName(this) , getString(R.string.howto)));
 			ad.setPositiveButton("OK", null);
 			ad.create().show();	
 			break;

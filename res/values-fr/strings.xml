@@ -4,7 +4,7 @@
     <string name="bluetooth_off">Bluetooth OFF</string>
     <string name="bluetooth_on">Bluetooth ON</string>
     <string name="please_switch">Mettez d’abord le Bluetooth en route</string>
-    <string name="bluetooth_near">Bluetooth communication disponible</string>
+    <string name="bluetooth_near">Bluetooth communication disponible:</string>
     <string name="paired_succ">Synchronisation réussie</string>
     <string name="paired_fail">Echec de la synchronisation Bluetooth</string>
     <string name="select_system">Sélectionnez le type de votre système de manoeuvre</string>
@@ -18,4 +18,14 @@
     <string name="exit_yes">Oui</string>
     <string name="exit_no">Non</string>
     
+	<string name="reset_bluetooth">Ré-initialisez le Bluetooth communication</string>
+	<string name="version">Version</string>
+	<string name="company_info">Coordonées de l’entreprise</string>
+	<string name="address_info">L’Adresse</string>
+	<string name="website">Site</string>
+	<string name="connected">Connecté</string>
+	<string name="please_select">Faites votre choix</string>
+	<string name="exit_touch_backkey">Appuyez sur la touche retour pour quitter</string>
+	<string name="exit_touch_again">Appuyez sur la touche retour pour quitter</string>
+
 </resources>

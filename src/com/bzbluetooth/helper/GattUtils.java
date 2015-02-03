@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService;
@@ -129,7 +130,7 @@ public class GattUtils {
 	public static String vvnn = null;
 	public static String getVersionName(Context context)//获取版本号(内部识别号)
 	{
-		if(!vvnn.isEmpty()) return vvnn;
+		if(!TextUtils.isEmpty(vvnn)) return vvnn;
 		try {
 			PackageInfo pi=context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			return (vvnn=pi.versionName);

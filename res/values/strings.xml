@@ -1,32 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ENDURO</string>
+    <string name="app_name">Language</string>
+    <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+
     <string name="title_activity_main">ENDURO</string>
-    <string name="howto">
-        1. Turn on the APP and select “Bluetooth ON” in the interface to turn on the bluetooth.\n\n
+    <string name="howto">        1. Turn on the APP and select “Bluetooth ON” in the interface to turn on the bluetooth.\n\n
 		2. Select “Start Scanning” and users will find existing bluetooth connections listed nearby. Choose your manoeuvring system’s control unit to connect.\n\n
 		3.If the control unit bluetooth shows unpaired, click and enter the password 1234 to get paired.\n\n
 		4. After successful paired your cellphone and control unit combined with a prompt sound, users will see “Please select the type of your caravan manoeuvring system”. Users shall select “Manual Engaging Your Manoeuvring System” or “Automatic Engaging Your Manoeuvring System” \n\n
 		5. If “Manual Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
 		6. If “Automatic Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
-		7. If users’ cellphone fail to connect with control unit, there’s no need to operate on APP. Simply by pressing sync button on the control unit and waiting for the cellphone to give out a promt sound indicating sync completed. Then sync is completed. APP can now perform normally with control unit.
-    </string>
+		7. If users’ cellphone fail to connect with control unit, there’s no need to operate on APP. Simply by pressing sync button on the control unit and waiting for the cellphone to give out a promt sound indicating sync completed. Then sync is completed. APP can now perform normally with control unit.</string>
     <string name="about1">Software Version：\nv1.01\n\nCompany Info：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
     <string name="about2">Net Link：\nwww.enduro-europe.eu\n</string>
-    
     <string name="btn_howto">how to use</string>
     <string name="btn_about">about ENDURO</string>
-    
     <string name="hint_pairfirst">please get paired first!</string>
-    
     
     <string name="start_search">Search for devices</string>
     <string name="bluetooth_off">Bluetooth OFF</string>
     <string name="bluetooth_on">Bluetooth ON</string>
     <string name="please_switch">Please switch Bluetooth on first</string>
-    <string name="bluetooth_near">Bluetooth connection available</string>
+    <string name="bluetooth_near">Bluetooth connection available:</string>
     <string name="paired_succ">Paired successfully</string>
     <string name="paired_fail">Failed to pair</string>
     <string name="select_system">Please select the type of your manoeuvring system</string>
@@ -40,5 +37,13 @@
     <string name="exit_yes">Yes</string>
     <string name="exit_no">No</string>
     
-    
+	<string name="reset_bluetooth">Reset Bluetooth connections</string>
+	<string name="version">Version</string>
+	<string name="company_info">Company information</string>
+	<string name="address_info">Address</string>
+	<string name="website">Website</string>
+	<string name="connected">Connected</string>
+	<string name="please_select">Please select</string>
+	<string name="exit_touch_backkey">Touch the back key to exit</string>
+	<string name="exit_touch_again">Touch the Back Key again to exit</string>
 </resources>
