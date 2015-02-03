@@ -6,13 +6,14 @@
     <string name="hello_world">Hello world!</string>
 
     <string name="title_activity_main">ENDURO</string>
-    <string name="howto">        1. Turn on the APP and select “Bluetooth ON” in the interface to turn on the bluetooth.\n\n
-		2. Select “Start Scanning” and users will find existing bluetooth connections listed nearby. Choose your manoeuvring system’s control unit to connect.\n\n
-		3.If the control unit bluetooth shows unpaired, click and enter the password 1234 to get paired.\n\n
-		4. After successful paired your cellphone and control unit combined with a prompt sound, users will see “Please select the type of your caravan manoeuvring system”. Users shall select “Manual Engaging Your Manoeuvring System” or “Automatic Engaging Your Manoeuvring System” \n\n
-		5. If “Manual Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
-		6. If “Automatic Engaging Your Manoeuvring System” is selected, users will enter below interface.\n\n
-		7. If users’ cellphone fail to connect with control unit, there’s no need to operate on APP. Simply by pressing sync button on the control unit and waiting for the cellphone to give out a promt sound indicating sync completed. Then sync is completed. APP can now perform normally with control unit.</string>
+    <string name="howtotitle">Instructions</string>
+    <string name="howto">        1. Start the APP and turn the Bluetooth option on. The APP automatically remind Iphone users to turn on the bluetooth by changing the phone setting, while Android users by clicking “Bluetooth ON” icon on the phone screen.
+ \n\n2. Press the “Start Scanning” icon. A list with found nearby Bluetooth devices is shown on the screen. Select the manoeuvring system control unit (BOLUTEK) to be paired.
+ \n\n3. After successful pairing, select “Manual engaging manoeuvring system” or “Automatic engaging manoeuvring system” and enter the operating screen.
+\n\n4. The last step is to synchronize the phone and the control unit of the manoeuvring system. Press the reset button on the control unit. Do not operate the APP. Wait for the phone gives a vibration indicating that the synchronization is completed. Now the APP is ready for use!
+\n\n5. Above steps 2, 3 and 4 must be followed only for the first time use. After successful first-time use with the same phone, users do not have to repeat step 2, 3 and 4. Just start the APP, turn on the Bluetooth option and turn on the battery power isolation switch of the manoeuvring system. The APP automatically enters the operating screen and normally work with the control unit without asking to select the Bluetooth connection and engaging system again.  
+
+		</string>
     <string name="about1">Software Version：\nv1.01\n\nCompany Info：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
     <string name="about2">Net Link：\nwww.enduro-europe.eu\n</string>
     <string name="btn_howto">how to use</string>

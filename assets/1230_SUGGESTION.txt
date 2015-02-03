@@ -54,3 +54,141 @@
 6. 	平板上不能装；
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======8====
+使用说明：
+1、	打开软件，如果手机上蓝牙未打开，iphone手机上出现自动提示打开蓝牙界面，可点击提示跳转到蓝牙设置界面，android手机上可以点击“Bluetooth ON”打开手机蓝牙；  
+2、	点击“Start Scanning”，出现附近已有的蓝牙设备，选择需要连接的控制盒； 
+3、	连接成功后，提示选择“Manual engaging manoeuvring system”或者“Automatic engaging manoeuvring system”，出现相应的控制界面；
+4、	如果手机和电控盒没有正常通讯，请按控制盒上对码健，手机软件不用任何操作，等待手机发出对码完成的振动提示，对码过程完成，可以正常和控制盒通讯：
+5、	以上2、3、4操作，是基于首次打开软件的操作，如果同一台手机中的软件已经通过步骤2、3、4，能够正常和相应控制盒通讯的时候，下次打开软件，相应的控制盒在上电状态时，软件会自动进入相应操作界面并和相应控制盒正常通讯；
+
+
+Instructions
+
+1. Start the APP and turn the Bluetooth option on. The APP automatically remind Iphone users to turn on the bluetooth by changing the phone setting, while Android users by clicking “Bluetooth ON” icon on the phone screen.
+ 
+2. Press the “Start Scanning” icon. A list with found nearby Bluetooth devices is shown on the screen. Select the manoeuvring system control unit (BOLUTEK) to be paired.
+ 
+3. After successful pairing, select “Manual engaging manoeuvring system” or “Automatic engaging manoeuvring system” and enter the operating screen.
+
+4. The last step is to synchronize the phone and the control unit of the manoeuvring system. Press the reset button on the control unit. Do not operate the APP. Wait for the phone gives a vibration indicating that the synchronization is completed. Now the APP is ready for use!
+
+5. Above steps 2, 3 and 4 must be followed only for the first time use. After successful first-time use with the same phone, users do not have to repeat step 2, 3 and 4. Just start the APP, turn on the Bluetooth option and turn on the battery power isolation switch of the manoeuvring system. The APP automatically enters the operating screen and normally work with the control unit without asking to select the Bluetooth connection and engaging system again.  
+
+Instructies
+
+1. Start de APP en zet de Bluetooth optie aan. De APP zal iPhone-gebruikers er automatisch aan herinneren de Bluetooth aan te zetten bij wijziging van de instelling van de telefoon. De Android-gebruikers dienen op "Bluetooth ON" pictogram op het scherm van de telefoon te drukken.
+
+2. Druk op het pictogram "Start Scannen". Een lijst met in de nabijheid gevonden Bluetooth-apparaten zal worden weergegeven op het scherm. Selecteer de besturingseenheid (BOLUTEK) van het manoeuvreersysteem om te worden gekoppeld.
+
+3. Na een succesvolle koppeling, selecteert u "Handmatig bedienen manoeuvreer- systeem" of "Automatisch bedienen manoeuvreersysteem" en ga naar het bedieningsscherm.
+
+4. De laatste stap is om de telefoon en de controle-eenheid van het manoeuvreersysteem te synchroniseren. Druk op de reset-knop op de besturingseenheid. Gebruik de APP niet direct. Wacht totdat de telefoon met een trilsignaal aangeeft dat de synchronisatie is voltooid. 
+Nu is de APP gereed voor gebruik!
+
+5. Boven genoemde stappen 2, 3 en 4 dienen alleen te worden gevolgd bij het gebruik voor de eerste keer. Na een succesvol eerste gebruik behoeven de gebruikers de stappen 2, 3 en 4 met dezelfde telefoon niet te herhalen. Start alleen de APP, schakel de Bluetooth-optie in en zet de geïsoleerde aan/uit schakelaar van de accu van het manoeuvreersysteem aan. De APP gaat automatisch naar het bedieningsscherm en zal normaal communiceren met de besturingseenheid, zonder te vragen om de Bluetooth-verbinding te selecteren. Het manoeuvreersysteem kan weer worden gebruikt. 
+
+
+Bedienungsanleitung
+
+Einrichten der App
+
+1.	Starten Sie die App. iPhone-Nutzer werden aufgefordert, die Bluetooth-Funktion in den Telefoneinstellungen einzuschalten. Android-Nutzer können Bluetooth über die Schaltfläche der App direkt einschalten. Schalten Sie die Bluetooth-Funktion ein.
+
+2.	Tippen Sie auf die Schaltfläche „Start scanning“. Danach wird eine Liste mit Bluetooth-Geräten in Ihrer Nähe angezeigt. Wählen Sie aus dieser Liste „BOLUTEK“ aus, um Ihr Smartphone mit der Steuerung der Rangierhilfe zu verbinden.
+
+3.	Nach der erfolgreichen Verbindung wählen Sie den Typ Ihrer Rangierhilfe aus. Für eine Rangierhilfe mit automatischer Anstellung der Fahrmotoren wählen Sie „Automatisches Heranfahren der Rangierhilfe“, für eine Rangierhilfe mit manueller Anstellung wählen Sie „Manuelles Heranfahren der Rangierhilfe“.
+
+4.	Der letzte Schritt der Einrichtung ist die Synchronisation des Smartphones mit der Steuerung der Rangierhilfe. Drücken Sie den Resetschalter der Steuerung, führen Sie keine Funktionen mit der App aus und warten Sie bis der Vibrationsalarm des Smartphones auslöst. Die App ist jetzt einsatzbereit.
+
+5.	Die Schritte 2, 3, und 4 müssen nur einmalig für die Einrichtung der App durchgeführt werden. Nach dem erfolgreichen Einrichten starten Sie für jeden Einsatz der Rangierhilfe die App und schalten Bluetooth und den Batteriehauptschalter ein.
+
+
+Instructions
+
+1. Démarrez l'APPLICATION et activez l'option Bluetooth. L'APPLICATION rappelle automatiquement aux utilisateurs de l'Iphone d'activer le Bluetooth en modifiant les réglages du téléphone, alors que les utilisateurs d'Android l'activent en cliquant sur l'icône « Bluetooth ON » sur l'écran de leur téléphone.
+ 
+2. Appuyez sur l'icône « Démarrer Scan ». Une liste avec des appareils Bluetooth trouvés à proximité est affichée sur l'écran. Sélectionnez l'unité de contrôle du système de manœuvre (BOLUTEK) pour être appairé.
+ 
+3. Après l'appariement réussi, sélectionnez « enclenchement manuel du système de manœuvre » et entrez dans l'écran d'opération.
+
+4. La dernière étape est la synchronisation du téléphone et de l'unité de contrôle du système de manœuvre. Appuyez sur le bouton Reset (réinitialisation) de l'unité de contrôle. N'opérez pas l'APPLICATION. Attendez jusqu'à ce que le téléphone émette une vibration signalisant que la synchronisation est complétée. Maintenant l'APPLICATION est prête à l'emploi.
+
+5. Les étapes 2, 3 et 4 ci-dessus doivent uniquement être suivies lors de la première utilisation. Après une première utilisation réussie avec le même téléphone, les utilisateurs n'ont plus besoin de répéter les étapes 2, 3 et 4. Il vous suffit de démarrer l'APPLICATION, d'activer l'option Bluetooth et d'activer l'interrupteur de puissance de la batterie du système de manœuvre. L'APPLICATION entre automatiquement dans l'écran d'opération et travaille normalement avec l'unité de contrôle sans demander de sélectionner la connexion Bluetooth et de ré-enclencher le système. 
+
+
+
+
+Vejledning
+
+1、Tænd for Bluetooth og åbn APP’en. APP’en påminder automatisk Iphone brugere om, at tænde for bluetooth. Android brugere skal trykke på ”Bluetooth TIL” på telefonens skræm.
+
+2、Tryk “Start Scanning” og parring påbegyndes.
+
+3、Efter Succesfuld parring, skal type af mover-system vælges. Der kan vælges imellem:”Manuel tilkobling” (Model: Pro eller ECO II) eller ”Automatisk tilkobling” (Model: Premium eller ECO II Auto)
+
+4、Derefter skal telefon og moverens styrboks synkroniseres. Tryk på reset knappen på styrboksen. Anvend ikke APP’en. Vent på telefonen giver melding, at synkronisering er fuldendt. Herefter kan APP’en anvendes. 
+
+5、Ovenstående trin skal følges når Bluetooth opkoblingen anvendes første gang. Herefter vil den parrede telefon og mover styrboks automatisk koble sammen. Åbn APP’en, tænd for Bluetooth og moveren. APP’en åbner automatisk betjeningsmodulet op.
+
+
+
+Bruksanvisning:
+
+1. Skru på APP og bluetooth. APP’n minner automatisk Iphone brukere på å skru på Bluetooth ved å endre telefon innstillingene, mens Android brukere skal klikke på “Bluetooth PÅ” ikonet på telefonskjermen.  
+ 
+2. Klikk “Start Scanning” ikonet, brukere velger kontrollenhet for å bli koblet til enheter i nærheten.
+ 
+3. Etter en vellykket synkronisering, velg “Manuell tilkobling” eller “Automatisk tilkobling” og gå inn på operasjonssystemet;
+
+4. Siste steg er synkronisering. Trykk reset knappen på kontroll enheten. Ikke bruk APP’n. Vent til telefonen avgir en vibrasjon som indikerer at synkroniseringen er fullført. APP’n arbeider normalt med kontrollenheten.
+
+5. De ovenfor nevnte trinnene 2,3 og 4 må bli fulgt for førstegangsbrukere. Etter en vellykket førstegangs bruk I en identisk telefon, trenger man ikke å gjenta trinnene 2,3 og 4. Skru på APP’n , bluetooth og kontrollenheten, APP’n går automatisk inn I operasjonssystemet og arbeider normalt med kontrollenheten uten å måtte velge tilkoblingsmodus igjen.
+
+
+Hur använder jag:
+
+1. Starta Appen och blåtanden. Appen kommer automatiskt påminna  iphone användare att starta sin blåtand under inställningar, medans Android användare klickar på ”blåtand på” ikonen på telefonskärmen.
+
+2. Tryck på “Start Scanning” ikonen, para ihop enheten med styrenheten
+ 
+
+3. Efter en lyckosam parning, välj “Manuell anläggning” eller “Automatisk anläggning” (Automatisk anläggning) och gå in I manöver interfacet. 
+
+4. Sista steget är att synka. Tryck in reset knappen på styrenheten. Använd inte Appen under detta moment. Vänta på att telefonen ger en vibration som indikerar att synkningen är klar. Appen fungerar nu normalt med styrenheten.
+
+5. Ovan steg 2,3 och 4 moste göras enbart första gången. Efter en lyckosam parning så fungerar telefonen varje gång. Slå på Appen och blåtanden samt styrenheten, Appen kommer automatiskt ta dig till manövrerings interfacet utan att fråga om anläggnings metod igen.
+
+
+Miten käyttää:
+
+1. Kytke APP ja bluetooth. APP muistuttaa automaattisesti Iphone-käyttäjää panna bluetooth päälle vaihtamalla puhelimen asetukset, kun taas Anroid käyttäjät klikkaamalla "Bluetooth"-kuvaketta puhelimen näytöllä.
+2. Valitse "Käynnistä skannaus"-kuvaketta, käyttäjät valitsevat ohjausyksikön joka pariliitetään löytyneisiin yksikköihin lähistöllä.
+
+3. Pariliitoksen jälkeen, valitse "Manuaalinen mukaansatempaavaan" tai "Automaattinen mukaansatempaavan" ja anna käyttöjärjestelmän käyttöliittymä.
+
+4. Viimeinen vaihe on synkronointi. Painikkeella ohjausyksikön. Älä käytä APP:ä. Odota, että puhelin antaa tärinän näyttäen, että synkronointi on valmis. APP voi nyt työskennellä normaalisti ohjausyksikössä.
+
+5. Ennen vaiheet 2, 3 ja 4 on ensimmäisen kerran noudatettava käyttöön. Onnistuneen ensimmäisen kerran käyttäen samaa puhelinta, käyttäjien ei tarvitse toistaa vaiheet 2, 3 ja 4. Kytke APP, bluetooth ja ohjausyksikkö, APP siirtyy automaattisesti käyttöjärjestelmän käyttöliittymää ja toimivat yleensä ohjausyksikön kysymättä valita mukaansatempaavan tilaa uudelleen.
+

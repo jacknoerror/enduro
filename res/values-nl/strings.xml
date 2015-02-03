@@ -28,4 +28,15 @@
 	<string name="exit_touch_backkey">Druk de terug toets om af te sluiten</string>
 	<string name="exit_touch_again">Druk de terug toets om af te sluiten</string>
     
+	<string name="Instructies">Instructions</string>
+	<string name="howto">       1. Start de APP en zet de Bluetooth optie aan. De APP zal iPhone-gebruikers er automatisch aan herinneren de Bluetooth aan te zetten bij wijziging van de instelling van de telefoon. De Android-gebruikers dienen op "Bluetooth ON" pictogram op het scherm van de telefoon te drukken.
+\n\n2. Druk op het pictogram "Start Scannen". Een lijst met in de nabijheid gevonden Bluetooth-apparaten zal worden weergegeven op het scherm. Selecteer de besturingseenheid (BOLUTEK) van het manoeuvreersysteem om te worden gekoppeld.
+\n\n3. Na een succesvolle koppeling, selecteert u "Handmatig bedienen manoeuvreer- systeem" of "Automatisch bedienen manoeuvreersysteem" en ga naar het bedieningsscherm.
+\n\n4. De laatste stap is om de telefoon en de controle-eenheid van het manoeuvreersysteem te synchroniseren. Druk op de reset-knop op de besturingseenheid. Gebruik de APP niet direct. Wacht totdat de telefoon met een trilsignaal aangeeft dat de synchronisatie is voltooid. 
+Nu is de APP gereed voor gebruik!
+\n\n5. Boven genoemde stappen 2, 3 en 4 dienen alleen te worden gevolgd bij het gebruik voor de eerste keer. Na een succesvol eerste gebruik behoeven de gebruikers de stappen 2, 3 en 4 met dezelfde telefoon niet te herhalen. Start alleen de APP, schakel de Bluetooth-optie in en zet de geïsoleerde aan/uit schakelaar van de accu van het manoeuvreersysteem aan. De APP gaat automatisch naar het bedieningsscherm en zal normaal communiceren met de besturingseenheid, zonder te vragen om de Bluetooth-verbinding te selecteren. Het manoeuvreersysteem kan weer worden gebruikt. 
+
+</string>
+    
+	
 </resources>
