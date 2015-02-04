@@ -97,7 +97,6 @@ public class ControlActivity extends Activity {
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mBluetoothLeService = null;
-            Log.e(TAG, "---notice!onServiceDisconnected:LINE_96");
         }
     };
 
@@ -210,7 +209,6 @@ public class ControlActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder ad;
 				switch (v.getId()) {
 				case R.id.zhinanzhen_img:
 				case R.id.layout_compass_big:
@@ -219,23 +217,16 @@ public class ControlActivity extends Activity {
 					break;
 				case R.id.btn_howto:
 				case R.id.img_hint:
-					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
-					ad.setCancelable(false);
-					ad.setTitle("How to use?");
-					ad.setMessage(R.string.howto);
-					ad.setPositiveButton("OK", null);
-					ad.create().show();	
+					GattUtils.showHowto(ControlActivity.this);
 					break;
-				case R.id.btn_about:
-					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
+				case R.id.btn_about://abandon 0204
+					/*ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 					ad.setCancelable(false);
 					ad.setTitle("About ENDURO?");
-//					ad.setMessage("软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\n" +
-//							"Add: Staalweg 8  4104 AT  Culemborg\n\n网站链接：\nwww.enduro-europe.eu");
 					View view = LayoutInflater.from(ControlActivity.this).inflate(R.layout.layout_about, null);//
 					ad.setView(view);
 					ad.setPositiveButton("OK", null);
-					ad.create().show();	
+					ad.create().show();	*/
 					break;				
 				default:
 					break;
@@ -279,13 +270,12 @@ public class ControlActivity extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			final String action = intent.getAction();
 			if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-				Log.i("RECON", "CONND");
 				mConnected = true;
 				/*if(noSignal>0	){
 					displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA)); //重连之后发一次
 					noSignal=-20;//0203
 				}*/
-				Toast.makeText(ControlActivity.this, "connected",Toast.LENGTH_SHORT).show();
+				Toast.makeText(ControlActivity.this, R.string.connected,Toast.LENGTH_SHORT).show();
 				savDvcInfo();
 				mHandler.sendEmptyMessage(4);
 				if(null!=connectingDialog&&connectingDialog.isShowing()) connectingDialog.dismiss();//0104
@@ -297,12 +287,6 @@ public class ControlActivity extends Activity {
 //				BLINK_CONNECT = true;//1217 0104zs(to mHandler 5&6)
 //				reconnect();//0201 0203jazz
 				restartactivity();
-//				GattUtils.showDialog(ControlActivity.this, "bluetooth disconnected, reconnect?", new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(DialogInterface arg0, int arg1) {
-//					}
-//				});
 //				startScan(context); //0201 jazz
 			} else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
 //				Log.e(TAG, "---notice！ACTION_GATT_SERVICES_DISCOVERED:LINE_277");
@@ -425,7 +409,7 @@ public class ControlActivity extends Activity {
 //					if(!NO_RECONN) mHandler.sendEmptyMessage(100);//1224 重连 0104jazz
 					if(noSignal>20&&mConnected) {
 //						mBluetoothLeService.disconnect();//0203 //0203
-						Log.i("RECON", "nosignal-disc");
+//						Log.i("RECON", "nosignal-disc");
 					}
 				}
 			}, 100, 200, TimeUnit.MILLISECONDS);
@@ -471,7 +455,7 @@ public class ControlActivity extends Activity {
 //            broken_str =  broken_str + rcvStr;//?
             if(rcvStr.length() == 18){//rcvStr.length() == 16 || broken_str.length() == 18){
 
-           	 noSignal = 0;//jazz this?
+           	 noSignal = 0; 
            	 
 //           	 if(rcvStr.length() == 16){
 //           		 
@@ -639,7 +623,7 @@ public class ControlActivity extends Activity {
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			if(System.currentTimeMillis()-lastTimePressBack>2000){
-				Toast.makeText(this, "Press again to exit!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, R.string.exit_touch_again, Toast.LENGTH_SHORT).show();
 			}else{
 				finish();
 			}
@@ -715,24 +699,37 @@ public class ControlActivity extends Activity {
 				break;
 				
 			case 101://连接中loading框
-				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, "connecting device..");
+				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, "connecting device..");//
 				connectingDialog.setCancelable(false);
 				mHandler.sendEmptyMessageDelayed(102, 10*1000);
 				break;
 			case 102://判断是否连接失败
 				if(null!=connectingDialog&&connectingDialog.isShowing()){
 					connectingDialog.dismiss();
-					Context context = ControlActivity.this;
-					CharSequence text = "connecting failed";
-					GattUtils.showToast(context, text);
-					finish();//FIXME delete me when testing
+//					CharSequence text = "connecting failed";
+//					GattUtils.showToast(context, text);
+//					finish();//FIXME delete me when testing
+					GattUtils.showDialog(ControlActivity.this, "connecting failed, reconnect?",  new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							restartactivity();
+						}
+					}).setOnDismissListener(new DialogInterface.OnDismissListener(){
+
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+							finish();
+						}
+						
+					});//0204
 				}
 				break;
 			case 103://0201
 				if(mConnected) return;
 				mBluetoothLeService.connect(mDeviceAddress);
 				mHandler.sendEmptyMessageDelayed(103, 5000);
-				Log.i("RECON", "CONN");
+//				Log.i("RECON", "CONN");
 				break;
 			default:
 				break;
@@ -742,7 +739,7 @@ public class ControlActivity extends Activity {
 		private void showChooseLlDialog() {
 			AlertDialog.Builder ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
-			ad.setTitle("Please select the type of your mover");
+			ad.setTitle(R.string.select_system);
 			DialogInterface.OnClickListener dListener = new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
@@ -751,8 +748,8 @@ public class ControlActivity extends Activity {
 					showDianjiLl(show );
 				}
 			};
-			ad.setPositiveButton("Manual Engaging Mover", dListener);
-			ad.setNegativeButton("Automatic Engaging Mover", dListener);
+			ad.setPositiveButton(R.string.system_Manual, dListener);
+			ad.setNegativeButton(R.string.system_auto, dListener);
 			ad.create().show();	
 			needSelectEngine = false;
 		}
@@ -806,12 +803,11 @@ public class ControlActivity extends Activity {
 			AlertDialog.Builder ad = new Builder(ControlActivity.this,
 					AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
-			ad.setNegativeButton("No", null);
+			ad.setNegativeButton(R.string.answer_no, null);
 			switch (v.getId()) {
 			case R.id.songkaiBtn:
 				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
-					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,Toast.LENGTH_LONG).show();//
 					return;
 				}
 				ad.setTitle(R.string.roller_disengage);
@@ -832,8 +828,7 @@ public class ControlActivity extends Activity {
 				break;
 			case R.id.jiajinBtn:
 				if (box_token.equals("")) { // 未对码的情况下禁止用户操作
-					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(ControlActivity.this, R.string.hint_pairfirst,Toast.LENGTH_LONG).show();
 					return;
 				}
 				ad.setTitle(R.string.roller_engage);

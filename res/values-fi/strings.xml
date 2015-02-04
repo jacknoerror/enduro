@@ -28,4 +28,11 @@
     <string name="exit_touch_backkey">Kosketa back näppäintä poistuaksesi</string>
     <string name="exit_touch_again">Kosketa Back-avainta uudelleen poistuaksesi</string>
 
+    <string name="howtotitle">Miten käyttää:</string>
+    <string name="howto">        1. Kytke APP ja bluetooth. APP muistuttaa automaattisesti Iphone-käyttäjää panna bluetooth päälle vaihtamalla puhelimen asetukset, kun taas Anroid käyttäjät klikkaamalla "Bluetooth"-kuvaketta puhelimen näytöllä.
+\n\n2. Valitse "Käynnistä skannaus"-kuvaketta, käyttäjät valitsevat ohjausyksikön joka pariliitetään löytyneisiin yksikköihin lähistöllä.
+\n\n3. Pariliitoksen jälkeen, valitse "Manuaalinen mukaansatempaavaan" tai "Automaattinen mukaansatempaavan" ja anna käyttöjärjestelmän käyttöliittymä.
+\n\n4. Viimeinen vaihe on synkronointi. Painikkeella ohjausyksikön. Älä käytä APP:ä. Odota, että puhelin antaa tärinän näyttäen, että synkronointi on valmis. APP voi nyt työskennellä normaalisti ohjausyksikössä.
+\n\n5. Ennen vaiheet 2, 3 ja 4 on ensimmäisen kerran noudatettava käyttöön. Onnistuneen ensimmäisen kerran käyttäen samaa puhelinta, käyttäjien ei tarvitse toistaa vaiheet 2, 3 ja 4. Kytke APP, bluetooth ja ohjausyksikkö, APP siirtyy automaattisesti käyttöjärjestelmän käyttöliittymää ja toimivat yleensä ohjausyksikön kysymättä valita mukaansatempaavan tilaa uudelleen.
+</string>
 </resources>

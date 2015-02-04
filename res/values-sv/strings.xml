@@ -27,4 +27,13 @@
 	<string name="please_select">Notater</string>
 	<string name="exit_touch_backkey">Trykk på "Backknappen" for å avslutte</string>
 	<string name="exit_touch_again">Trykk på tilbake knappen igjen for å gå ut.</string>
+	
+	<string name="howtotitle">Hur använder jag:</string>
+    <string name="howto">        1. Starta Appen och blåtanden. Appen kommer automatiskt påminna  iphone användare att starta sin blåtand under inställningar, medans Android användare klickar på ”blåtand på” ikonen på telefonskärmen.
+\n\n2. Tryck på “Start Scanning” ikonen, para ihop enheten med styrenheten
+\n\n3. Efter en lyckosam parning, välj “Manuell anläggning” eller “Automatisk anläggning” (Automatisk anläggning) och gå in I manöver interfacet. 
+\n\n4. Sista steget är att synka. Tryck in reset knappen på styrenheten. Använd inte Appen under detta moment. Vänta på att telefonen ger en vibration som indikerar att synkningen är klar. Appen fungerar nu normalt med styrenheten.
+\n\n5. Ovan steg 2,3 och 4 moste göras enbart första gången. Efter en lyckosam parning så fungerar telefonen varje gång. Slå på Appen och blåtanden samt styrenheten, Appen kommer automatiskt ta dig till manövrerings interfacet utan att fråga om anläggnings metod igen.
+		</string>
+	
 </resources>

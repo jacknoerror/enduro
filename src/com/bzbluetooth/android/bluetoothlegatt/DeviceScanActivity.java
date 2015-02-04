@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -234,27 +232,19 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 
 	@Override
 	public void onClick(View v) {
-    	AlertDialog.Builder ad;
 		switch (v.getId()) {
 		case R.id.howtoButton://abandon 0202
 		case R.id.img_howto:
-			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
-			ad.setCancelable(false);
-			ad.setTitle("How to use?");
-			ad.setMessage(String.format("%sv%s\n\n%s", "Software version:",GattUtils.getVersionName(this) , getString(R.string.howto)));
-			ad.setPositiveButton("OK", null);
-			ad.create().show();	
+			GattUtils.showHowto(this);	
 			break;
 		case R.id.aboutButton://abandon 0202
-			ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
+			/*ad = new Builder(this,AlertDialog.THEME_HOLO_DARK);
 			ad.setCancelable(false);
 			ad.setTitle("About ENDURO?");
-//			ad.setMessage("软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\n" +
-//					"Add: Staalweg 8  4104 AT  Culemborg\n\n网站链接：\nwww.enduro-europe.eu");
 			View view = LayoutInflater.from(this).inflate(R.layout.layout_about, null);//
 			ad.setView(view);
 			ad.setPositiveButton("OK", null);
-			ad.create().show();	
+			ad.create().show();	*/
 			break;
 		case R.id.scanButton:
 			if(null==mBluetoothAdapter){
@@ -293,6 +283,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			break;
 		}
 	}
+
+	
 
 	/*@Override
     public boolean onOptionsItemSelected(MenuItem item) {

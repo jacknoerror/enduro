@@ -28,4 +28,13 @@
 	<string name="exit_touch_backkey">Zum Beenden die Zurück-Taste drücken</string>
 	<string name="exit_touch_again">Zum Beenden die Zurück-Taste drücken</string>
     
+	<string name="howtotitle">Bedienungsanleitung</string>
+    <string name="howto">        1.	Starten Sie die App. iPhone-Nutzer werden aufgefordert, die Bluetooth-Funktion in den Telefoneinstellungen einzuschalten. Android-Nutzer können Bluetooth über die Schaltfläche der App direkt einschalten. Schalten Sie die Bluetooth-Funktion ein.
+\n\n2.	Tippen Sie auf die Schaltfläche „Start scanning“. Danach wird eine Liste mit Bluetooth-Geräten in Ihrer Nähe angezeigt. Wählen Sie aus dieser Liste „BOLUTEK“ aus, um Ihr Smartphone mit der Steuerung der Rangierhilfe zu verbinden.
+\n\n3.	Nach der erfolgreichen Verbindung wählen Sie den Typ Ihrer Rangierhilfe aus. Für eine Rangierhilfe mit automatischer Anstellung der Fahrmotoren wählen Sie „Automatisches Heranfahren der Rangierhilfe“, für eine Rangierhilfe mit manueller Anstellung wählen Sie „Manuelles Heranfahren der Rangierhilfe“.
+\n\n4.	Der letzte Schritt der Einrichtung ist die Synchronisation des Smartphones mit der Steuerung der Rangierhilfe. Drücken Sie den Resetschalter der Steuerung, führen Sie keine Funktionen mit der App aus und warten Sie bis der Vibrationsalarm des Smartphones auslöst. Die App ist jetzt einsatzbereit.
+\n\n5.	Die Schritte 2, 3, und 4 müssen nur einmalig für die Einrichtung der App durchgeführt werden. Nach dem erfolgreichen Einrichten starten Sie für jeden Einsatz der Rangierhilfe die App und schalten Bluetooth und den Batteriehauptschalter ein.
+
+		</string>
+	
 </resources>

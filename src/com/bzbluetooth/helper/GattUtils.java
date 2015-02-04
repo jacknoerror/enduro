@@ -13,6 +13,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.bzbluetooth.R;
+import com.bzbluetooth.R.string;
 import com.bzbluetooth.android.bluetoothlegatt.BluetoothLeService;
 
 public class GattUtils {
@@ -148,12 +150,12 @@ public class GattUtils {
 		AlertDialog.Builder builder = new Builder(acti);
 		builder.setMessage(hintContent);
 
-		builder.setTitle("提示");
+		builder.setTitle(R.string.app_name);
 
 		if (null != positiveListener)
-			builder.setPositiveButton("确认", positiveListener);// 0408
+			builder.setPositiveButton(R.string.answer_yes, positiveListener);// 0408
 
-		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.answer_no, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -163,5 +165,17 @@ public class GattUtils {
 		});
 
 		return builder.show();
+	}
+	/**
+	 * 
+	 */
+	public static void showHowto(Activity mActi) {
+		AlertDialog.Builder ad;
+		ad = new Builder(mActi,AlertDialog.THEME_HOLO_DARK);
+		ad.setCancelable(false);
+		ad.setTitle(R.string.howtotitle);
+		ad.setMessage(String.format("%s: v%s\n\n%s", mActi.getString(R.string.version),getVersionName(mActi) , mActi.getString(R.string.howto)));
+		ad.setPositiveButton(R.string.answer_yes, null);
+		ad.create().show();
 	}
 }
