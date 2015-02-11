@@ -275,7 +275,7 @@ public class ControlActivity extends Activity {
 					displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA)); //重连之后发一次
 					noSignal=-20;//0203
 				}*/
-				Toast.makeText(ControlActivity.this, R.string.connected,Toast.LENGTH_SHORT).show();
+				Toast.makeText(ControlActivity.this, R.string.paired_succ,Toast.LENGTH_SHORT).show();
 				savDvcInfo();
 				mHandler.sendEmptyMessage(4);
 				if(null!=connectingDialog&&connectingDialog.isShowing()) connectingDialog.dismiss();//0104
@@ -299,48 +299,7 @@ public class ControlActivity extends Activity {
 		}
 
 	};
-	//0201
-	private void reconnect() {
-		if(null==mBluetoothLeService||TextUtils.isEmpty(mDeviceAddress)) return;
-		Toast.makeText(ControlActivity.this, "reconnecting",Toast.LENGTH_SHORT).show();
-		mBluetoothLeService.disconnect();//0203
-		mHandler.sendEmptyMessage(103);
-	}
-	private void startScan(Context context){
-		NO_RECONN = false;//1224 0104zs
-//		Context mCtx = ControlActivity.this;
-		BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(context).getAdapter();
-		if(null!=btAdapter&&btAdapter.isEnabled()){
-			btAdapter.startLeScan(mLeScanCallback);
-		}else{
-			
-			Toast.makeText(context, "Bluetooth not enable!", Toast.LENGTH_LONG).show();
-		}
-	}
-	void stopScanAndConnect(Context context){
-		BluetoothAdapter btAdapter = GattUtils.getBluetoothAdapter(context).getAdapter();
-		if(null!=btAdapter)btAdapter.stopLeScan(mLeScanCallback);
-		NO_RECONN = true;
-		mBluetoothLeService.connect(mDeviceAddress);
-	}
 	
-	// Device cntrl callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-            runOnUiThread(new Runnable() {
-
-				@Override
-                public void run() {
-					if(!NO_RECONN&&device.getName().equals(mDeviceName)&&device.getAddress().equals(mDeviceAddress)){
-						stopScanAndConnect(ControlActivity.this);
-					}
-                }
-            });
-        }
-    };
     byte[] WriteBytes = new byte[20];
     /** 固定使用的读写字符     */
     BluetoothGattCharacteristic fixedCharacteristic = null;
@@ -401,7 +360,7 @@ public class ControlActivity extends Activity {
 
 				@Override
 				public void run() {
-					mHandler.sendEmptyMessage(noSignal>3?5:6);
+					mHandler.sendEmptyMessage(noSignal>4?5:6);
 					send();
 					noSignal++;
 //					Log.i(TAG, "哎哟~你别恶心我~");
@@ -489,7 +448,7 @@ public class ControlActivity extends Activity {
 						 check_str = "550301"+box_token +"CC"+ GattUtils.computeCRC8("0301"+box_token,204) +"EE";
 						 if(needfengming){
 //							 needSelectEngine = true;//1222 首次对码要选择
-//							 mHandler.sendEmptyMessage(4);//1230注释 改再链接成功时选择
+							 mHandler.sendEmptyMessage(104);//1230注释 改再链接成功时选择	0211 force
 						 }			
 						 setOpBtnEnablity(true);//1230 对码成功后可以操作
                    	 Log.d("--","--------------对码成功----重新轮询的字串是---->" + check_str);
@@ -638,20 +597,25 @@ public class ControlActivity extends Activity {
             super.handleMessage(msg);
             switch(msg.what){
             case 0:
+            	if(BLINK_HIGH) break;//0211
+            	BLINK_LOW=false;//0211
+            	BLINK_HIGH = true;
             	gaoya_img.setVisibility(View.VISIBLE);//0108
             	diya_img.setVisibility(View.INVISIBLE);
-            	BLINK_HIGH = true;
             	xinhao_img.setVisibility(View.VISIBLE);
-            	playBeep();
+//            	playBeep();
             	break;
             case 1:
+            	if(BLINK_LOW) break;//0211
+            	BLINK_HIGH=false;//0211
             	BLINK_LOW = true;
             	diya_img.setVisibility(View.VISIBLE);//0108
             	gaoya_img.setVisibility(View.INVISIBLE);
             	xinhao_img.setVisibility(View.VISIBLE);
-            	playBeep();            	
+//            	playBeep();            	
             	break;
             case 2:
+            	if(BLINK_OVER) break;//0211
             	BLINK_OVER = true;
             	guozai_img.setVisibility(View.VISIBLE);//0108
             	xinhao_img.setVisibility(View.VISIBLE);
@@ -670,7 +634,7 @@ public class ControlActivity extends Activity {
             	setOpBtnEnablity(true);
             	if(needSelectEngine){
             		showChooseLlDialog();
-            		playBeep();
+//            		playBeep();//0211jazz
             	}
             	else {
 //            		showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222  1230注视，改到开头
@@ -687,8 +651,8 @@ public class ControlActivity extends Activity {
 //            	if(!box_token.equals(""))stopScanAndConnect(ControlActivity.this);//0122 0201jazz
             	break; 
 			case 7://blink
-//				Log.i(TAG, "blinkCount"+blinkTimerCount);
-				blinkTimerCount%=2;
+				Log.i(TAG, "blinkCount"+blinkTimerCount);
+				blinkTimerCount%=4;
 				if(blinkTimerCount++!=0) break;//时间倍数闪烁
 				if(BLINK_CONNECT) blinkBtn(xinhao_img);
 				if(BLINK_HIGH) blinkBtn(gaoya_img);
@@ -699,7 +663,7 @@ public class ControlActivity extends Activity {
 				break;
 				
 			case 101://连接中loading框
-				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, "connecting device..");//
+				connectingDialog = GattUtils.showProgressDialog(ControlActivity.this, getString(R.string.connecting));//not enough
 				connectingDialog.setCancelable(false);
 				mHandler.sendEmptyMessageDelayed(102, 10*1000);
 				break;
@@ -709,7 +673,8 @@ public class ControlActivity extends Activity {
 //					CharSequence text = "connecting failed";
 //					GattUtils.showToast(context, text);
 //					finish();//FIXME delete me when testing
-					GattUtils.showDialog(ControlActivity.this, "connecting failed, reconnect?",  new DialogInterface.OnClickListener() {
+					mBluetoothLeService.close();//0211
+					GattUtils.showDialog(ControlActivity.this, getString(R.string.connectfailreconnect),  new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -730,6 +695,10 @@ public class ControlActivity extends Activity {
 				mBluetoothLeService.connect(mDeviceAddress);
 				mHandler.sendEmptyMessageDelayed(103, 5000);
 //				Log.i("RECON", "CONN");
+				break;
+			case 104://0211 force to beep
+				needfengming =true;
+				playBeep();
 				break;
 			default:
 				break;
@@ -765,7 +734,7 @@ public class ControlActivity extends Activity {
 			
 		}
 
-		long [] vPattern = {0,600};   // 停止 开启 停止 开启   
+		long [] vPattern = {0,600,100,300};   // 停止 开启 停止 开启   
 		/**
 		 * 
 		 */

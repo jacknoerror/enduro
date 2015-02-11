@@ -47,4 +47,7 @@
 	<string name="please_select">Please select</string>
 	<string name="exit_touch_backkey">Touch the back key to exit</string>
 	<string name="exit_touch_again">Touch the Back Key again to exit</string>
+	
+	<string name="connecting">connecting device..</string>
+	<string name="connectfailreconnect">connecting failed, reconnect?</string>
 </resources>

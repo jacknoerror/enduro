@@ -136,6 +136,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 		            invalidateOptionsMenu();
 		            if(null!=sDialog&&sDialog.isShowing()) sDialog.dismiss();
 					break;
+				case 9://0211 delay
+					scanLeDevice(true);
+					break;
 				default:
 					break;
 				}
@@ -307,7 +310,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 		mScanListView.setAdapter(mLeDeviceListAdapter);
 
 		if (null != mBluetoothAdapter&&mBluetoothAdapter.isEnabled()){
-			scanLeDevice(true);
+			mHandler.sendEmptyMessageDelayed(9, 1000);//0211
 		}			
 
 	}

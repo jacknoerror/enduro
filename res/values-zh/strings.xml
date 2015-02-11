@@ -1,0 +1,47 @@
+<resources>
+
+    <string name="title_activity_main">ENDURO</string>
+    <string name="about1">软件版本：\nv1.01\n\n公司信息：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
+    <string name="about2">网站链接：\nwww.enduro-europe.eu\n</string>
+    
+    <string name="start_search">开始扫描</string>
+    <string name="bluetooth_off">关闭蓝牙</string>
+    <string name="bluetooth_on">打开蓝牙</string>
+    <string name="please_switch">请先打开蓝牙</string>
+    <string name="bluetooth_near">附近的蓝牙有：</string>
+    <string name="paired_succ">已配对</string>
+    <string name="paired_fail">未配对</string>
+    <string name="select_system">选择驱动器版本</string>
+    <string name="system_Manual">手动款 </string>
+    <string name="system_auto">电动款</string>
+    <string name="roller_engage">是否要滚轮顶紧轮胎？</string>
+    <string name="roller_disengage">是否要滚轮离开轮胎？</string>
+    <string name="answer_yes">是</string>
+    <string name="answer_no">否</string>
+    <string name="hint_exit">确定要退出程序吗？</string>
+    <string name="exit_yes">退出</string>
+    <string name="exit_no">不退出</string>
+    
+	<string name="reset_bluetooth">清除历史记录</string>
+	<string name="version">软件版本</string>
+	<string name="company_info">公司信息</string>
+	<string name="address_info">地址信息</string>
+	<string name="website">网站链接</string>
+	<string name="connected">匹配中</string>
+	<string name="please_select">提示</string>
+	<string name="exit_touch_backkey">返回键退出</string>
+	<string name="exit_touch_again">再按一次返回键退出</string>
+	
+<string name="howtotitle">使用说明：</string>
+    <string name="howto">        1、	打开软件，如果手机上蓝牙未打开，iphone手机上出现自动提示打开蓝牙界面，可点击提示跳转到蓝牙设置界面，android手机上可以点击“Bluetooth ON”打开手机蓝牙；  
+\n\n2、	点击“Start Scanning”，出现附近已有的蓝牙设备，选择需要连接的控制盒； 
+\n\n3、	连接成功后，提示选择“Manual engaging manoeuvring system”或者“Automatic engaging manoeuvring system”，出现相应的控制界面；
+\n\n4、	如果手机和电控盒没有正常通讯，请按控制盒上对码健，手机软件不用任何操作，等待手机发出对码完成的振动提示，对码过程完成，可以正常和控制盒通讯：
+\n\n5、	以上2、3、4操作，是基于首次打开软件的操作，如果同一台手机中的软件已经通过步骤2、3、4，能够正常和相应控制盒通讯的时候，下次打开软件，相应的控制盒在上电状态时，软件会自动进入相应操作界面并和相应控制盒正常通讯；
+
+		</string>
+		
+    <string name="connecting">正在连接设备..</string>
+    <string name="connectfailreconnect">连接失败，是否尝试重连?</string>
+    
+</resources>
