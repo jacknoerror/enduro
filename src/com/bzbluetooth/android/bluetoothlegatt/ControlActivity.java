@@ -320,7 +320,7 @@ public class ControlActivity extends Activity {
 
 	private boolean needfengming=true;
 	private boolean needSelectEngine=false;//1218 1222
-	private boolean needSetNormalSignal;
+	private boolean needSetNormalSignal=true;
 
 	private int noSignal;//0203 改为int
 	
@@ -619,7 +619,7 @@ public class ControlActivity extends Activity {
             	BLINK_OVER = true;
             	guozai_img.setVisibility(View.VISIBLE);//0108
             	xinhao_img.setVisibility(View.VISIBLE);
-            	playBeep();        	
+//            	playBeep();        	
             	break;
             case 3:
             	needfengming = true;
@@ -734,7 +734,7 @@ public class ControlActivity extends Activity {
 			
 		}
 
-		long [] vPattern = {0,600,100,300};   // 停止 开启 停止 开启   
+		long [] vPattern = {0,700};   // 停止 开启 停止 开启   
 		/**
 		 * 
 		 */
