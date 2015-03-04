@@ -122,8 +122,7 @@ public class ControlActivity extends Activity {
         token = TokenKeeper.getValue(this, SP_TOKEN);
         box_token = TokenKeeper.getValue(this, SP_BOX_TOKEN);
         blt_addr_str = TokenKeeper.getValue(this, SP_AUTO_BLT);
-        TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        imei = telephonyManager.getDeviceId().substring(4, 10);    
+        imei = getDeviceId();    
         check_str = String.format("%s%s%s%sEE", "550301",box_token.isEmpty()?imei:box_token,"CC",GattUtils.computeCRC8("0301"+(box_token.isEmpty()?imei:box_token), 204));
         mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE); //0201
         
@@ -140,6 +139,21 @@ public class ControlActivity extends Activity {
         }
         // 连接不上 该页面消失
 	}//12-04 18:54:06.510: I/ControlActivity(9916): sending:550301110270CCB3EE
+
+	/**
+	 * @return imei or 000000
+	 * 0304
+	 */
+	public String getDeviceId() {
+		TelephonyManager telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = telephonyManager.getDeviceId();
+        if(null!=deviceId&&deviceId.length()>=10){
+        	deviceId= deviceId.substring(4, 10);
+        }else{
+        	deviceId= "000000";
+        }
+        return deviceId;
+	}
 
 	@Override
     protected void onDestroy() {
@@ -215,19 +229,19 @@ public class ControlActivity extends Activity {
 					//0111
 					if(null!=cmpsLayout)cmpsLayout.setVisibility(cmpsLayout.getVisibility()==View.VISIBLE?View.INVISIBLE:View.VISIBLE);
 					break;
-				case R.id.btn_howto:
+//				case R.id.btn_howto:
 				case R.id.img_hint:
 					GattUtils.showHowto(ControlActivity.this);
 					break;
-				case R.id.btn_about://abandon 0204
-					/*ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
+				/*case R.id.btn_about://abandon 0204
+					ad = new Builder(ControlActivity.this,AlertDialog.THEME_HOLO_DARK);
 					ad.setCancelable(false);
 					ad.setTitle("About ENDURO?");
 					View view = LayoutInflater.from(ControlActivity.this).inflate(R.layout.layout_about, null);//
 					ad.setView(view);
 					ad.setPositiveButton("OK", null);
-					ad.create().show();	*/
-					break;				
+					ad.create().show();	
+					break;	*/			
 				default:
 					break;
 				}
@@ -236,8 +250,8 @@ public class ControlActivity extends Activity {
 		};
 		hintImg = (ImageView) this.findViewById(R.id.img_hint);
 		hintImg.setOnClickListener(l);
-		this.findViewById(R.id.btn_about).setOnClickListener(l);
-		this.findViewById(R.id.btn_howto).setOnClickListener(l);
+//		this.findViewById(R.id.btn_about).setOnClickListener(l);
+//		this.findViewById(R.id.btn_howto).setOnClickListener(l);
 		cmpsLayout = findViewById(R.id.layout_compass_big);//0111
 		cmpsLayout.setOnClickListener(l);//0119
 		ImageView compassImg_b = (ImageView) this.findViewById(R.id.img_compass);

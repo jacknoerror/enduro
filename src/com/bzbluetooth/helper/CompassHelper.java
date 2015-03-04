@@ -24,6 +24,8 @@ public class CompassHelper {
 	private SensorListener listener ;
 	ImageView[] campassImgs;
 
+	private boolean showed;
+
 	public CompassHelper(Context context,ImageView... campassImgs) {
 		this.context = context;
 		if(null==manager)manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -36,8 +38,9 @@ public class CompassHelper {
 		// 应用在前台时候注册监听器
 		manager.registerListener(listener, sensor,				SensorManager.SENSOR_DELAY_GAME);
 		
-		if(null == sensor){//taotao 1117
+		if(null == sensor&&!showed){//taotao 1117 0304notshow
 			Toast.makeText(context, "Sorry, compass is not available on your device!", Toast.LENGTH_LONG).show();
+			showed=true;
 		}
 	}
 	public void onPause(){

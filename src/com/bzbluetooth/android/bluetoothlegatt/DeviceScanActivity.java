@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -34,6 +33,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +85,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void demo() {
 		/*delete FIXME*/
-	    String myString = "2015/02/28";
+	    String myString = "2015/03/30";
 	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);//
 	    Date d;
 		try {
@@ -104,6 +104,11 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.layout_prepare);
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int width = dm.widthPixels;// 宽度
+		int height = dm.heightPixels ;//高度
+		Log.i(TAG, width + "++++++++++++++++++++++++" + height);
         
         lastName = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICENAME);
         lastAddr = TokenKeeper.getValue(DeviceScanActivity.this, ControlActivity.SP_DEVICEADDRESS);
