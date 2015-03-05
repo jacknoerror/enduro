@@ -10,8 +10,8 @@
     <string name="select_system">Sélectionnez le type de votre système de manoeuvre</string>
     <string name="system_Manual">Système de manoeuvre semi-automatique</string>
     <string name="system_auto">Système de manoeuvre automatique</string>
-    <string name="roller_engage">Roulettes motorisées connectées ?</string>
-    <string name="roller_disengage">Roulettes motorisées désengagées ?</string>
+    <string name="roller_engage">Fixer le frein à main. Roulettes motorisées connectées ?</string>
+    <string name="roller_disengage">Fixer le frein à main. Roulettes motorisées désengagées ?</string>
     <string name="answer_yes">Oui</string>
     <string name="answer_no">Non</string>
     <string name="hint_exit">Êtes-vous certain de vouloir quitter?</string>

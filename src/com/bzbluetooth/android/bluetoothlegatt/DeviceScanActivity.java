@@ -97,6 +97,13 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			e.printStackTrace();
 		}
 		
+		initScreenData();
+	}
+	private void initScreenData(){
+		DisplayMetrics dm = getResources().getDisplayMetrics();
+//		Const.SCREEN_WIDTH = dm.widthPixels;
+//		Const.SCREEN_HEIGHT= dm.heightPixels;
+		Log.i("MyApplication", dm.densityDpi+":dpi+=+desi:"+dm.density);
 	}
 	
 	@Override
@@ -184,7 +191,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         
         demo();
         
-//        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
+        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
     }
 
 	/**
@@ -353,8 +360,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 	 */
 	public void goControl(String dName, String dAddr) {
 		final Intent intent = new Intent(this, ControlActivity.class);
-		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);//FIXME delete us when testing
-		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
+//		intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, dName);//FIXME delete us when testing
+//		intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, dAddr);
         if (mScanning) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mScanning = false;

@@ -10,8 +10,8 @@
     <string name="select_system">Vänligen välj typ av manöveringssystem</string>
     <string name="system_Manual">Manuell anläggning</string>
     <string name="system_auto">Automatisk anläggning</string>
-    <string name="roller_engage">Lägg an drivrullarna?</string>
-    <string name="roller_disengage">Lossa på drivrullarna?</string>
+    <string name="roller_engage">Dra åt handbromsen. Lägg an drivrullarna?</string>
+    <string name="roller_disengage">Dra åt handbromsen. Lossa på drivrullarna?</string>
     <string name="answer_yes">Ja</string>
     <string name="answer_no">Nej</string>
     <string name="hint_exit">Är du säker på att du vill avsluta ?</string>

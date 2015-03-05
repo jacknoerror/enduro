@@ -14,8 +14,8 @@
     <string name="select_system">选择驱动器版本</string>
     <string name="system_Manual">手动款 </string>
     <string name="system_auto">电动款</string>
-    <string name="roller_engage">是否要滚轮顶紧轮胎？</string>
-    <string name="roller_disengage">是否要滚轮离开轮胎？</string>
+    <string name="roller_engage">请确保手刹。是否要滚轮顶紧轮胎？</string>
+    <string name="roller_disengage">请确保手刹。是否要滚轮离开轮胎？</string>
     <string name="answer_yes">是</string>
     <string name="answer_no">否</string>
     <string name="hint_exit">确定要退出程序吗？</string>

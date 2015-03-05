@@ -10,8 +10,8 @@
     <string name="select_system">Bitte wählen Sie den passenden Typ Ihrer Rangierhilfe</string>
     <string name="system_Manual">Manuelles heranfahren der Rangierhilfe</string>
     <string name="system_auto">Automatisches heranfahren der Rangierhilfe</string>
-    <string name="roller_engage">Antriebsrollen angekuppelt?</string>
-    <string name="roller_disengage">Antriebsrollen abgekuppelt?</string>
+    <string name="roller_engage">Handbremse anziehen .Antriebsrollen angekuppelt?</string>
+    <string name="roller_disengage">Handbremse anziehen .Antriebsrollen abgekuppelt?</string>
     <string name="answer_yes">Ja</string>
     <string name="answer_no">Nein</string>
     <string name="hint_exit">Sind Sie sicher, dass Sie beenden wollen?</string>

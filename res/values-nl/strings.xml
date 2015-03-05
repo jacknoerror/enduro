@@ -10,8 +10,8 @@
     <string name="select_system">Selecteer type rangeersysteem</string>
     <string name="system_Manual">Halfautomaat rangeersysteem</string>
     <string name="system_auto">Volautomaat rangeersysteem</string>
-    <string name="roller_engage">Aandrijfrollen aankoppelen?</string>
-    <string name="roller_disengage">Aandrijfrollen afkoppelen?</string>
+    <string name="roller_engage">Handrem vastzetten. Aandrijfrollen aankoppelen?</string>
+    <string name="roller_disengage">Handrem vastzetten. Aandrijfrollen afkoppelen?</string>
     <string name="answer_yes">Ja</string>
     <string name="answer_no">Nee</string>
     <string name="hint_exit">Weet u zeker dat u wilt afsluiten?</string>

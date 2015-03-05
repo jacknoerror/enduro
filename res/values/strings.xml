@@ -30,8 +30,8 @@
     <string name="select_system">Please select the type of your manoeuvring system</string>
     <string name="system_Manual">Manual engaging manoeuvring system</string>
     <string name="system_auto">Automatic engaging manoeuvring system</string>
-    <string name="roller_engage">Engage the rollers?</string>
-    <string name="roller_disengage">Disengage the rollers?</string>
+    <string name="roller_engage">Secure the handbrake. Engage the rollers?</string>
+    <string name="roller_disengage">Secure the handbrake. Disengage the rollers?</string>
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
     <string name="hint_exit">Are you sure to exit?</string>

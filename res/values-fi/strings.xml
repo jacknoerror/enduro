@@ -10,9 +10,9 @@
     <string name="paired_fail">Mislykket synkronisering</string>
     <string name="select_system">Valitse tyyppi teidän ohjailujärjestelmään</string>
     <string name="system_Manual">Manuaalinen ohjaus-siirtolaite</string>
-    <string name="system_auto">Automaattinen ohjaus-siirtolaite</string>
+    <string name="system_auto">laita käsijarru päälle. Automaattinen ohjaus-siirtolaite</string>
     <string name="roller_engage">Kytke rullat?</string>
-    <string name="roller_disengage">Irrota rullat?</string>
+    <string name="roller_disengage">laita käsijarru päälle. Irrota rullat?</string>
     <string name="answer_yes">Kyllä</string>
     <string name="answer_no">Ei</string>
     <string name="hint_exit">Oletko varma, että haluat lopettaa?</string>
