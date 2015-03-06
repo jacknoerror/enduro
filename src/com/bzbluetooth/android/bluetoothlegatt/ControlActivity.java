@@ -132,7 +132,7 @@ public class ControlActivity extends Activity {
         initBtns();
         
         needSelectEngine = !TokenKeeper.getSpInstance(ControlActivity.this).contains("showdianji");//1230
-        needSelectEngine = false;//FIXME delete
+//        needSelectEngine = false;//FIXME delete
         if(needSelectEngine)layout_operate.setVisibility(View.INVISIBLE);//1230 在连接之前 透明  
         else{
         	showDianjiLl(TokenKeeper.getSpInstance(ControlActivity.this).getBoolean("showdianji", true));//1222
@@ -687,7 +687,7 @@ public class ControlActivity extends Activity {
 //					CharSequence text = "connecting failed";
 //					GattUtils.showToast(context, text);
 					mBluetoothLeService.close();//0211
-					/*GattUtils.showDialog(ControlActivity.this, getString(R.string.connectfailreconnect),  new DialogInterface.OnClickListener() {
+					GattUtils.showDialog(ControlActivity.this, getString(R.string.connectfailreconnect),  new DialogInterface.OnClickListener() {
 						
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -701,7 +701,7 @@ public class ControlActivity extends Activity {
 						}
 						
 					});//0204 //FIXME delete when testing
-*/				}
+				}
 				break;
 			case 103://0201
 				if(mConnected) return;
