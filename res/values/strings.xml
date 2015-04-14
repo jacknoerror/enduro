@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ENDURO</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name" translatable="false">ENDURO</string>
+    <string name="action_settings" translatable="false">Settings</string>
 
-    <string name="title_activity_main">ENDURO</string>
-    <string name="howtotitle">Instructions</string>
+    <string name="title_activity_main" translatable="false">ENDURO</string>
+    <string name="howtotitle" translatable="false">Instructions</string>
+    
     <string name="howto">        1. Start the APP and turn the Bluetooth option on. The APP automatically remind Iphone users to turn on the bluetooth by changing the phone setting, while Android users by clicking “Bluetooth ON” icon on the phone screen.
  \n\n2. Press the “Start Scanning” icon. A list with found nearby Bluetooth devices is shown on the screen. Select the manoeuvring system control unit (BOLUTEK) to be paired.
  \n\n3. After successful pairing, select “Manual engaging manoeuvring system” or “Automatic engaging manoeuvring system” and enter the operating screen.
@@ -14,11 +14,11 @@
 \n\n5. Above steps 2, 3 and 4 must be followed only for the first time use. After successful first-time use with the same phone, users do not have to repeat step 2, 3 and 4. Just start the APP, turn on the Bluetooth option and turn on the battery power isolation switch of the manoeuvring system. The APP automatically enters the operating screen and normally work with the control unit without asking to select the Bluetooth connection and engaging system again.  
 
 		</string>
-    <string name="about1">Software Version：\nv1.01\n\nCompany Info：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
-    <string name="about2">Net Link：\nwww.enduro-europe.eu\n</string>
-    <string name="btn_howto">how to use</string>
-    <string name="btn_about">about ENDURO</string>
-    <string name="hint_pairfirst">please get paired first!</string>
+    <string name="about1" translatable="false">Software Version：\nv1.01\n\nCompany Info：\nTradekar International B.V.\n\nAdd: Staalweg 8  4104 AT  Culemborg\n</string>
+    <string name="about2" translatable="false">Net Link：\nwww.enduro-europe.eu\n</string>
+    <string name="btn_howto" translatable="false">how to use</string>
+    <string name="btn_about" translatable="false">about ENDURO</string>
+    <string name="hint_pairfirst" translatable="false">please get paired first!</string>
     
     <string name="start_search">Search for devices</string>
     <string name="bluetooth_off">Bluetooth OFF</string>
@@ -48,6 +48,6 @@
 	<string name="exit_touch_backkey">Touch the back key to exit</string>
 	<string name="exit_touch_again">Touch the Back Key again to exit</string>
 	
-	<string name="connecting">connecting device..</string>
-	<string name="connectfailreconnect">connecting failed, reconnect?</string>
+	<string name="connecting" translatable="false">connecting device..</string>
+	<string name="connectfailreconnect" translatable="false">connecting failed, reconnect?</string>
 </resources>

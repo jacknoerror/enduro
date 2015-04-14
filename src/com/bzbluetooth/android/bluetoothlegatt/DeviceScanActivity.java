@@ -97,7 +97,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 			e.printStackTrace();
 		}
 		
-		initScreenData();
+		
 	}
 	private void initScreenData(){
 		DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -189,8 +189,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         	//
         }
         
-        demo();
-        
+//        demo();
+        initScreenData();
 //        goControl("asdf", "13gsdgwe54hgweh4");//FIXME run me when testing 
     }
 
