@@ -30,7 +30,7 @@
 	
 	<string name="howtotitle">Bruksanvisning</string>
     <string name="howto">       1. Skru på APP og bluetooth. APP’n minner automatisk Iphone brukere på å skru på Bluetooth ved å endre telefon innstillingene, mens Android brukere skal klikke på “Bluetooth PÅ” ikonet på telefonskjermen.  
-\n\n2. Klikk “Start Scanning” ikonet, brukere velger kontrollenhet for å bli koblet til enheter i nærheten.
+\n\n2. Klikk “Sök enhet” ikonet, brukere velger kontrollenhet for å bli koblet til enheter i nærheten.
 \n\n3. Etter en vellykket synkronisering, velg “Manuell tilkobling” eller “Automatisk tilkobling” og gå inn på operasjonssystemet;
 \n\n4. Siste steg er synkronisering. Trykk reset knappen på kontroll enheten. Ikke bruk APP’n. Vent til telefonen avgir en vibrasjon som indikerer at synkroniseringen er fullført. APP’n arbeider normalt med kontrollenheten.
 \n\n5. De ovenfor nevnte trinnene 2,3 og 4 må bli fulgt for førstegangsbrukere. Etter en vellykket førstegangs bruk I en identisk telefon, trenger man ikke å gjenta trinnene 2,3 og 4. Skru på APP’n , bluetooth og kontrollenheten, APP’n går automatisk inn I operasjonssystemet og arbeider normalt med kontrollenheten uten å måtte velge tilkoblingsmodus igjen.

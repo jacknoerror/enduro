@@ -8,7 +8,7 @@
     <string name="howtotitle" translatable="false">Instructions</string>
     
     <string name="howto">        1. Start the APP and turn the Bluetooth option on. The APP automatically remind Iphone users to turn on the bluetooth by changing the phone setting, while Android users by clicking “Bluetooth ON” icon on the phone screen.
- \n\n2. Press the “Start Scanning” icon. A list with found nearby Bluetooth devices is shown on the screen. Select the manoeuvring system control unit (BOLUTEK) to be paired.
+ \n\n2. Press the “Search for devices” icon. A list with found nearby Bluetooth devices is shown on the screen. Select the manoeuvring system control unit (BOLUTEK) to be paired.
  \n\n3. After successful pairing, select “Manual engaging manoeuvring system” or “Automatic engaging manoeuvring system” and enter the operating screen.
 \n\n4. The last step is to synchronize the phone and the control unit of the manoeuvring system. Press the reset button on the control unit. Do not operate the APP. Wait for the phone gives a vibration indicating that the synchronization is completed. Now the APP is ready for use!
 \n\n5. Above steps 2, 3 and 4 must be followed only for the first time use. After successful first-time use with the same phone, users do not have to repeat step 2, 3 and 4. Just start the APP, turn on the Bluetooth option and turn on the battery power isolation switch of the manoeuvring system. The APP automatically enters the operating screen and normally work with the control unit without asking to select the Bluetooth connection and engaging system again.  
